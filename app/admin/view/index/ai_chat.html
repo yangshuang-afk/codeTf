@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>泽润九福AI助手</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#3B82F6',
+            secondary: '#10B981',
+            neutral: {
+              100: '#F3F4F6',
+              200: '#E5E7EB',
+              300: '#D1D5DB',
+              400: '#9CA3AF',
+              500: '#6B7280',
+              600: '#4B5563',
+              700: '#374151',
+              800: '#1F2937',
+              900: '#111827',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      }
+    }
+  </script>
+  
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .chat-height {
+        height: clamp(400px, 100vh, 700px);
+      }
+      .chat-shadow {
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+      }
+      .message-appear {
+        animation: fadeIn 0.3s ease-in-out;
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .float-animation {
+        animation: float 3s ease-in-out infinite;
+      }
+      @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+        100% { transform: translateY(0px); }
+      }
+      .bounce-hover {
+        transition: transform 0.2s ease;
+      }
+      .bounce-hover:hover {
+        transform: translateY(-5px) scale(1.05);
+      }
+      .fullscreen-chat {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        max-width: 100% !important;
+        border-radius: 0 !important;
+        z-index: 9999 !important;
+      }
+      .typing-indicator {
+        display: inline-block;
+        overflow: hidden;
+        vertical-align: bottom;
+        animation: typing 1.5s steps(4, end) infinite;
+      }
+      @keyframes typing {
+        from { width: 0 }
+        to { width: 1.5em }
+      }
+      .markdown-content {
+        @apply text-sm text-neutral-800 leading-relaxed;
+      }
+      .markdown-content p {
+        @apply mb-2;
+      }
+      .markdown-content ul {
+        @apply list-disc pl-5 mb-2;
+      }
+      .markdown-content ol {
+        @apply list-decimal pl-5 mb-2;
+      }
+      .markdown-content li {
+        @apply mb-1;
+      }
+      .markdown-content strong {
+        @apply font-bold;
+      }
+      .markdown-content a {
+        @apply text-primary hover:underline;
+      }
+      .markdown-content h4 {
+        @apply font-semibold mb-1;
+      }
+      .markdown-content h5 {
+        @apply font-medium mb-1;
+      }
+    }
+  </style>
+</head>
+<body class="bg-gray-50 font-sans">
+  <!-- AI聊天窗口 -->
+  <div id="chat-window" class="fixed inset-0 bg-white rounded-xl shadow-xl chat-shadow overflow-hidden z-40">
+    <div class="bg-primary text-white p-4 flex items-center justify-between">
+      <div class="flex items-center">
+        <div class="relative mr-3">
+          <img src="https://picsum.photos/40/40?random=ai" alt="泽润九福AI助手头像" class="w-10 h-10 rounded-full border-2 border-white">
+          <div class="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+        </div>
+        <div>
+          <h3 class="font-medium">泽润九福AI助手</h3>
+          <p class="text-xs opacity-80">随时为您服务</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-3">
+        <button id="toggle-fullscreen" class="text-white hover:text-gray-200 transition-colors">
+          <i class="fa fa-compress"></i>
+        </button>
+        <button id="close-chat" class="text-white hover:text-gray-200 transition-colors">
+          <i class="fa fa-times"></i>
+        </button>
+      </div>
+    </div>
+    
+    <div id="chat-messages" class="chat-height overflow-y-auto p-4 space-y-4 bg-gray-50">
+      <!-- 欢迎消息 -->
+      <div class="flex items-start message-appear">
+        <img src="https://picsum.photos/40/40?random=ai" alt="AI助手头像" class="w-8 h-8 rounded-full mr-2 mt-1">
+        <div class="bg-white rounded-lg p-3 max-w-[80%] shadow-sm">
+          <div class="markdown-content">
+            <p>👋 您好！我是泽润九福AI助手，有什么可以帮助您的吗？</p>
+            <p>我可以为您提供以下方面的信息：</p>
+            <ul>
+              <li>公司业务介绍（软件开发、婚恋服务、医药招商）</li>
+              <li>OA系统功能和使用方法</li>
+              <li>员工手册和公司政策</li>
+              <li>其他工作相关问题</li>
+            </ul>
+          </div>
+          <p class="text-xs text-neutral-400 mt-1">刚刚</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="p-4 border-t border-gray-200">
+      <div class="relative">
+        <input id="message-input" type="text" placeholder="输入问题或指令..." class="w-full pl-4 pr-12 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors">
+        <button id="send-message" class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-primary text-white p-2 rounded-full hover:bg-primary/90 transition-colors">
+          <i class="fa fa-paper-plane"></i>
+        </button>
+      </div>
+      <p class="text-xs text-neutral-400 mt-2">输入 "帮助" 查看可用命令</p>
+    </div>
+  </div>
+  
+  <script>
+    // DeepSeek API 聊天类
+    class DeepSeekChat {
+      constructor(apiKey) {
+        this.apiKey = apiKey;
+        this.apiUrl = 'https://api.deepseek.com/v1/chat/completions';
+        this.headers = {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.apiKey}`
+        };
+        this.messages = [];
+      }
+      
+      // 添加系统消息
+      setSystemMessage(content) {
+        this.messages.push({
+          role: 'system',
+          content: content
+        });
+      }
+      
+      // 发送用户消息并获取回复
+      async sendMessage(content, onMessageUpdate) {
+        // 添加用户消息到对话历史
+        this.messages.push({
+          role: 'user',
+          content: content
+        });
+        
+        try {
+          const response = await fetch(this.apiUrl, {
+            method: 'POST',
+            headers: this.headers,
+            body: JSON.stringify({
+              model: 'deepseek-chat',
+              messages: this.messages,
+              temperature: 0.7,
+              stream: true // 启用流式响应
+            })
+          });
+          
+          if (!response.ok) {
+            throw new Error(`API请求失败: ${response.status}`);
+          }
+          
+          // 处理流式响应
+          return this._handleStreamResponse(response, onMessageUpdate);
+        } catch (error) {
+          console.error('DeepSeek API 错误:', error);
+          throw error;
+        }
+      }
+      
+      // 处理流式响应
+      async _handleStreamResponse(response, onMessageUpdate) {
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let accumulatedText = '';
+        
+        return new Promise((resolve, reject) => {
+          const readLoop = async () => {
+            try {
+              while (true) {
+                const { done, value } = await reader.read();
+                if (done) {
+                  // 添加AI回复到对话历史
+                  this.messages.push({
+                    role: 'assistant',
+                    content: accumulatedText
+                  });
+                  resolve(accumulatedText);
+                  return;
+                }
+                
+                // 处理数据块
+                const chunk = decoder.decode(value, { stream: true });
+                const lines = chunk.split('\n').filter(line => line.trim() !== '');
+                
+                for (const line of lines) {
+                  if (line.startsWith('data: ')) {
+                    const data = line.substring(6);
+                    if (data === '[DONE]') continue;
+                    
+                    try {
+                      const parsed = JSON.parse(data);
+                      if (parsed.choices && parsed.choices[0].delta.content) {
+                        accumulatedText += parsed.choices[0].delta.content;
+                        // 调用回调函数更新UI
+                        if (typeof onMessageUpdate === 'function') {
+                          onMessageUpdate(accumulatedText);
+                        }
+                      }
+                    } catch (e) {
+                      console.error('解析流数据失败:', e);
+                    }
+                  }
+                }
+              }
+            } catch (error) {
+              console.error('读取流失败:', error);
+              reject(error);
+            }
+          };
+          
+          readLoop();
+        });
+      }
+    }
+    
+    // 辅助函数：将文本中的换行符转换为HTML换行标签
+    function formatMessage(text) {
+      if (!text) return '';
+      // 简单的Markdown解析：换行符转<br>，列表解析，粗体解析
+      let formatted = text
+        // 转换换行符
+        .replace(/\n/g, '<br>')
+        // 转换无序列表
+        .replace(/^\s*-\s+(.*)$/gm, '<li>$1</li>')
+        // 转换有序列表
+        .replace(/^\s*\d+\.\s+(.*)$/gm, '<li>$1</li>')
+        // 转换标题
+        .replace(/^#\s+(.*)$/gm, '<h4 class="font-semibold mb-1">$1</h4>')
+        .replace(/^##\s+(.*)$/gm, '<h5 class="font-medium mb-1">$1</h5>')
+        // 转换粗体
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        // 转换链接
+        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+      
+      // 将列表项包装在<ul>或<ol>中
+      formatted = formatted
+        .replace(/(<li>.*?<\/li>)+/gs, '<ul class="list-disc pl-5 mb-2">$&</ul>')
+        .replace(/<ul>(\s*<li>.*?<\/li>\s*)+<\/ul>/gs, (match) => {
+          // 检查是否是有序列表
+          if (match.includes('<li>1.')) {
+            return match.replace('<ul>', '<ol class="list-decimal pl-5 mb-2">');
+          }
+          return match;
+        });
+      
+      return formatted;
+    }
+    
+    // 聊天UI初始化
+    document.addEventListener('DOMContentLoaded', function() {
+      const chatWindow = document.getElementById('chat-window');
+      const closeChat = document.getElementById('close-chat');
+      const messageInput = document.getElementById('message-input');
+      const sendMessage = document.getElementById('send-message');
+      const chatMessages = document.getElementById('chat-messages');
+      const toggleFullscreen = document.getElementById('toggle-fullscreen');
+      let isFullscreen = true;
+      
+      // 初始化DeepSeek聊天实例
+      const chat = new DeepSeekChat('sk-bffc53706f39422e8c0b989178bb676a');
+      chat.setSystemMessage(`你是佳木斯泽润九福网络科技有限公司的AI助手，公司主要从事软件开发、婚恋介绍和药福医药招商网等服务。你需要帮助员工解决工作相关问题，提供公司业务信息和OA系统使用指导。请简洁明了地回答问题，并尽量使用友好的语气，务必注意：禁止胡编乱造，你只能根据告诉你的内容进行回答，知道的内容如实说，不知道的内容提示联系人事部。`);
+      
+      // 关闭聊天窗口
+      closeChat.addEventListener('click', function() {
+        // 通知父窗口关闭
+        if (window.parent !== window) {
+          window.parent.postMessage({ type: 'close-chat' }, '*');
+        }
+      });
+      
+      // 切换全屏模式
+      toggleFullscreen.addEventListener('click', function() {
+        isFullscreen = !isFullscreen;
+        
+        if (isFullscreen) {
+          // 进入全屏
+          chatWindow.classList.add('fullscreen-chat');
+          toggleFullscreen.innerHTML = '<i class="fa fa-compress"></i>';
+        } else {
+          // 退出全屏
+          chatWindow.classList.remove('fullscreen-chat');
+          toggleFullscreen.innerHTML = '<i class="fa fa-expand"></i>';
+        }
+      });
+      
+      // 发送消息
+      sendMessage.addEventListener('click', async function() {
+        const message = messageInput.value.trim();
+        if (!message) return;
+        
+        // 显示用户消息
+        appendMessage('user', message);
+        messageInput.value = '';
+        
+        try {
+          // 创建AI回复元素并显示"正在输入"状态
+          const aiMessageId = 'ai-message-' + Date.now();
+          appendThinkingMessage(aiMessageId);
+          
+          // 发送消息到API并获取回复
+          await chat.sendMessage(message, (partialResponse) => {
+            // 更新AI回复内容
+            updateAIMessage(aiMessageId, partialResponse);
+          });
+        } catch (error) {
+          console.error('聊天过程中出错:', error);
+          appendMessage('error', '抱歉，发生错误: ' + error.message);
+        }
+      });
+      
+      // 输入框回车事件
+      messageInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          sendMessage.click();
+        }
+      });
+      
+      // 添加消息到UI
+      function appendMessage(role, content) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = role === 'user' 
+          ? 'flex items-start justify-end message-appear' 
+          : 'flex items-start message-appear';
+        
+        const contentDiv = document.createElement('div');
+        contentDiv.className = role === 'user' 
+          ? 'bg-primary text-white rounded-lg p-3 max-w-[80%] shadow-sm' 
+          : role === 'error' 
+            ? 'bg-red-50 text-red-800 rounded-lg p-3 max-w-[80%] shadow-sm'
+            : 'bg-white rounded-lg p-3 max-w-[80%] shadow-sm';
+        
+        if (role === 'user') {
+          contentDiv.innerHTML = `<p class="text-sm">${content}</p>
+                            <p class="text-xs opacity-70 mt-1">刚刚</p>`;
+        } else {
+          contentDiv.innerHTML = `
+            <div class="markdown-content">
+              ${formatMessage(content)}
+            </div>
+            <p class="text-xs opacity-70 mt-1">刚刚</p>
+          `;
+        }
+        
+        const img = document.createElement('img');
+        img.src = role === 'user' 
+          ? 'https://picsum.photos/40/40?random=user' 
+          : 'https://picsum.photos/40/40?random=ai';
+        img.alt = role === 'user' ? '用户头像' : 'AI助手头像';
+        img.className = 'w-8 h-8 rounded-full ' + (role === 'user' ? 'ml-2 mt-1' : 'mr-2 mt-1');
+        
+        messageDiv.appendChild(contentDiv);
+        messageDiv.appendChild(img);
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+      
+      // 添加"正在输入"消息
+      function appendThinkingMessage(id) {
+        const thinkingDiv = document.createElement('div');
+        thinkingDiv.id = id;
+        thinkingDiv.className = 'flex items-start message-appear';
+        
+        const img = document.createElement('img');
+        img.src = 'https://picsum.photos/40/40?random=ai';
+        img.alt = 'AI助手头像';
+        img.className = 'w-8 h-8 rounded-full mr-2 mt-1';
+        
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'bg-white rounded-lg p-3 max-w-[80%] shadow-sm';
+        contentDiv.innerHTML = `
+          <div class="markdown-content">
+            <p>AI正在思考<span class="typing-indicator">...</span></p>
+          </div>
+        `;
+        
+        thinkingDiv.appendChild(img);
+        thinkingDiv.appendChild(contentDiv);
+        chatMessages.appendChild(thinkingDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+      
+      // 更新AI消息内容
+      function updateAIMessage(id, content) {
+        const messageDiv = document.getElementById(id);
+        if (messageDiv) {
+          const contentDiv = messageDiv.querySelector('div');
+          if (contentDiv) {
+            contentDiv.innerHTML = `
+              <div class="markdown-content">
+                ${formatMessage(content)}
+              </div>
+              <p class="text-xs opacity-70 mt-1">刚刚</p>
+            `;
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+          }
+        }
+      }
+      
+      // 监听来自父窗口的消息
+      window.addEventListener('message', function(event) {
+        if (event.data.type === 'open-chat') {
+          // 可以在这里添加打开动画等
+        }
+      });
+    });
+  </script>
+</body>
+</html>

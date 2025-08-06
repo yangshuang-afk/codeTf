@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>铁粉CODE - ThinkPHP开发的AI低代码平台</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="__PUBLIC__/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="__PUBLIC__/assets/element/index.css">
+    <link rel="stylesheet" href="__PUBLIC__/assets/css/base.css">
+    <script src="__PUBLIC__/assets/element/vue.js"></script>
+    <script src="__PUBLIC__/assets/element/index.js"></script>
+    <script src="__PUBLIC__/assets/js/axios.min.js"></script>
+    <script>Vue.config.productionTip = false</script>
+    <style>
+        /* 基础样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: #121826;
+            background-image:
+                    radial-gradient(circle at 10% 20%, rgba(37, 99, 235, 0.1) 0%, transparent 20%),
+                    radial-gradient(circle at 90% 70%, rgba(16, 185, 129, 0.1) 0%, transparent 30%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .body-bg {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background:none ;
+        }
+        
+        /* 容器样式 */
+        .login-container {
+            width: 100%;
+            max-width: 1200px;
+            height: 650px;
+            background-color: #1e293b;
+            border-radius: 16px;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            display: flex;
+            position: relative;
+        }
+        
+        /* 左侧宣传区域 */
+        .promotion-section {
+            width: 55%;
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            background-color: #0f172a;
+        }
+        
+        /* 装饰元素 */
+        .promotion-section::before {
+            content: '';
+            position: absolute;
+            top: -20%;
+            right: -20%;
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%);
+            border-radius: 50%;
+            z-index: 1;
+        }
+        
+        .promotion-section::after {
+            content: '';
+            position: absolute;
+            bottom: -10%;
+            left: -10%;
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%);
+            border-radius: 50%;
+            z-index: 1;
+        }
+        
+        .promo-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .promotion-title {
+            font-size: 42px;
+            font-weight: bold;
+            margin-bottom: 24px;
+            color: #f8fafc;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .promotion-title code {
+            color: #3b82f6;
+            background-color: rgba(59, 130, 246, 0.1);
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-family: 'Fira Code', monospace;
+        }
+        
+        .promotion-title span {
+            color: #10b981;
+            font-size: 18px;
+            background-color: rgba(16, 185, 129, 0.1);
+            padding: 4px 12px;
+            border-radius: 6px;
+            margin-left: 10px;
+        }
+        
+        .promotion-desc {
+            font-size: 18px;
+            line-height: 1.8;
+            margin-bottom: 50px;
+            color: #94a3b8;
+            max-width: 450px;
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 30px;
+        }
+        
+        .feature-item {
+            margin-bottom: 24px;
+            display: flex;
+            align-items: flex-start;
+            color: #e2e8f0;
+            font-size: 16px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .feature-item i {
+            font-size: 22px;
+            margin-right: 16px;
+            margin-top: 3px;
+            color: #3b82f6;
+            min-width: 24px;
+        }
+        
+        .feature-item strong {
+            color: #f8fafc;
+        }
+        
+        /* 右侧表单区域 */
+        .form-section {
+            width: 45%;
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background-color: #1e293b;
+        }
+        
+        .form-header {
+            margin-bottom: 40px;
+        }
+        
+        .form-header h2 {
+            color: #f8fafc;
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+        
+        .form-header p {
+            color: #94a3b8;
+            font-size: 14px;
+        }
+        
+        .form-tabs {
+            display: flex;
+            margin-bottom: 35px;
+            border-bottom: 1px solid #334155;
+        }
+        
+        .form-tab {
+            padding: 12px 20px;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            color: #94a3b8;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .form-tab.active {
+            color: #3b82f6;
+        }
+        
+        .form-tab.active::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -1px;
+            width: 100%;
+            height: 2px;
+            background-color: #3b82f6;
+        }
+        
+        .form-tab:hover:not(.active) {
+            color: #cbd5e1;
+        }
+        
+        .login-form, .register-form {
+            width: 100%;
+        }
+        
+        /* Element UI 组件样式覆盖 */
+        .el-input {
+            background-color: #334155;
+            border-color: #475569;
+            border-radius: 6px;
+        }
+        
+        .el-input__inner {
+            background-color: #334155;
+            border-color: #475569;
+            color: #f8fafc;
+            border-radius: 6px;
+            height: 42px;
+        }
+        
+        .el-input__inner::placeholder {
+            color: #94a3b8;
+        }
+        
+        .el-input__prefix {
+            color: #94a3b8;
+        }
+        
+        .el-button {
+            height: 42px;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .el-button--primary {
+            background-color: #3b82f6;
+            border-color: #3b82f6;
+        }
+        
+        .el-button--primary:hover {
+            background-color: #2563eb;
+            border-color: #2563eb;
+        }
+        
+        .el-button--text {
+            color: #94a3b8;
+        }
+        
+        .el-button--text:hover {
+            color: #3b82f6;
+        }
+        
+        .el-form-item__label {
+            color: #e2e8f0;
+        }
+        
+        .el-form-item {
+            margin-bottom: 24px !important;
+        }
+        
+        .form-footer {
+            margin-top: 30px;
+            text-align: center;
+        }
+        
+        /* 响应式调整 */
+        @media (max-width: 992px) {
+            .login-container {
+                flex-direction: column;
+                height: auto;
+                max-height: none;
+            }
+            
+            .promotion-section, .form-section {
+                width: 100%;
+            }
+            
+            .promotion-section {
+                padding: 40px;
+                height: auto;
+            }
+            
+            .form-section {
+                padding: 40px;
+            }
+            
+            .promotion-title {
+                font-size: 36px;
+            }
+        }
+    </style>
+</head>
+
+
+<div id="app" class="body-bg">
+    <div class="login-container">
+        <!-- 左侧宣传区域 -->
+        <div class="promotion-section">
+            <div class="promo-content">
+                <h1 class="promotion-title">
+                    铁粉<code>code</code>
+                    <span>ThinkPHP开源低代码平台</span>
+                </h1>
+                <p class="promotion-desc">
+                    为开发者打造的高效低代码平台，让企业应用开发效率提升10倍，从构思到上线，一键完成。
+                </p>
+                
+                <ul class="feature-list">
+                    <li class="feature-item">
+                        <i class="el-icon-bolt"></i>
+                        <span><strong>快速构建</strong> 企业级应用，无需复杂编码</span>
+                    </li>
+                    <li class="feature-item">
+                        <i class="el-icon-code"></i>
+                        <span>基于 <strong>ThinkPHP</strong> 框架开发，稳定可靠</span>
+                    </li>
+                    <li class="feature-item">
+                        <i class="el-icon-share-alt"></i>
+                        <span><strong>免费开源</strong>，无商业化限制，完全可控</span>
+                    </li>
+                    <li class="feature-item">
+                        <i class="el-icon-shopping-cart"></i>
+                        <span>支持应用 <strong>开发与销售</strong>，创造商业价值</span>
+                    </li>
+                    <li class="feature-item">
+                        <i class="el-icon-link"></i>
+                        <span><strong>连接开发者与需求方</strong>，构建完整生态</span>
+                    </li>
+                    <li class="feature-item">
+                        <i class="el-icon-magic-stick"></i>
+                        <span>集成 <strong>AI</strong> 能力，实现一句话开发应用</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- 右侧表单区域 -->
+        <div class="form-section">
+            <div class="form-header">
+                <h2>欢迎使用TFadmin</h2>
+                <p>请登录您的账号</p>
+            </div>
+            
+            <!-- <div class="form-tabs"> -->
+            <!--     <div class="form-tab" :class="{active: isLogin}" @click="switchForm(true)">登录</div> -->
+            <!--     <div class="form-tab" :class="{active: !isLogin}" @click="switchForm(false)">注册</div> -->
+            <!-- </div> -->
+            
+            <!-- 登录表单 -->
+            <el-form v-if="isLogin" ref="login" :model="login" size="medium" :rules="loginRules" class="login-form" label-position="left">
+                <el-form-item prop="username">
+                    <el-input v-model="login.username" type="text" placeholder="用户名" prefix-icon="el-icon-user" autocomplete="off" clearable />
+                </el-form-item>
+                <el-form-item prop="password">
+                    <el-input v-model="login.password" type="password" placeholder="密码" prefix-icon="el-icon-lock" @keyup.enter.native="handleLogin" autocomplete="off" clearable show-password/>
+                </el-form-item>
+                <el-form-item prop="verify" v-if="verify_status">
+                    <el-col :span="13">
+                        <el-input v-model="login.verify" type="text" placeholder="验证码" prefix-icon="el-icon-picture" @keyup.enter.native="handleLogin" autocomplete="off" clearable/>
+                    </el-col>
+                    <el-col :span="11">
+                        <el-image :src="verifySrc" alt="验证码" title="点击刷新验证码" @click="refeshVerifySrc" style="width:108px;height:35px; margin-top:3px;float:right" />
+                    </el-col>
+                </el-form-item>
+                
+                <el-button :loading="loading" size="small" type="primary" style="width:100%;" @click.native.prevent="handleLogin">
+                    <span v-if="!loading">登 录</span>
+                    <span v-else>登 录 中...</span>
+                </el-button>
+            </el-form>
+            
+            <!-- 注册表单 -->
+            <el-form v-if="!isLogin" ref="registerForm" :model="registerForm" :rules="registerRules" class="register-form" label-width="100px">
+                <el-form-item label="真实姓名" prop="customer_name">
+                    <el-input v-model="registerForm.customer_name" placeholder="请输入真实姓名"></el-input>
+                </el-form-item>
+                <el-form-item label="联系方式" prop="customer_phone">
+                    <el-input v-model="registerForm.customer_phone" placeholder="请输入手机号码"></el-input>
+                </el-form-item>
+                <el-form-item label="登录账号" prop="username">
+                    <el-input v-model="registerForm.username" placeholder="请输入账号"></el-input>
+                </el-form-item>
+                <el-form-item label="登录密码" prop="password">
+                    <el-input v-model="registerForm.password" type="password" placeholder="请输入密码" show-password></el-input>
+                </el-form-item>
+                <el-form-item label="确认密码" prop="confirmPassword">
+                    <el-input v-model="registerForm.confirmPassword" type="password" placeholder="请再次输入密码" show-password></el-input>
+                </el-form-item>
+                
+                <el-button :loading="registerLoading" size="small" type="primary" style="width:100%;" @click.native.prevent="handleRegister">
+                    <span v-if="!registerLoading">注 册</span>
+                    <span v-else>注 册 中...</span>
+                </el-button>
+            </el-form>
+            
+            <!-- <div class="form-footer"> -->
+            <!--     <el-button size="small" type="text" @click="switchForm(!isLogin)"> -->
+            <!--         <span v-if="isLogin">还没有账号？立即注册</span> -->
+            <!--         <span v-else>已有账号？返回登录</span> -->
+            <!--     </el-button> -->
+            <!-- </div> -->
+        </div>
+    </div>
+</div>
+
+<script>
+    new Vue({
+        el: '#app',
+        data: function() {
+            return {
+                // 控制登录/注册表单切换
+                isLogin: true,
+                
+                loading: false,
+                registerLoading: false,
+                login:{
+                    username:'',
+                    password:'',
+                    rememberMe:false,
+                    verify: ''
+                },
+                registerForm: {
+                    username: '',
+                    password: '',
+                    confirmPassword: '',
+                    customer_name: '',
+                    customer_phone: '',
+                },
+                loginRules: {
+                    username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+                    password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+                    verify: [{ required: true, message: '请输入验证码', trigger: 'blur' }]
+                },
+                registerRules: {
+                    username: [
+                        { required: true, message: '请输入账号', trigger: 'blur' },
+                    ],
+                    password: [
+                        { required: true, message: '请输入密码', trigger: 'blur' },
+                        { min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur' }
+                    ],
+                    confirmPassword: [
+                        { required: true, message: '请再次输入密码', trigger: 'blur' },
+                        { validator: (rule, value, callback) => {
+                                if (value !== this.registerForm.password) {
+                                    callback(new Error('两次输入密码不一致!'));
+                                } else {
+                                    callback();
+                                }
+                            }, trigger: 'blur' }
+                    ],
+                    customer_name: [
+                        { required: true, message: '请输入姓名', trigger: 'blur' },
+                    ],
+                    customer_phone: [
+                        { required: true, message: '请输入手机号码', trigger: 'blur' },
+                        { pattern: /^1[3-9]\d{9}$/, message: '请输入正确的手机号码', trigger: 'blur' }
+                    ],
+                },
+                verifySrc:'',
+                verify_status:true,
+                success_url:'',
+                site_title:'',
+            }
+        },
+        
+        mounted(){
+            this.captch()
+        },
+        methods:{
+            // 切换登录/注册表单
+            switchForm(isLogin) {
+                this.isLogin = isLogin;
+                // 重置表单
+                if (isLogin) {
+                    this.$refs.registerForm && this.$refs.registerForm.resetFields();
+                } else {
+                    this.$refs.login && this.$refs.login.resetFields();
+                }
+            },
+            
+            captch(){
+                axios('{:url("admin/Login/verify")}').then(res => {
+                    if(res.data.status == 200){
+                        this.verifySrc = res.data.data.img
+                        this.login.key = res.data.data.key
+                        this.success_url = res.data.success_url
+                        this.site_title = res.data.site_title
+                        this.verify_status = res.data.verify_status
+                    }else{
+                        this.$message.error('验证码获取失败!')
+                    }
+                })
+            },
+            refeshVerifySrc() {
+                this.captch()
+            },
+            handleLogin(){
+                this.$refs['login'].validate(valid => {
+                    if(valid){
+                        this.loading = true
+                        axios.post('{:url("admin/Login/index")}',this.login).then(res => {
+                            if(res.data.status == 200){
+                                window.location.href = '{:url("admin/Index/index")}';
+                            }else{
+                                this.loading = false
+                                this.refeshVerifySrc()
+                                this.$message.error(res.data.msg)
+                            }
+                        })
+                    }
+                })
+            },
+            handleRegister() {
+                this.$refs.registerForm.validate(valid => {
+                    if (valid) {
+                        this.registerLoading = true;
+                        axios.post('{:url("admin/Login/register")}', this.registerForm).then(res => {
+                            if (res.data.status == 200) {
+                                this.$message.success('注册成功！即将为您跳转到登录');
+                                // 注册成功后切换到登录表单，并填充用户名
+                                setTimeout(() => {
+                                    this.switchForm(true);
+                                    this.login.username = this.registerForm.username;
+                                }, 1500);
+                            } else {
+                                this.$message.error(res.data.msg);
+                            }
+                            this.registerLoading = false;
+                        }).catch(() => {
+                            this.registerLoading = false;
+                        });
+                    }
+                });
+            }
+        },
+    })
+</script>

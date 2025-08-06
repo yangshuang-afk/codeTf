@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="__PUBLIC__/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+<link href="__PUBLIC__/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+<link href="__PUBLIC__/assets/element/index.css" rel="stylesheet">
+<link href="__PUBLIC__/assets/element/colors.css" rel="stylesheet">
+<link href="__PUBLIC__/assets/element/detail.css" rel="stylesheet">
+<link href="__PUBLIC__/assets/css/base.css" rel="stylesheet">
+<script src="__PUBLIC__/assets/element/vue.js"></script>
+<script src="__PUBLIC__/assets/element/index.js"></script>
+<script src="__PUBLIC__/assets/js/axios.min.js"></script>
+<script src="__PUBLIC__/components/base.component.js"></script>
+<script src="__PUBLIC__/assets/libs/jquery/jquery.min.js"></script>
+<script src="__PUBLIC__/assets/libs/metismenu/metisMenu.min.js"></script>
+<script src="__PUBLIC__/assets/js/js.cookie.min.js"></script>
+<script src="__PUBLIC__/assets/js/common.js"></script>
+<script src="__PUBLIC__/assets/js/waterMark.js"></script>
+<script type="text/javascript">
+Vue.config.productionTip = false
+<?php
+$dialogstate = request()->get('dialogstate');
+?>
+const base_url = '<?php echo getBaseUrl()?>';
+const base_dir = '';//勿要删除
+</script>
+{block name="style"}{/block}
+<style>
+    .el-avatar {
+    background-color: transparent !important;
+}
+</style>
+</head>
+
+
+<body>
+<header id="page-topbar" style="position:fixed;left:0; top:0; z-index:999;{if $dialogstate == 1}display:none;{/if}" v-cloak>
+	<div class="navbar-header">
+		<div class="d-flex">
+			<div class="navbar-header">
+				<div class="d-flex" data-toggle="cospan">
+					<i style="margin-left:15px;" id="vertical-menu-btn" class="el-icon-s-fold"></i>
+					<i style="margin-left:15px;" @click="reload" class="el-icon-refresh hidden-sm-and-down"></i>
+				</div>
+				<div class="d-flex hidden-sm-and-down">
+					<el-breadcrumb separator="/" style="margin-left:30px;">
+						<el-breadcrumb-item v-for="item in levelList" :key="item.path">
+							<a v-if="item.title == '控制台'" :href="item.path">{{item.title}}</a>
+							<span v-else>{{item.title}}</span>
+						</el-breadcrumb-item>
+					</el-breadcrumb>
+				</div>
+			</div>
+		</div>
+		<div class="d-flex">
+			{if session('admin.role_id') == 1}
+			<div class="iconbutton">
+				<el-tooltip content="清除缓存" effect="dark" placement="bottom">
+					<i @click="clearCache()" class="icontool el-icon-delete"></i>
+				</el-tooltip>
+			</div>
+			{/if}
+
+			<div class="iconbutton">
+				<el-avatar src="{:config('base_config.logo')}" style="vertical-align:middle"></el-avatar>
+				<el-dropdown trigger="click" placement="bottom" style="cursor: pointer;margin-right:15px;">
+					<span class="el-dropdown-link">
+						{:session('admin.username')}<i style="margin-left:0px; font-size:100%" class="icontool el-icon-arrow-down"></i>
+					</span>
+					<el-dropdown-menu slot="dropdown">
+						<el-dropdown-item icon="el-icon-lock" @click.native.prevent="passwordDialogStatus = true">修改密码</el-dropdown-item>
+						<el-dropdown-item icon="el-icon-back" @click.native.prevent="logout">退出</el-dropdown-item>
+					</el-dropdown-menu>
+				</el-dropdown>
+			</div>
+			<div class="iconbutton" style="margin-left:0">
+				<i class="bx bx-cog bx-spin right-bar-toggle"></i>
+			</div>
+		</div>
+	</div>
+
+	<el-dialog title="重置密码" style="margin-top:100px;" width="450px"  :visible="passwordDialogStatus" :before-close="closeForm" append-to-body>
+		<el-form :size="size" ref="form" :model="form" :rules="rules" label-width="80px">
+			<el-row>
+				<el-col :span="24">
+					<el-form-item label="新密码" prop="password">
+						<el-input  show-password autoComplete="off" v-model="form.password"  clearable placeholder="请输入密码"/>
+					</el-form-item>
+				</el-col>
+			</el-row>
+			<el-row>
+				<el-col :span="24">
+					<el-form-item label="确认密码" prop="repassword">
+						<el-input  show-password autoComplete="off" v-model="form.repassword"  clearable placeholder="请输入确认密码"/>
+					</el-form-item>
+				</el-col>
+			</el-row>
+		</el-form>
+		<div slot="footer" class="dialog-footer">
+			<el-button :size="size" :loading="loading" type="primary" @click="submit" >
+				<span v-if="!loading">确 定</span>
+				<span v-else>提 交 中...</span>
+			</el-button>
+			<el-button :size="size" @click="closeForm">取 消</el-button>
+		</div>
+	</el-dialog>
+</header>
+
+<script>
+new Vue({
+	el: '#page-topbar',
+	data(){
+		var validatePass2 = (rule, value, callback) => {
+			if(value === '') {
+				callback(new Error('请再次输入密码'))
+			}else if (value !== this.form.password) {
+				callback(new Error('两次输入密码不一致!'))
+			}else {
+				callback()
+			}
+		}
+		return {
+			form: {
+				password:'',
+				repassword:'',
+			},
+			url:{},
+			levelList:[],
+			notice:[],
+			passwordDialogStatus:false,
+			loading:false,
+			size:'small',
+			urlobj:{},//这里是判断如果是弹窗链接的话 不显示头部
+			rules: {
+                password: [{ required: true, message: '密码不能为空', trigger: 'blur' }],
+				repassword:[
+					{required: true, validator: validatePass2, trigger: 'blur'},
+				],
+			}
+		}
+	},
+	mounted(){
+		if(sessionStorage.getItem(base_url+'breadcrumb')){
+			const menuList = JSON.parse(sessionStorage.getItem(base_url+'breadcrumb'))
+			this.url = new URL(window.location.href)
+			let menus = this.getMenus(menuList)
+			let home = [{title:'控制台', path:base_url+'/Index/main.html'}]
+			if (menus !== undefined) {
+				if(this.url.pathname !== base_url+'/Index/main.html' && this.url.href !== base_url+'/Index/main.html'){
+					menus = home.concat(menus)
+				}
+			}else{
+				menus = home
+			}
+
+			this.levelList = menus
+		}
+	},
+	methods:{
+		getMenus(menuList,arr,z){
+            arr = arr || []
+            z = z || 0
+            for (let i = 0; i < menuList.length; i++) {
+                let item = menuList[i]
+                arr[z] = item
+                if(this.url.pathname === menuList[i].url || this.url.href === menuList[i].url){
+                   return arr.slice(0,z + 1)
+                }
+                if(menuList[i].children && menuList[i].children.length){
+                   let res = this.getMenus(menuList[i].children,arr,z+1)
+                   if(res){
+                       return res
+                   }
+                }
+            }
+        },
+		submit(){
+			this.$refs['form'].validate(valid => {
+				if(valid) {
+					this.loading = true
+					axios.post(base_url+'/Base/resetPwd',this.form).then(res => {
+						if(res.data.status == 200){
+							this.$message({message: '操作成功', type: 'success'})
+							this.closeForm()
+						}else{
+							this.$message.error(res.data.msg)
+						}
+					}).catch(()=>{
+						this.loading = false
+					})
+				}
+			})
+		},
+		closeForm(){
+			this.passwordDialogStatus = false
+			this.loading = false
+			if (this.$refs['form']!==undefined) {
+				this.$refs['form'].resetFields()
+			}
+		},
+		getNotice(){
+			axios.post(base_url+'/Index/getNotice').then(res => {
+				if(res.data.status == 200){
+					this.notice = res.data.data
+				}
+			})
+		},
+		clearCache(){
+			this.$confirm('确定清除缓存吗?', '提示', {
+				confirmButtonText: '确定',
+				cancelButtonText: '取消',
+				type: 'warning'
+			}).then(()=>{
+				axios.post(base_url+'/Base/clearCache').then(res => {
+					if(res.data.status == 200){
+						this.$message({message: '操作成功', type: 'success'})
+					}
+				})
+			})
+		},
+		logout(){
+			this.$confirm('确定注销并且退出系统?', '提示', {
+				confirmButtonText: '确定',
+				cancelButtonText: '取消',
+				type: 'warning'
+			}).then(()=>{
+				axios.get(base_url+'/Login/logout').then(res => {
+					if(res.data.status == 200){
+						sessionStorage.setItem(base_url+'breadcrumb','')
+						Cookies.set(base_url+'menu','')
+						top.parent.frames.location.href = base_url+'/login/index'
+					}
+				})
+			})
+		},
+		reload(){
+			location.reload()
+		},
+	},
+})
+</script>
+
+<div id="app" class="page-content" :style="!urlobj.dialogstate ? 'margin-top:60px;':'margin-top:10px;'">
+	<tab-tag v-if="!urlobj.dialogstate"></tab-tag>
+	{block name="content"}{/block}
+</div>
+
+<div class="right-bar" id="rightbar">
+	<div data-simplebar class="h-100">
+		<div class="rightbar-title flex align-items-center bg-dark p-3" style="height:51px;">
+			<h5 class="m-0 me-2 text-white">主题设置</h5>
+			<a href="javascript:void(0);" class="right-bar-toggle ms-auto">
+				<i class="mdi mdi-close noti-icon"></i>
+			</a>
+		</div>
+		<div class="drawer-container">
+			<div class="drawer-item">
+				<span>标签页</span>
+				<el-switch @change="selectTag" :active-value="1" :inactive-value="0" v-model="setting.tagsView" class="drawer-switch" />
+			</div>
+			<div class="drawer-item">
+				<p>顶部背景色</p>
+				<el-radio-group v-model="setting.topbg" @change="selectTopBg" size="mini">
+					<el-radio-button label="light">白色</el-radio-button>
+					<el-radio-button label="blank">黑色</el-radio-button>
+					<el-radio-button label="dark">蓝色</el-radio-button>
+				</el-radio-group>
+			</div>
+			<div class="drawer-item">
+				<p>侧栏背景色</p>
+				<el-radio-group v-model="setting.sidebg" @change="selectSideBg" size="mini">
+					<el-radio-button label="dark">黑色</el-radio-button>
+					<el-radio-button label="brand">蓝色</el-radio-button>
+					<el-radio-button label="office_blue">淡蓝</el-radio-button>
+					<el-radio-button label="sky_blue">天蓝</el-radio-button>
+					<el-radio-button label="light">白色</el-radio-button>
+				</el-radio-group>
+			</div>
+        </div>
+	</div>
+</div>
+<div class="rightbar-overlay"></div>
+<script>
+var siteconfig
+if(Cookies.get(base_url+'siteconfig')){
+	siteconfig = JSON.parse(Cookies.get(base_url+'siteconfig'))
+
+	console.log('siteconfig.topbg',siteconfig.topbg)
+
+	document.body.setAttribute('data-topbar', siteconfig.topbg)
+	parent.document.body.setAttribute('data-sidebar', siteconfig.sidebg)
+	var classname = !siteconfig.tagsView ? 'hiddenbox' : 'showbox'
+	document.getElementById('app').setAttribute('tag-box', classname)
+}
+
+new Vue({
+	el: '#rightbar',
+	data(){
+		return {
+			setting:{
+				tagsView:1,
+				topbg:'light',
+				sidebg:'light',
+			}
+		}
+	},
+	mounted(){
+		if(Cookies.get(base_url+'siteconfig')){
+			this.setting = JSON.parse(Cookies.get(base_url+'siteconfig'))
+		}
+		var classname = this.setting.tagsView == 0 ? 'hiddenbox' : 'showbox'
+		document.getElementById('app').setAttribute('tag-box', classname)
+		document.body.setAttribute('data-topbar', this.setting.topbg)
+	},
+	methods:{
+		selectTopBg(val){
+			document.body.setAttribute('data-topbar', val)
+			Cookies.set(base_url+'siteconfig',JSON.stringify(this.setting))
+		},
+		selectSideBg(val){
+			parent.document.body.setAttribute('data-sidebar', val)
+			Cookies.set(base_url+'siteconfig',JSON.stringify(this.setting))
+		},
+		selectTag(val){
+			var classname = !val ? 'hiddenbox' : 'showbox'
+			document.getElementById('app').setAttribute('tag-box', classname)
+			Cookies.set(base_url+'siteconfig',JSON.stringify(this.setting))
+		}
+	},
+})
+</script>
+<!--水印-->
+<div class="elementdiv"></div>
+	<script>
+		//设置水印名称
+		var now = new Date();
+		// 获取年份
+		var year = now.getFullYear();
+		// 获取月份（加1，因为月份是从0开始的）
+		var month = now.getMonth() + 1;
+		// 获取日期
+		var date = now.getDate();
+
+		// 检查是否需要在月份和日期前添加0
+		month = month < 10 ? '0' + month : month;
+		date = date < 10 ? '0' + date : date;
+		var dateTimeString = year + '-' + month + '-' + date;
+		axios.post(base_url + '/Base/watermark').then(res => {
+			if(res.data.status == 200){
+				if (res.data.menus.watermark_status == 1) {
+					//按登录者显示水印
+					watermark("<?=session('admin.name')?>", dateTimeString)
+					//窗口变化
+					window.addEventListener('resize', function() {
+						var windowHeight = window.innerHeight;
+						var windowWidth = window.innerWidth;
+
+						// 获取所有具有class="watermarkDiv"的div元素
+						var watermarkDivs = document.querySelectorAll('.watermarkDiv');
+						// 遍历并删除每个水印元素
+						for (var i = 0; i < watermarkDivs.length; i++) {
+							var parentElement = watermarkDivs[i].parentNode;
+							parentElement.removeChild(watermarkDivs[i]);
+						}
+						//重新绘制水印
+						watermark("<?=session('admin.name')?>", dateTimeString)
+					});
+				}
+			}
+		})
+	</script>
+{block name="script"}{/block}
+</body>
+</html>

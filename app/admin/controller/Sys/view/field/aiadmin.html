@@ -1,0 +1,1091 @@
+{extend name='view/common/container'}
+{block name="style"}
+<style>
+    /* AI对话框样式 */
+    .el-dialog {
+        margin-bottom: 0;
+         margin-top: 0 !important;
+        display: flex;
+        flex-direction: column;
+        z-index: -999;
+        max-height: 100%;!important;
+        overflow: hidden;
+        position: relative;
+        /* left: -120px; */
+        /*max-width: 1200px;*/
+    }
+
+    .ai-dialog .el-dialog__body {
+        padding: 10px 20px !important;
+        height: calc(100vh - 55px);
+    }
+
+    /* 卡片样式 */
+    .input-card, .prompt-card, .chat-card {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        margin: 0 !important; /* 移除边距 */
+    }
+
+    .input-card .el-card__body,
+    .prompt-card .el-card__body,
+    .chat-card .el-card__body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        padding: 0 !important; /* 移除内边距 */
+    }
+
+    /* 输入区域样式 */
+    .full-height-textarea {
+        flex: 1;
+        margin: 0 !important; /* 移除边距 */
+    }
+
+    .full-height-textarea textarea {
+        height: 100% !important;
+        min-height: 100% !important;
+        resize: none;
+        margin: 0 !important; /* 移除边距 */
+    }
+
+    /* 修改聊天区域样式 */
+    .chat-card {
+        position: relative;
+        height: 100%;
+    }
+
+    .chat-container {
+        flex: 1;
+        overflow-y: auto;
+        padding: 10px;
+        margin-bottom: 60px; /* 为底部输入框留出空间 */
+    }
+
+    /* 发送按钮固定在底部 */
+    .chat-card .el-input {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 10px;
+        background: white;
+        border-top: 1px solid #ebeef5;
+    }
+
+    /* 消息气泡样式优化 */
+    .message-bubble {
+        margin: 8px 0;
+        padding: 10px 15px;
+        border-radius: 4px;
+        max-width: 90%;
+    }
+
+    .user-message {
+        background: #e6f7ff;
+        margin-left: auto;
+    }
+
+    .ai-message {
+        background: #f6ffed;
+        margin-right: auto;
+    }
+
+    .loading-message {
+        color: #999;
+        font-style: italic;
+    }
+
+    .message-content {
+        margin-top: 5px;
+        word-break: break-word;
+    }
+
+    /* 表格行高亮 */
+    .rowLight {
+        background-color: #f0f9eb !important;
+    }
+
+    /* 排序拖拽样式 */
+    .sortable-ghost {
+        opacity: 0.8;
+        background: #c8ebfb !important;
+    }
+
+    /* 父级div充满 */
+    .el-card {
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    /* 对话框内容充满 */
+    .el-dialog__body {
+        padding: 0 !important;
+    }
+
+    .el-textarea__inner {
+        border-radius: 0 !important;
+        border: 0 !important;
+    }
+
+</style>
+{/block}
+{block name="content"}
+
+<div style="margin:0 15px 15px 15px;">
+    <el-card shadow="never" style="min-height:650px;">
+        <!-- 头部标题区域 -->
+        <div style="border-bottom:1px solid #ebeef5; padding-bottom:15px; font-size:14px;" class="clearfix">
+            <span>{{app_name}}-{{menu_title}} 字段列表 (支持拖动排序)</span>
+            <el-button size="small" @click="backup" type="primary" icon="el-icon-back" style="float:right; margin-left:10px;">返回菜单</el-button>
+            <el-button size="small" @click="backupAction" type="primary" icon="el-icon-back" style="float:right">前往字段</el-button>
+        </div>
+
+        <!-- 操作按钮区域 -->
+        <el-row style="margin-bottom:9px; margin-top:11px;">
+            <el-col :span="21">
+                <el-button type="success" size="mini" icon="el-icon-plus" @click="toggleBatchCreate">{{ showBatchCreate ? '取消批量' : '批量新增' }}</el-button>
+                <el-button type="warning" size="mini" icon="el-icon-magic-stick" @click="showAIModal">AI新增</el-button>
+                <el-button type="primary" size="mini" icon="el-icon-edit-outline" @click="createMysql">生成MYSQL字段</el-button>
+            </el-col>
+            <el-col :span="3" style="text-align:right">
+                <table-tool :expand_status="false" @refesh_list="loadlist"></table-tool>
+            </el-col>
+        </el-row>
+
+        <!-- 批量创建区域 - 完整表格列定义 -->
+        <div v-if="showBatchCreate" style="margin-bottom: 15px; border: 1px solid #ebeef5; padding: 15px; background: #f8f8f8;">
+            <el-row>
+                <el-col :span="24">
+                    <el-table :data="batchFields" border style="width: 100%">
+                        <el-table-column label="序号" width="60" align="center">
+                            <template slot-scope="scope">{{ scope.$index + 1 }}</template>
+                        </el-table-column>
+                        <el-table-column prop="title" label="字段标题">
+                            <template slot-scope="scope">
+                                <el-input v-model="scope.row.title" size="small" placeholder="字段标题"></el-input>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="field" label="字段名称">
+                            <template slot-scope="scope">
+                                <el-input v-model="scope.row.field" size="small" placeholder="字段名称"></el-input>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="type" label="字段类型">
+                            <template slot-scope="scope">
+                                <el-select v-model="scope.row.type" size="small" placeholder="请选择" @change="updateFieldLength(scope.row)">
+                                    <el-option v-for="(item,i) in field" :key="i" :label="item.name" :value="item.type"></el-option>
+                                </el-select>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="datatype" label="数据结构" :min-width="120" :max-width="250">
+                            <template slot-scope="scope">
+                                <el-row :gutter="10">
+                                    <el-col :span="12">
+                                        <el-select v-model="scope.row.datatype" size="small" placeholder="请选择" @change="updateFieldLength(scope.row)">
+                                            <el-option-group label="整数类型">
+                                                <el-option label="TINYINT" value="TINYINT"></el-option>
+                                                <el-option label="SMALLINT" value="SMALLINT"></el-option>
+                                                <el-option label="MEDIUMINT" value="MEDIUMINT"></el-option>
+                                                <el-option label="INT" value="INT"></el-option>
+                                                <el-option label="BIGINT" value="BIGINT"></el-option>
+                                            </el-option-group>
+                                            <el-option-group label="字符串类型">
+                                                <el-option label="CHAR" value="CHAR"></el-option>
+                                                <el-option label="VARCHAR" value="VARCHAR"></el-option>
+                                                <el-option label="TEXT" value="TEXT"></el-option>
+                                                <el-option label="LONGTEXT" value="LONGTEXT"></el-option>
+                                            </el-option-group>
+                                            <el-option-group label="浮点类型">
+                                                <el-option label="FLOAT" value="FLOAT"></el-option>
+                                                <el-option label="DOUBLE" value="DOUBLE"></el-option>
+                                                <el-option label="DECIMAL" value="DECIMAL"></el-option>
+                                            </el-option-group>
+                                            <el-option-group label="日期时间">
+                                                <el-option label="DATE" value="DATE"></el-option>
+                                                <el-option label="TIME" value="TIME"></el-option>
+                                                <el-option label="DATETIME" value="DATETIME"></el-option>
+                                                <el-option label="TIMESTAMP" value="TIMESTAMP"></el-option>
+                                            </el-option-group>
+                                        </el-select>
+                                    </el-col>
+                                    <el-col :span="12">
+                                        <el-input v-model="scope.row.length" size="small" placeholder="如: 255, 10,2"></el-input>
+                                    </el-col>
+                                </el-row>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="list_show" label="显示位置/状态" width="120">
+                            <template slot-scope="scope">
+                                <el-select v-model="scope.row.list_show" size="small" placeholder="请选择">
+                                    <el-option-group label="显示状态">
+                                        <el-option label="不显示" :value="0"></el-option>
+                                    </el-option-group>
+                                    <el-option-group label="显示位置">
+                                        <el-option label="居中" :value="2"></el-option>
+                                        <el-option label="居左" :value="3"></el-option>
+                                        <el-option label="居右" :value="4"></el-option>
+                                    </el-option-group>
+                                </el-select>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="search_type" label="搜索状态/模式" width="120">
+                            <template slot-scope="scope">
+                                <el-select v-model="scope.row.search_type" size="small" placeholder="请选择">
+                                    <el-option-group label="是否搜索">
+                                        <el-option label="否" :value="0"></el-option>
+                                    </el-option-group>
+                                    <el-option-group label="搜索模式">
+                                        <el-option label="=" :value="1"></el-option>
+                                        <el-option label="like" :value="2"></el-option>
+                                        <el-option label="in" :value="3"></el-option>
+                                    </el-option-group>
+                                </el-select>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="create_table_field" label="创建字段" width="100">
+                            <template slot-scope="scope">
+                                <el-switch v-model="scope.row.create_table_field" :active-value="1" :inactive-value="0"></el-switch>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="post_status" label="录入状态" width="100">
+                            <template slot-scope="scope">
+                                <el-switch v-model="scope.row.post_status" :active-value="1" :inactive-value="0"></el-switch>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="width" label="单元格宽度" width="100">
+                            <template slot-scope="scope">
+                                <el-input v-model="scope.row.width" size="small" placeholder="宽度"></el-input>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="sortid" label="排序">
+                            <template slot-scope="scope">
+                                <el-input v-model="scope.row.sortid" size="small" placeholder="排序"></el-input>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="操作" width="80" align="center">
+                            <template slot-scope="scope">
+                                <el-button type="danger" size="mini" icon="el-icon-delete" @click="removeBatchField(scope.$index)"></el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </el-col>
+            </el-row>
+            <el-row style="margin-top: 15px;">
+                <el-col :span="24" style="text-align: right;">
+                    <el-button type="primary" size="mini" icon="el-icon-plus" @click="addBatchField">添加一行</el-button>
+                    <el-button type="success" size="mini" icon="el-icon-upload" @click="submitBatchCreate">提交创建</el-button>
+                </el-col>
+            </el-row>
+        </div>
+
+        <!-- 主表格区域 -->
+        <el-row>
+            <el-table row-key="id" :header-cell-style="{ background: '#eef1f6', color: '#606266' }"
+                     :row-class-name="rowClass" v-loading="loading" ref="multipleTable"
+                     border class="eltable" :data="list" @selection-change="selection"
+                     @row-click="handleRowClick" style="width: 100%">
+                <el-table-column align="center" type="selection" width="42"></el-table-column>
+                <el-table-column property="id" align="center" label="编号" width="65"></el-table-column>
+                <el-table-column property="title" label="字段标题">
+                    <template slot-scope="scope">
+                        <el-input size="mini" placeholder="字段标题" @blur.stop="updateFieldExt(scope.row,'title')" v-model="scope.row.title"></el-input>
+                    </template>
+                </el-table-column>
+                <el-table-column property="field" label="字段名称">
+                    <template slot-scope="scope">
+                        <el-input size="mini" placeholder="字段名称" @blur.stop="updateField(scope.row,'field')" v-model="scope.row.field"></el-input>
+                    </template>
+                </el-table-column>
+                <el-table-column property="type" label="字段类型">
+                    <template slot-scope="scope">
+                        <el-select v-model="scope.row.type" size="mini" @change="updateFieldExt(scope.row,'type')" filterable placeholder="请选择">
+                            <el-option v-for="(item,i) in field" :key="i" :label="item.name" :value="item.type"></el-option>
+                        </el-select>
+                    </template>
+                </el-table-column>
+                <el-table-column property="list_show" label="显示位置/状态">
+                    <template slot-scope="scope">
+                        <el-select v-model="scope.row.list_show" @change="updateFieldExt(scope.row,'list_show')" size="mini" filterable placeholder="请选择">
+                            <el-option-group label="显示状态">
+                                <el-option key="2" label="不显示" :value="0"></el-option>
+                            </el-option-group>
+                            <el-option-group label="显示位置">
+                                <el-option key="1" label="居中" :value="2"></el-option>
+                                <el-option key="2" label="居左" :value="3"></el-option>
+                                <el-option key="3" label="居右" :value="4"></el-option>
+                            </el-option-group>
+                        </el-select>
+                    </template>
+                </el-table-column>
+                <el-table-column align="left" property="search_type" label="搜索状态/模式">
+                    <template slot-scope="scope">
+                        <el-select v-model="scope.row.search_type" @change="updateFieldExt(scope.row,'search_type')" size="mini" placeholder="请选择">
+                            <el-option-group label="是否搜索">
+                                <el-option key="1" label="否" :value="0"></el-option>
+                            </el-option-group>
+                            <el-option-group label="搜索模式">
+                                <el-option key="1" label="=" :value="1"></el-option>
+                                <el-option key="2" label="like" :value="2"></el-option>
+                                <el-option key="3" label="in" :value="3"></el-option>
+                            </el-option-group>
+                        </el-select>
+                    </template>
+                </el-table-column>
+                <el-table-column width="75" align="center" property="create_table_field" label="创建字段">
+                    <template slot-scope="scope">
+                        <el-tag size="mini" @blur.stop="updateFieldExt(scope.row,'create_table_field')" :type="scope.row.create_table_field=='1'?'primary':'info'" effect="dark">{{ scope.row.create_table_field == '1' ? '是' : '否' }}</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column width="75" align="center" property="post_status" label="录入状态">
+                    <template slot-scope="scope">
+                        <el-switch @change="updateFieldExt(scope.row,'post_status')" :active-value="1" :inactive-value="0" v-model="scope.row.post_status"></el-switch>
+                    </template>
+                </el-table-column>
+                <el-table-column width="100" align="center" property="width" label="单元格宽度">
+                    <template slot-scope="scope">
+                        <el-input style="width:60px" @blur.stop="updateFieldExt(scope.row,'width')" size="mini" placeholder="宽度" v-model="scope.row.width"></el-input>
+                    </template>
+                </el-table-column>
+                <el-table-column width="90" align="center" property="sortid" label="排序">
+                    <template slot-scope="scope">
+                        <el-input style="width:60px;" @blur.stop="updateFieldExt(scope.row,'sortid')" size="mini" placeholder="排序" v-model="scope.row.sortid"></el-input>
+                    </template>
+                </el-table-column>
+                <el-table-column align="center" property="datatype" label="数据结构">
+                    <template slot-scope="scope">
+                        {{scope.row.datatype}}({{scope.row.length}})
+                    </template>
+                </el-table-column>
+                <el-table-column :fixed="false" label="操作" align="center" width="135">
+                    <template slot-scope="scope">
+                        <el-button size="mini" style="padding:7px 5px" type="primary" icon="el-icon-edit-outline" @click="editor(scope.row)">修改</el-button>
+                        <el-button size="mini" style="padding:7px 5px" type="danger" icon="el-icon-delete" @click="deleteField(scope.row)">删除</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <Page :total="page_data.total" :page.sync="page_data.page" :limit.sync="page_data.limit" @pagination="loadlist" />
+        </el-row>
+    </el-card>
+</div>
+
+<!-- AI智能解析对话框 -->
+<el-dialog title="AI智能解析" :visible.sync="aiDialogVisible" width="90%" fullscreen class="ai-dialog">
+  <el-row :gutter="20" style="height: 85vh;">
+    <!-- 左侧输入区 -->
+    <el-col :span="12" style="height: 100%;">
+      <el-card shadow="never" style="height: 100%;padding: 0px" class="input-card" style="padding:0px;">
+        <div slot="header" class="clearfix">
+          <span>输入区</span>
+          <el-button style="float: right; padding: 3px 0" type="text" @click="clearInput">清空</el-button>
+        </div>
+        <el-input
+          type="textarea"
+          :rows="22"
+          v-model="aiInputText"
+          placeholder='请粘贴您的代码/表结构/接口文档等，系统将自动解析字段信息'
+          resize="none"
+          class="full-height-textarea">
+        </el-input>
+      </el-card>
+    </el-col>
+
+    <!-- 右侧区域 -->
+    <el-col :span="12" style="height: 100%;">
+      <el-row style="height: 50%;">
+        <el-card shadow="never" style="height: 100%;" class="prompt-card">
+          <div slot="header" class="clearfix">
+            <span>提示词模板</span>
+            <el-button style="float: right; padding: 3px 0" type="text" @click="useDefaultPrompt">使用默认</el-button>
+          </div>
+          <el-input
+            type="textarea"
+            :rows="8"
+            v-model="aiPromptText"
+            placeholder='请填写提示词或使用默认模板'
+            resize="none"
+            class="full-height-textarea">
+          </el-input>
+        </el-card>
+      </el-row>
+
+      <el-row style="height: 50%;">
+        <el-card shadow="never" style="height: 100%;" class="chat-card">
+          <div slot="header">
+            <span>AI对话区</span>
+          </div>
+          <div class="chat-container" ref="chatContainer">
+            <div v-for="(msg, index) in aiConversation" :key="index"
+                 :class="['message-bubble', msg.role === 'user' ? 'user-message' : 'ai-message']">
+              <el-tag :type="msg.role === 'user' ? 'primary' : 'success'" size="small">
+                {{msg.role === 'user' ? '我' : 'AI'}}
+              </el-tag>
+              <div class="message-content">{{msg.role === 'user' ? msg.content : (msg.content === '代码生成中...' ? msg.content : '代码生成中...')}}</div>
+            </div>
+          </div>
+          <el-input
+            v-model="aiUserInput"
+            placeholder="请输入您的需求描述"
+            clearable
+            @keyup.enter.native="sendToAI"
+            :disabled="loadingAI">
+            <el-button slot="append" icon="el-icon-s-promotion" @click="sendToAI" :loading="loadingAI">发送</el-button>
+          </el-input>
+        </el-card>
+      </el-row>
+    </el-col>
+  </el-row>
+
+  <div slot="footer" class="dialog-footer">
+    <el-button @click="aiDialogVisible = false">取消</el-button>
+    <el-button type="primary" @click="parseAIContent" :loading="loadingAI">解析内容</el-button>
+  </div>
+</el-dialog>
+
+<!-- 对话框组件 -->
+<admin-add :show.sync="dialog.addDialogStatus" menuid="{$menu_id}" :field="field" :item_field="itemList" size="small" @refesh_list="loadlist"></admin-add>
+<admin-update :show.sync="dialog.updateDialogStatus" menu_id="{$menu_id}" :info="info" :field="field" :item_field="itemList" size="small" @refesh_list="loadlist"></admin-update>
+
+{/block}
+
+{block name="script"}
+<script src="__PUBLIC__/components/sys/field.js"></script>
+<script src="__PUBLIC__/assets/js/Sortable.min.js"></script>
+<script src="__PUBLIC__/assets/libs/vuedragable/Sortable.min.js"></script>
+<script src="__PUBLIC__/assets/libs/vuedragable/vuedraggable.umd.min.js"></script>
+<script src="__PUBLIC__/assets/js/app.js"></script>
+<script src="__PUBLIC__/assets/js/common.js" type="module"></script>
+<script>
+new Vue({
+    el: '#app',
+    components: {
+        'draggable': window.vuedraggable,
+    },
+    data() {
+        return {
+            dialog: {
+                addDialogStatus: false,
+                updateDialogStatus: false,
+            },
+            aiDialogVisible: false,
+            aiInputText: '',
+            aiPromptText: `【角色定义】你是一个专业的低代码平台设计师，请根据以下需求生成完整的字段配置，返回严谨的横版的json代码，每条数据一行内展示：
+
+【具体要求】
+1. 生成完整的字段列表
+2. 为每个字段设置：
+   - 字段名(栏目简拼+下划线+字段拼音)
+   - 中文标题
+   - 字段类型
+   - 数据类型和长度
+   - 是否列表显示(0不显示、2居中、3居中、4居右)
+   - 搜索类型(1是=、2是like、3是in)
+   - 是否创建真实字段(1是/0否)
+   - 是否允许录入(1是/0否)
+3. 输出为规范的JSON格式
+4.忽略栏目主键，因为我已经事先生成完成了
+5.type类型必须参考【TYPE字典】
+6.datatype类型必须参考【datatype字典】
+
+
+
+【示例输出】：
+{
+"员工性别":{"field":"yg_xingbie","type":"1","datatype":"varchar","length":"20","list_show":2,"search_type":1,"create_table_field":1,"post_status":1,"width":"","sortid":"","item_config":""},
+"员工姓名":{"field":"yg_name","type":"1","datatype":"varchar","length":"20","list_show":2,"search_type":1,"create_table_field":1,"post_status":1,"width":"","sortid":"","item_config":""}
+}
+
+【输出注释】：
+"字段中文名称":{"field":"字段英文用小写加下划线","type":"低代码平台的字段类型，请看【TYPE字典】","datatype":"字段类型请严格执行【datatype字典】使用的字段类型","length":"字段长度（纯数字）","list_show":列表显示判断（0不显示、2居中、3居中、4居右）,"search_type":搜索模式（1是=、2是like、3是in）,"create_table_field":创建实体字段（1是真实创建、0是不创建）,"post_status":录入状态（1可以录入、0禁止录入）,"width":"列表宽度（默认不填写，如果是短字段添加限制比如人名、时间等）","sortid":"列表排序（默认不填写）","item_config":如果是性别、等单选框、下拉框时才会出现，参考【item_config字段规则】},
+
+【TYPE字典】：
+[{name:"文本框",type:1,property:1,mongoProperty:1,search:true},{name:"下拉框",type:2,property:2,mongoProperty:2,item:true,search:true},{name:"下拉框(多选)",type:3,property:1,mongoProperty:1,item:true,search:true},{name:"下拉框(带分页)",type:35,property:2,mongoProperty:2,item:true,search:true},{name:"单选框",type:4,property:3,mongoProperty:2,item:true,search:true},{name:"多选框",type:5,property:1,mongoProperty:1,item:true,search:true},{name:"开关按钮",type:6,property:6,mongoProperty:2,item:true,search:true},{name:"密码框",type:7,property:1,mongoProperty:1,search:false},{name:"文本域",type:8,property:4,mongoProperty:1,search:true},{name:"日期框",type:9,property:2,mongoProperty:2,search:false},{name:"日期范围",type:10,property:1,mongoProperty:1,search:false},{name:"创建时间(后端自动)",type:11,property:2,mongoProperty:2,search:false},{name:"修改时间(后端自动)",type:12,property:2,mongoProperty:2,search:false},{name:"单图上传",type:13,property:1,mongoProperty:1,search:false},{name:"多图上传",type:14,property:4,mongoProperty:1,search:false},{name:"单文件上传",type:15,property:1,mongoProperty:1,search:false},{name:"多文件上传",type:16,property:4,mongoProperty:1,search:false},{name:"计数器",type:17,property:5,mongoProperty:2,search:false},{name:"标签",type:18,property:1,mongoProperty:1,search:true},{name:"进度条滑块",type:19,property:3,mongoProperty:2,search:false},{name:"颜色选择器",type:20,property:1,mongoProperty:1,search:false},{name:"键值对",type:21,property:4,mongoProperty:1,search:false},{name:"商品规格",type:39,property:4,mongoProperty:1,search:false},{name:"省市区联动",type:22,property:1,mongoProperty:1,search:false},{name:"百度地图坐标选择器",type:23,property:4,mongoProperty:1,search:false},{name:"高德地图坐标选择器",type:24,property:4,mongoProperty:1,search:false},{name:"腾讯地图坐标选择器",type:28,property:4,mongoProperty:1,search:false},{name:"编辑器(wangeditor)",type:25,property:4,mongoProperty:1,search:false},{name:"编辑器(tinymce)",type:26,property:8,mongoProperty:1,search:false},{name:"markdown编辑器(mdeditor)",type:27,property:4,mongoProperty:1,search:false},{name:"评分",type:37,property:3,mongoProperty:2,search:false},{name:"权限节点",type:38,property:4,mongoProperty:1,search:false},{name:"排序号",type:29,property:2,mongoProperty:2,search:false},{name:"session值",type:30,property:2,mongoProperty:1,search:true},{name:"随机数",type:31,property:1,mongoProperty:1,search:false},{name:"订单号",type:32,property:1,mongoProperty:1,search:false},{name:"隐藏域",type:33,property:1,mongoProperty:1,search:true},{name:"请求ip",type:34,property:1,mongoProperty:1,search:false},{name:"url",type:36,property:4,mongoProperty:1,search:false},{name:"数值计算",type:40,property:1,mongoProperty:1,search:false}]
+
+【datatype字典】：
+varchar','int','smallint','text','longtext','decimal','tinyint','datetime
+
+
+【item_config字段规则】：
+[{"key":"男","val":"1","label_color":"success"},{"key":"女","val":"0","label_color":"info"}]
+
+【label_color颜色字典】：
+[灰色：info、绿色：success]
+
+【需求描述】`,
+            aiUserInput: '',
+            aiConversation: [],
+            deepseekKey: '',
+            loadingAI: false,
+            eventSource: null,
+
+            showBatchCreate: false,
+            batchFields: [{
+                title: '',
+                field: '',
+                type: '',
+                datatype: 'VARCHAR',
+                length: '255',
+                list_show: 1,
+                search_type: 0,
+                create_table_field: 1,
+                post_status: 1,
+                width: '',
+                sortid: '',
+                item_config: '',
+                menu_id: '{$menu_id}'
+            }],
+            app_name: '',
+            menu_title: '',
+            ids: [],
+            field_titles: [],
+            single: true,
+            multiple: true,
+            list: [],
+            field: [],
+            itemList: [],
+            info: {},
+            copy_app_list: [],
+            appid: '',
+            loading: false,
+            page_data: {
+                limit: 20,
+                page: 1,
+                total: 50
+            }
+        };
+    },
+    methods: {
+        showAIModal() {
+            this.aiDialogVisible = true;
+            this.aiInputText = '';
+            this.aiUserInput = '';
+            this.aiConversation = [];
+            if (!this.aiPromptText) {
+                this.useDefaultPrompt();
+            }
+        },
+
+        useDefaultPrompt() {
+            this.aiPromptText = `【角色定义】你是一个专业的低代码平台设计师...`;
+            this.$message.success('已加载默认提示词模板');
+        },
+
+        clearInput() {
+            this.aiInputText = '';
+            this.$message.success('已清空输入区');
+        },
+
+        async sendToAI() {
+            if (!this.aiUserInput.trim()) {
+                this.$message.warning('请输入您的需求描述');
+                return;
+            }
+
+            // document.getElementById('fasong').style.bottom = '-11vh'
+
+            this.loadingAI = true;
+            const userMessage = this.aiUserInput;
+
+            // 添加用户消息到对话
+            this.aiConversation.push({
+                role: 'user',
+                content: userMessage
+            });
+
+            // 添加AI回复提示
+            this.aiConversation.push({
+                role: 'assistant',
+                content: '思考中...'
+            });
+
+            // 清空输入区，准备接收流式数据
+            this.aiInputText = '';
+
+            // DeepSeek API 参数
+            const apiKey = this.deepseekKey; // 替换为你的真实API Key
+            const apiUrl = 'https://api.deepseek.com/v1/chat/completions';
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${apiKey}`
+                    },
+                    body: JSON.stringify({
+                        model: "deepseek-chat",
+                        messages: [
+                            { role: "system", content: this.aiPromptText },
+                            { role: "user", content: userMessage }
+                        ],
+                        stream: true, // 关键：开启流式
+                        temperature: 0.7
+                    })
+                });
+
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+                // 处理流式数据
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder("utf-8");
+                let fullText = '';
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+
+                    const chunk = decoder.decode(value, { stream: true });
+                    const lines = chunk.split('\n').filter(line => line.trim() !== '');
+
+                    for (const line of lines) {
+                        if (line.startsWith('data: ')) {
+                            const data = line.replace('data: ', '');
+                            if (data === '[DONE]') {
+                                this.loadingAI = false;
+                                return;
+                            }
+
+                            try {
+                                const parsed = JSON.parse(data);
+                                if (parsed.choices?.[0]?.delta?.content) {
+                                    fullText += parsed.choices[0].delta.content;
+                                    this.aiInputText = fullText; // 流式更新
+
+                                    // 自动滚动
+                                    this.$nextTick(() => {
+                                        const textarea = document.querySelector('.full-height-textarea textarea');
+                                        if (textarea) textarea.scrollTop = textarea.scrollHeight;
+                                    });
+                                }
+                            } catch (e) {
+                                console.error('解析错误:', e);
+                            }
+                        }
+                    }
+                }
+            } catch (error) {
+                this.$message.error(`请求失败: ${error.message}`);
+                this.aiConversation.push({
+                    role: 'system',
+                    content: `错误: ${error.message}`
+                });
+            } finally {
+                this.loadingAI = false;
+            }
+        },
+
+        parseAIContent() {
+            if (!this.aiInputText.trim()) {
+                this.$message.warning('请输入要解析的内容');
+                return;
+            }
+            try {
+                let fields = [];
+
+
+                text = this.aiInputText.replace(/^```(json)?/gm, '').replace(/```$/gm, '');
+                text = text.trim();
+                fields = this.parseJSON(text);
+                if (fields.length > 0) {
+                    this.batchFields = fields;
+                    this.showBatchCreate = true;
+                    this.aiDialogVisible = false;
+                    this.$message.success(`成功解析出 ${fields.length} 个字段`);
+                } else {
+                    this.$message.warning('未能识别出有效字段信息');
+                }
+            } catch (e) {
+                this.$message.error('解析失败: ' + e.message);
+            }
+        },
+
+
+
+        parseJSON(jsonText) {
+
+
+          try {
+            const data = JSON.parse(jsonText);
+console.log(data)
+            // 确保是对象类型（非数组）
+            const sample = Array.isArray(data) ? data[0] : data;
+
+            // 校验是否为有效对象
+            if (typeof sample !== 'object' || sample === null) {
+              throw new Error("输入必须是对象或数组");
+            }
+
+            return Object.keys(sample).map(zhName => {
+              const config = sample[zhName];
+
+              // 校验配置项格式
+              if (!config || typeof config !== 'object') {
+                throw new Error(`字段"${zhName}"的配置必须是对象`);
+              }
+              if (!config.field) {
+                throw new Error(`字段"${zhName}"缺少必需的field属性`);
+              }
+
+              // 返回字段配置对象（严格保留原注释）
+              return {
+                title: zhName,                   //字段中文名（中文注释）
+                field: config.field,              //字段英文名
+                type: config.type || this.guessFieldType(config.field, config.value), // 默认类型（根据业务逻辑补充）
+                datatype: config.datatype || 'VARCHAR', // 字段类型（默认VARCHAR）
+                length: config.length || this.getDefaultLength(config.datatype), // 数据字段长度
+                list_show: config.list_show ?? 1,       // 是否在列表页展示（1显示，默认1）
+                search_type: config.search_type ?? (config.datatype === 'VARCHAR' ? 2 : 1), //搜索模式（1=精确,2=LIKE）
+                create_table_field: config.create_table_field ?? 1, //是否创建真实字段（1是创建）
+                post_status: config.post_status ?? 1,    //是否允许录入（1允许）
+                width: config.width || '',               // 列表页展示宽度（空默认）
+                sortid: config.sortid || '',             // 列表也排序纯数字
+                menu_id: config.menu_id || '{$menu_id}',  //当前低代码所属栏目id
+                item_config: config.item_config || ''  //字段设置
+              };
+            });
+          } catch (e) {
+            this.$message.error('JSON解析失败: ' + e.message);
+            return []; // 返回空数组避免后续报错
+          }
+        },
+
+        convertToTitle(fieldName) {
+            return fieldName.replace(/_/g, ' ').replace(/(?:^|\s)\S/g, a => a.toUpperCase());
+        },
+
+        getDefaultLength(type) {
+            const map = {
+                'VARCHAR': '255',
+                'CHAR': '50',
+                'INT': '11',
+                'TINYINT': '4',
+                'DECIMAL': '10,2',
+                'TEXT': '',
+                'LONGTEXT': '',
+                'DATE': '',
+                'DATETIME': '',
+                'TIMESTAMP': ''
+            };
+            return map[type.toUpperCase()] || '';
+        },
+
+        guessFieldType(fieldName, value) {
+            if (/name|title|desc/i.test(fieldName)) return 'text';
+            if (/time|date/i.test(fieldName)) return 'datetime';
+            if (/status|type/i.test(fieldName)) return 'select';
+            if (/amount|price/i.test(fieldName)) return 'number';
+            if (/image|avatar|logo/i.test(fieldName)) return 'image';
+            if (typeof value === 'boolean' || /is_|has_/i.test(fieldName)) return 'switch';
+            return 'text';
+        },
+
+        // 以下是原有方法保持不变
+        toggleBatchCreate() {
+            this.showBatchCreate = !this.showBatchCreate;
+        },
+
+        addBatchField() {
+            this.batchFields.push({
+                title: '',
+                field: '',
+                type: '',
+                datatype: 'VARCHAR',
+                length: '255',
+                list_show: 1,
+                search_type: 0,
+                create_table_field: 1,
+                post_status: 1,
+                width: '',
+                sortid: '',
+                menu_id: '{$menu_id}',
+                item_config:''
+            });
+        },
+
+        removeBatchField(index) {
+            this.batchFields.splice(index, 1);
+            if (this.batchFields.length === 0) {
+                this.addBatchField();
+            }
+        },
+
+        updateFieldLength(row) {
+            if (row.datatype === 'VARCHAR') {
+                row.length = '255';
+            } else if (row.datatype === 'CHAR') {
+                row.length = '50';
+            } else if (row.datatype === 'INT') {
+                row.length = '11';
+            } else if (row.datatype === 'TINYINT') {
+                row.length = '4';
+            } else if (row.datatype === 'DECIMAL') {
+                row.length = '10,2';
+            } else if (['TEXT', 'LONGTEXT', 'DATE', 'DATETIME', 'TIMESTAMP'].includes(row.datatype)) {
+                row.length = '';
+            }
+        },
+
+        submitBatchCreate() {
+            let isValid = true;
+            const requiredFields = ['title', 'field', 'type', 'datatype'];
+
+            this.batchFields.forEach(field => {
+                requiredFields.forEach(key => {
+                    if (!field[key]) {
+                        isValid = false;
+                        this.$message.error(`第${this.batchFields.indexOf(field) + 1}行${key}不能为空`);
+                    }
+                });
+
+                if (field.field && !/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(field.field)) {
+                    isValid = false;
+                    this.$message.error(`第${this.batchFields.indexOf(field) + 1}行字段名格式不正确，只能包含字母、数字和下划线，且不能以数字开头`);
+                }
+            });
+
+            if (!isValid) return;
+
+            this.loading = true;
+            axios.post(base_url+'/Sys.Base/batchCreateField', {
+                fields: this.batchFields
+            }).then(res => {
+                if (res.data.status == 200) {
+                    this.$message.success(`成功创建 ${res.data.data.success_count} 个字段`);
+                    if (res.data.error_count > 0) {
+                        this.$message.warning(`有 ${res.data.data.error_count} 个字段创建失败`);
+                    }
+                    this.showBatchCreate = false;
+                    this.batchFields = [{
+                        title: '',
+                        field: '',
+                        type: '',
+                        datatype: 'VARCHAR',
+                        length: '255',
+                        list_show: 1,
+                        search_type: 0,
+                        create_table_field: 1,
+                        post_status: 1,
+                        width: '',
+                        sortid: '',
+                        menu_id: '{$menu_id}',
+                        item_config:'',
+                    }];
+                    this.loadlist();
+                } else {
+                    this.$message.error(res.data.msg);
+                }
+            }).catch(error => {
+                this.$message.error('请求失败: ' + error.message);
+            }).finally(() => {
+                this.loading = false;
+            });
+        },
+
+        editor(row) {
+            let id = row.id ? row.id : this.ids.join(',');
+            axios.post(base_url+'/Sys.Base/getFieldInfo', {id: id}).then(res => {
+                this.dialog.updateDialogStatus = true;
+                this.info = res.data.data;
+            });
+        },
+
+        selection(selection) {
+            this.ids = selection.map(item => item.id);
+            this.single = selection.length != 1;
+            this.multiple = !selection.length;
+        },
+
+        handleRowClick(row) {
+            this.$refs.multipleTable.toggleRowSelection(row);
+        },
+
+        rowClass({ row }) {
+            return this.ids.includes(row.id) ? 'rowLight' : '';
+        },
+
+        backup() {
+            location.href = base_url+'/Sys.Base/menu?appid={$appid}';
+        },
+
+        backupAction() {
+            location.href = base_url+'/Sys.Base/fieldList?menu_id={$menu_id}&appid={$appid}';
+        },
+
+        deleteField(row) {
+            this.$confirm('确定删除字段吗?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                let ids = row.id ? row.id : this.ids.join(',');
+                axios.post(base_url+'/Sys.Base/deleteField', {
+                    id: ids,
+                    menu_id: '{$menu_id}'
+                }).then(res => {
+                    if (res.data.status == 200) {
+                        this.$message({
+                            message: res.data.pk_status ? '操作成功,其中主键无法删除' : '操作成功',
+                            type: 'success'
+                        });
+                        this.loadlist();
+                    } else {
+                        this.$message.error(res.data.msg);
+                    }
+                });
+            }).catch(() => {});
+        },
+
+        updateFieldExt(row, field) {
+            axios.post(base_url+'/Sys.Base/updateFieldExt', {
+                id: row.id,
+                [field]: row[field]
+            }).then(res => {
+                if (res.data.status == 200) {
+                    this.$message({message: '操作成功', type: 'success'});
+                } else {
+                    this.$message.error(res.data.msg);
+                }
+            });
+        },
+
+        updateField(row) {
+            axios.post(base_url+'/Sys.Base/updateField', {
+                ...row,
+                field_type: 1
+            }).then(res => {
+                if (res.data.status == 200) {
+                    this.$message({message: '操作成功', type: 'success'});
+                } else {
+                    this.$message.error(res.data.msg);
+                }
+            });
+        },
+
+        createMysql() {
+            this.$confirm('确定生成吗?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                axios.post(base_url+'/Sys.CreateMysql/create', {
+                    menu_id: '{$menu_id}'
+                }).then(res => {
+                    if (res.data.status == 200) {
+                        this.$message({message: '操作成功', type: 'success'});
+                    } else {
+                        this.$message.error(res.data.msg);
+                    }
+                });
+            }).catch(() => {});
+        },
+
+        copyField() {
+            if (this.ids.length === 0 || !this.appid) {
+                this.$message.error('请选择字段和应用');
+                return;
+            }
+
+            this.$confirm('确定复制吗?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                axios.post(base_url+'/Sys.Base/copyField', {
+                    appid: this.appid,
+                    menu_id: '{$menu_id}',
+                    field_id: this.ids.join(',')
+                }).then(res => {
+                    if (res.data.status == 200) {
+                        this.$message({message: '操作成功', type: 'success'});
+                        this.loadlist();
+                    } else {
+                        this.$message.error(res.data.msg);
+                    }
+                });
+            }).catch(() => {});
+        },
+
+        loadlist() {
+            let param = {
+                limit: this.page_data.limit,
+                page: this.page_data.page,
+                appid: '{$appid}',
+                menu_id: '{$menu_id}',
+                ai:1
+            };
+
+            this.loading = true;
+            axios.post(base_url+'/Sys.Base/fieldList', param).then(res => {
+                this.app_name = res.data.app_name;
+                this.menu_title = res.data.menu_title;
+                this.list = res.data.data.data;
+                this.field = res.data.typeField;
+                this.itemList = res.data.itemList;
+                this.page_data.total = res.data.data.total;
+                this.copy_app_list = res.data.app_list.filter(item => item.app_type !== 3);
+                this.loading = false;
+                this.deepseekKey = res.data.deepseekkey;
+                console.log('deepseekkey',this.deepseekkey)
+            });
+        },
+
+        rowDrop() {
+            const el = this.$refs.multipleTable.$el.querySelectorAll('.el-table__body-wrapper > table > tbody')[0];
+            this.sortable = Sortable.create(el, {
+                ghostClass: 'sortable-ghost',
+                setData: function(dataTransfer) {
+                    dataTransfer.setData('Text', '');
+                },
+                onEnd: e => {
+                    const targetRow = this.list.splice(e.oldIndex, 1)[0];
+                    this.list.splice(e.newIndex, 0, targetRow);
+
+                    let currentId = this.list[e.newIndex].id;
+                    let currentSortId = this.list[e.newIndex].sortid;
+                    let preId = '', nextId = '', preSortId = '', nextSortId = '';
+
+                    if (this.list[e.newIndex - 1]) {
+                        preId = this.list[e.newIndex - 1].id;
+                        preSortId = this.list[e.newIndex - 1].sortid;
+                    }
+
+                    if (this.list[e.newIndex + 1]) {
+                        nextId = this.list[e.newIndex + 1].id;
+                        nextSortId = this.list[e.newIndex + 1].sortid;
+                    }
+
+                    axios.post(base_url+'/Sys.Base/updateFieldSort', {
+                        currentId: currentId,
+                        preId: preId,
+                        nextId: nextId,
+                        currentSortId: currentSortId,
+                        preSortId: preSortId,
+                        nextSortId: nextSortId,
+                        menu_id: '{$menu_id}'
+                    }).then(res => {
+                        if (res.data.status == 200) {
+                            this.loadlist();
+                            this.$message({message: '操作成功', type: 'success'});
+                        } else {
+                            this.$message.error(res.data.msg);
+                        }
+                    });
+                }
+            });
+        }
+    },
+    beforeDestroy() {
+        if (this.eventSource) {
+            this.eventSource.close();
+        }
+    },
+    mounted() {
+        this.loadlist();
+        this.rowDrop();
+    }
+});
+</script>
+{/block}
+
+

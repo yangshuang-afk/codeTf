@@ -1,0 +1,390 @@
+{extend name='common/container'}
+{block name="content"}
+
+<div :style="!urlobj.dialogstate ? 'margin:0 15px 15px 15px;':''">
+<el-card shadow="never" :style="!urlobj.dialogstate ? 'min-height:80vh':'margin:0;padding:0;min-height:100vh'">
+<div v-if="dialog.showlist">
+<div v-if="search_visible" id="search" class="search" style="margin-bottom:10px;">
+	<el-form ref="form" size="small" :model="searchData" inline>
+		<el-form-item label="登录账号">
+			<el-input id="user" v-model="searchData.user"  style="width:150px;" placeholder="请输入登录账号"></el-input>
+		</el-form-item>
+		<el-form-item label="所属角色">
+			<el-select   style="width:150px" v-model="searchData.role_id" filterable clearable placeholder="请选择">
+				<el-option v-for="(item,i) in role_id" :key="i" :label="item.key" :value="item.val.toString()"></el-option>
+			</el-select>
+		</el-form-item>
+		<el-form-item label="账号状态">
+			<el-select   style="width:150px" v-model="searchData.status" filterable clearable placeholder="请选择">
+				<el-option key="1" label="正常" value="1"></el-option><el-option key="0" label="禁用" value="0"></el-option>
+			</el-select>
+		</el-form-item>
+		<el-form-item label="唯一登录">
+			<el-input id="session_token" v-model="searchData.session_token"  style="width:150px;" placeholder="请输入唯一登录"></el-input>
+		</el-form-item>
+		<search-tool :page_data.sync="page_data" :search_data.sync="searchData" :is_clear.sync="is_clear" @refesh_list="index"></search-tool>
+	</el-form>
+</div>
+    <div v-if="filterGroupButtons && filterGroupButtons.length > 0" class="btn-group" style="margin-bottom:10px;">
+        	<div>
+          <span v-for="item in filterGroupButtons" :key="item.access" style="margin-right: 2px">
+
+            <el-button  :disabled="$data[item.disabled]" :type="item.color" size="mini"
+                       :icon="item.icon"
+                       @click="fn(item.clickname,'')">
+                <span v-if="item.batch" v-text="$data['batchUpdateStatus']?'批量保存':'批量编辑'"></span>
+                <span v-else v-text="item.name"></span>
+            </el-button>
+        </span>
+
+	</div>
+	<div><table-tool tableid="admin_user" :search_visible.sync="search_visible"   @refesh_list="index"></table-tool></div>
+</div>
+<el-table id="admin_user" :row-class-name="rowClass" highlight-current-row row-key="user_id"  @selection-change="selection" @row-click="handleRowClick" :header-cell-style="{ background: '#eef1f6', color: '#606266' }" @sort-change='sortChange' v-loading="loading"  ref="multipleTable" border class="eltable" :data="list"  style="width: 100%">
+	<el-table-column header-align='center' header-align='center' align="center" type="selection" width="42"></el-table-column>
+	<el-table-column header-align='center' header-align='center' align="center" type = ''  property="user_id"  label="编号"  width="70">
+	</el-table-column>
+	<el-table-column header-align='center' header-align='center' align="center"  property="name"  label="用户姓名"  width="90">
+	</el-table-column>
+	<el-table-column header-align='center' header-align='center' align="center"  property="user"  label="登录账号"  width="90">
+	</el-table-column>
+	<el-table-column header-align='center' header-align='center' align="center"  property="name"  label="所属分组"  width="90">
+	</el-table-column>
+	<el-table-column header-align='center' header-align='center' align="center"  property="status"  label="账号状态"  width="90">
+		<template slot-scope="scope">
+			<el-tag type="primary" v-if="scope.row.status == '1'" size="mini" effect="dark">正常</el-tag><el-tag type="danger" v-if="scope.row.status == '0'" size="mini" effect="dark">禁用</el-tag>
+		</template>
+	</el-table-column>
+	<el-table-column header-align='center' header-align='center' align="left"  property="note"  label="用户备注"  >
+	</el-table-column>
+	<el-table-column header-align='center' header-align='center' align="center"  property="session_token"  label="唯一登录" show-overflow-tooltip >
+	</el-table-column>
+	<el-table-column header-align='center' :fixed="ismobile()?false:'right'" label="操作" align="center" width="190">
+		<template slot-scope="scope">
+            <div v-if="scope.row.user_id">
+                
+    <el-button v-for="item in filterListButtons" :key="item.access" :type="item.color" size="mini" :icon="item.icon" @click="fn(item.clickname,scope.row)">
+        {{item.name}}
+    </el-button>
+
+                
+            </div>
+		</template>
+	</el-table-column>
+</el-table>
+<Page :total="page_data.total" :page.sync="page_data.page" :limit.sync="page_data.limit" @pagination="index" />
+</div>
+
+<!--添加-->
+<Add  :show.sync="dialog.addDialogStatus" size="small" @refesh_list="index"></Add>
+<!--修改-->
+<Update  :info="updateInfo" :show.sync="dialog.updateDialogStatus" size="small" @refesh_list="index"></Update>
+<!--查看详情-->
+<Detail  :info="detailInfo" :show.sync="dialog.detailDialogStatus" size="small" @refesh_list="index"></Detail>
+<!--重置密码-->
+<Resetpwd  :info="resetPwdInfo" :show.sync="dialog.resetPwdDialogStatus" size="small" @refesh_list="index"></Resetpwd>
+<!--修改角色-->
+<Batupdate  :info="batupdateInfo" :show.sync="dialog.batupdateDialogStatus" size="small" @refesh_list="index"></Batupdate>
+
+</el-card>
+
+
+
+
+
+</div>
+
+{/block}
+{block name="script"}
+<script src="__PUBLIC__/assets/js/app.js"></script>
+
+<script src="__PUBLIC__/assets/libs/xlsx/xlsx.core.min.js"></script>
+<script src="__PUBLIC__/assets/editor/tinymce/tinymce.min.js"></script>
+<script src="__PUBLIC__/assets/libs/crop/crop.js"></script>
+<script src="__PUBLIC__/components/admin/adminuser/add.js?v=<?php echo rand(1000,9999)?>"></script>
+<script src="__PUBLIC__/components/admin/adminuser/update.js?v=<?php echo rand(1000,9999)?>"></script>
+<script src="__PUBLIC__/components/admin/adminuser/detail.js?v=<?php echo rand(1000,9999)?>"></script>
+<script src="__PUBLIC__/components/admin/adminuser/resetPwd.js?v=<?php echo rand(1000,9999)?>"></script>
+<script src="__PUBLIC__/components/admin/adminuser/batupdate.js?v=<?php echo rand(1000,9999)?>"></script>
+<script>
+new Vue({
+    el: '#app',
+    components:{
+    'draggable':window.vuedraggable,
+    
+    },
+    data: function() {
+    return {
+            dialog: {
+                showlist:true,
+                addDialogStatus : false,
+updateDialogStatus : false,
+detailDialogStatus : false,
+resetPwdDialogStatus : false,
+batupdateDialogStatus : false,
+            },
+            searchData:{
+                user: '', 
+role_id: '', 
+status: '', 
+session_token: '', 
+
+                
+            },
+            button_group:[
+                {
+				name:'添加',
+				color:'success',
+				access:'/admin/Adminuser/add.html',
+				icon:'el-icon-plus',
+				disabled:'',
+				clickname:'add',
+				showGroup:'1',
+				showList:'',
+			},
+			{
+				name:'修改',
+				color:'primary',
+				access:'/admin/Adminuser/update.html',
+				icon:'el-icon-edit',
+				disabled:'single',
+				clickname:'update',
+				showGroup:'1',
+				showList:'1',
+			},
+			{
+				name:'删除',
+				color:'danger',
+				access:'/admin/Adminuser/delete.html',
+				icon:'el-icon-delete',
+				disabled:'multiple',
+				clickname:'delete',
+				showGroup:'1',
+				showList:'1',
+			},
+			{
+				name:'查看详情',
+				color:'info',
+				access:'/admin/Adminuser/detail.html',
+				icon:'el-icon-view',
+				disabled:'single',
+				clickname:'detail',
+				showGroup:'1',
+				showList:'',
+			},
+			{
+				name:'重置密码',
+				color:'primary',
+				access:'/admin/Adminuser/resetPwd.html',
+				icon:'el-icon-lock',
+				disabled:'single',
+				clickname:'resetPwd',
+				showGroup:'1',
+				showList:'',
+			},
+			{
+				name:'修改角色',
+				color:'primary',
+				access:'/admin/Adminuser/batupdate.html',
+				icon:'el-icon-edit',
+				disabled:'multiple',
+				clickname:'batupdate',
+				showGroup:'1',
+				showList:'',
+			},
+			
+            ],
+            loading: false,
+            page_data: {
+                limit: 20,
+                page: 1,
+                total:0,
+            },
+            order:'',
+            sort:'',
+            ids: [],
+            single:true,
+            multiple:true,
+            search_visible:false,
+            list: [],
+            
+            updateInfo : {},
+detailInfo : {},
+resetPwdInfo : {},
+batupdateInfo : {},
+            
+            
+            
+            role_id: [], 
+
+            
+            
+            is_clear:false,
+        }
+    },
+    computed: {
+        filterGroupButtons() {
+            return this.button_group.filter(item => item.showGroup && checkPermission(item.access,"{:implode(',',session('admin.access'))}","{:session('admin.role_id')}",[1]));
+        },
+        filterListButtons() {
+            return this.button_group.filter(item => item.showList == 1 && checkPermission(item.access,"{:implode(',',session('admin.access'))}","{:session('admin.role_id')}",[1]));
+        },
+        filterOtherButtons() {
+            return this.button_group.filter(item => item.showList == 2 && checkPermission(item.access,"{:implode(',',session('admin.access'))}","{:session('admin.role_id')}",[1]));
+        },
+    },
+    methods:{
+        index(){
+            let param = {limit:this.page_data.limit,page:this.page_data.page,order:this.order,sort:this.sort}
+            Object.assign(param, this.searchData,this.urlobj)
+            this.loading = true
+            axios.post(base_url + '/Adminuser/index',param).then(res => {
+                if(res.data.status == 200){
+                    this.list = res.data.data.data
+                    this.page_data.total = res.data.data.total
+                    
+                    if(this.page_data.page == 1){   
+				
+this.role_id = res.data.sql_field_data?.role_ids || [] 
+				}
+                    this.loading = false
+                }else{
+                    this.$message.error(res.data.msg);
+                }
+            })
+        },
+        updateExt(row,field){
+            if(row.user_id){
+                axios.post(base_url + '/Adminuser/updateExt',{user_id:row.user_id,[field]:row[field]}).then(res => {
+                    if(res.data.status == 200){
+                        this.$message({message: res.data.msg, type: 'success'})
+                    }else{
+                        this.$message.error(res.data.msg)
+                    }
+                })
+            }
+        },
+        add(){
+    this.dialog.addDialogStatus = true;
+    
+},
+update(row){
+    let id = row.user_id ? row.user_id : this.ids.join(',')
+    axios.post(base_url + '/Adminuser/getUpdateInfo',{user_id:id}).then(res => {
+        if(res.data.status == 200){
+            this.dialog.updateDialogStatus = true;
+            
+            this.updateInfo = res.data.data;
+        }else{
+            this.$message.error(res.data.msg)
+        }
+    })
+},
+            delete(row){
+                this.$confirm('确定操作吗?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    let ids = row.user_id ? row.user_id : this.ids.join(',')
+                    axios.post(base_url + '/Adminuser/delete',{user_id:ids}).then(res => {
+                        if(res.data.status == 200){
+                            this.$message({message: res.data.msg, type: 'success'})
+                            this.index()
+                        }else{
+                            this.$message.error(res.data.msg)
+                        }
+                    })
+                }).catch(() => {})
+            },
+            detail(row){
+                this.dialog.detailDialogStatus = true;
+                
+                this.detailInfo = {user_id:row.user_id ? row.user_id : this.ids.join(',')}
+            },
+            resetPwd(row){
+                this.dialog.resetPwdDialogStatus = true;
+                
+                this.resetPwdInfo = {user_id:row.user_id ? row.user_id : this.ids.join(',')}
+            },
+        batupdate(row){
+            this.dialog.batupdateDialogStatus = true;
+            
+            this.batupdateInfo = {user_id:row.user_id ? row.user_id : this.ids.join(',')}
+        },
+        	    selection(selection) {
+			this.ids = selection.map(item => item.user_id)
+			this.single = selection.length != 1
+			this.multiple = !selection.length
+		},
+        
+        
+        handleRowClick(row, rowIndex,event){
+            if(event.target.className !== 'el-input__inner'){
+                this.$refs.multipleTable.toggleRowSelection(row)
+            }
+        },
+         rowClass ({ row, rowIndex }) {
+            for(let i=0;i<this.ids.length;i++) {
+                if (row.user_id === this.ids[i]) {
+                    return 'rowLight'
+                }
+            }
+            if(row?.zerunjiufutx == 1) {
+                return 'status-danger';
+            }
+        },
+        sortChange(val){
+            if(val.order == 'descending'){
+                this.order= 'desc'
+            }
+            if(val.order == 'ascending'){
+                this.order= 'asc'
+            }
+            this.sort = val.prop
+            this.index()
+        },
+        getSummaries(param) {
+            const { columns, data } = param;
+            const sums = [];
+            columns.forEach((column, index) => {
+                if(index === 1) {
+                    sums[index] = '合计'
+                }
+                
+            })
+            return sums
+        },
+        
+        
+        
+        
+        
+        changepage(){
+			this.dialog.showlist = true
+			this.dialog.addDialogStatus = false
+			this.dialog.updateDialogStatus = false
+			this.dialog.detailDialogStatus = false
+		},
+		
+        fn(method,data){
+            if(data){
+                this[method](data)
+            }else{
+                this[method](this.ids)
+            }
+        },
+    },
+    mounted(){
+        this.index()
+    },
+})
+</script>
+
+
+<style>
+.status-danger {
+  color: red !important;
+}
+</style>
+{/block}

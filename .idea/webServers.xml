@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="c5622628-4bdc-4bc4-b5ed-d3a98e13f3f1" name="上传git">
+        <fileTransfer rootFolder="/www/wwwroot/open.jf.ivimoo.com" accessType="SFTP" host="47.104.130.199" port="22" sshConfigId="9a85c766-6a6c-41be-815c-2e80c829c0dd" sshConfig="root@47.104.130.199:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

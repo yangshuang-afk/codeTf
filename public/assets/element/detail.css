@@ -1,0 +1,63 @@
+/* 对话框整体样式 */
+.icon-dialog {
+  font-family: 'Arial', sans-serif;
+}
+
+/* 对话框标题样式 */
+.el-dialog__title {
+  color: #333;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* 表格整体样式 */
+#detail table {
+  border-collapse: collapse;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+}
+
+/* 表格行样式 */
+#detail tr {
+  transition: background-color 0.3s;
+}
+
+#detail tr:hover {
+  background-color: #f5f7fa;
+}
+
+/* 单元格样式 */
+#detail td {
+  padding: 12px 15px;
+  border: 1px solid #ebeef5;
+}
+
+/* 标题单元格样式 */
+#detail td.title {
+  background-color: #f8f8f9;
+  color: #515a6e;
+  font-weight: 600;
+}
+
+/* 内容单元格样式 */
+#detail td:not(.title) {
+  color: #606266;
+}
+
+/* 对话框底部间距 */
+.el-dialog__body {
+  padding-bottom: 30px;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .icon-dialog {
+    width: 90% !important;
+  }
+  
+  #detail td {
+    padding: 8px 10px;
+    font-size: 14px;
+  }
+}
