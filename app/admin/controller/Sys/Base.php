@@ -701,9 +701,7 @@ class Base extends Admin
                 $info = Field::find($v)->toArray();
                 $info['create_table_field'] = 0;
                 $info['menu_id'] = $target_menu_id;
-                if (in_array($info['list_show'], [2, 3, 4])) {
-                    $info['list_show'] = 1;
-                }
+            
                 unset($info['id']);
                 
                 $res = Field::insertGetId($info);

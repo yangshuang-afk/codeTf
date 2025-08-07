@@ -71,7 +71,8 @@ const base_dir = '';//勿要删除
 					</span>
 					<el-dropdown-menu slot="dropdown">
 						<el-dropdown-item icon="el-icon-lock" @click.native.prevent="passwordDialogStatus = true">修改密码</el-dropdown-item>
-						<el-dropdown-item icon="el-icon-back" @click.native.prevent="logout">退出</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-back" @click.native.prevent="loginEX">刷新权限</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-back" @click.native.prevent="logout">退出</el-dropdown-item>
 					</el-dropdown-menu>
 				</el-dropdown>
 			</div>
@@ -235,6 +236,23 @@ new Vue({
 				})
 			})
 		},
+        // 刷新权限
+        loginEX(){
+            this.$confirm('确定刷新当前用户权限吗?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(()=>{
+                axios.get(base_url+'/Login/loginEX').then(res => {
+                    if(res.data.status == 200){
+                        sessionStorage.setItem(base_url+'breadcrumb','')
+                        Cookies.set(base_url+'menu','')
+                        top.parent.frames.location.href = base_url+'/index/index'
+                    }
+                })
+            })
+        },
+        // 刷新权限
 		reload(){
 			location.reload()
 		},
