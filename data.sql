@@ -1,7 +1,7 @@
 /*
  Navicat Premium Dump SQL
 
- Source Server         : 开源脚手架
+ Source Server         : 演示
  Source Server Type    : MySQL
  Source Server Version : 80036 (8.0.36)
  Source Host           : 127.0.0.1:3306
@@ -11,7 +11,7 @@
  Target Server Version : 80036 (8.0.36)
  File Encoding         : 65001
 
- Date: 06/08/2025 18:37:52
+ Date: 07/08/2025 17:06:09
 */
 
 SET NAMES utf8mb4;
@@ -123,7 +123,7 @@ CREATE TABLE `cd_action_remarks`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `action_id`(`action_id` ASC) USING BTREE,
   INDEX `menu_id`(`menu_id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '版本记录' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '版本记录' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of cd_action_remarks
@@ -149,8 +149,7 @@ CREATE TABLE `cd_admin_user`  (
 -- ----------------------------
 -- Records of cd_admin_user
 -- ----------------------------
-INSERT INTO `cd_admin_user` VALUES (1, '铁粉', 'admin', '6b20c6ad3a9f0c5520c6139ee142111d', 1, '超级管理员', 1, 1548558919, '0dcfdd585d4ea4ccb26cdc235454b640');
-INSERT INTO `cd_admin_user` VALUES (340, '演示', 'yanshi', '9cb70541ad030b369f4dc7e9f0444749', 59, '', 1, 1754461285, '');
+INSERT INTO `cd_admin_user` VALUES (1, '铁粉', 'admin', '35bfa44f104ddfe466d1889daeff6e35', 1, '超级管理员', 1, 1548558919, '09802fb8f9d98beca00994ca04c11dd4');
 
 -- ----------------------------
 -- Table structure for cd_application
@@ -306,7 +305,7 @@ INSERT INTO `cd_field` VALUES (4907, 104, '所属菜单', 'menu_id', 1, 2, 1, 1,
 INSERT INTO `cd_field` VALUES (5206, 3, '弹窗关闭', 'pop_status', 4, 2, 1, 1, 1, '', NULL, 5206, '', '1', 'smallint', '6', NULL, NULL, '[{\"key\":\"点空白\",\"val\":\"1\",\"label_color\":\"success\"},{\"key\":\"点关闭\",\"val\":\"0\",\"label_color\":\"warning\"}]', NULL, NULL, '{\"shuxing\":[\"tooltip\"],\"guige\":[[]],\"tx_tiaojian\":\"\",\"tx_zhi\":\"\"}', '', NULL, '', '', 0, '');
 INSERT INTO `cd_field` VALUES (5207, 3, '搜索开关', 'search_status', 4, 2, 1, 1, 1, '', NULL, 5207, '', '1', 'smallint', '6', NULL, NULL, '[{\"key\":\"默认展开\",\"val\":\"1\",\"label_color\":\"success\"},{\"key\":\"默认收起\",\"val\":\"0\",\"label_color\":\"warning\"}]', NULL, NULL, '{\"shuxing\":[\"tooltip\"],\"guige\":[[]],\"tx_tiaojian\":\"\",\"tx_zhi\":\"\"}', '', NULL, '', '', 0, '');
 INSERT INTO `cd_field` VALUES (5208, 3, '水印开关', 'watermark_status', 4, 2, 1, 1, 1, '', NULL, 5208, '', '1', 'smallint', '6', NULL, NULL, '[{\"key\":\"默认打开\",\"val\":\"1\"},{\"key\":\"默认关闭\",\"val\":\"0\"}]', NULL, NULL, '{\"shuxing\":[\"tooltip\"],\"guige\":[[]],\"tx_tiaojian\":\"\",\"tx_zhi\":\"\"}', '', NULL, '', '', 0, '');
-INSERT INTO `cd_field` VALUES (5243, 6, '唯一登录', 'session_token', 1, 2, 1, 1, 1, '', NULL, 5243, '', '', 'varchar', '250', NULL, NULL, '', NULL, NULL, '{\"address_type\":\"1\",\"now_time\":false,\"placeholder\":\"\",\"rand_config\":\"\",\"filetype\":\"\",\"liandong_field\":\"\",\"shuxing\":[\"tooltip\"],\"jdt\":\"changtiao\",\"remote_research_field\":\"\",\"rename_status\":\"\",\"default_tabs_value\":\"\",\"application_id\":\"\",\"crop\":\"\",\"time_search_tempate\":true,\"guige\":[[]],\"maxrows\":4,\"inputRemark\":\"\",\"rangetime_type\":\"date\",\"tx_tiaojian\":\"\",\"tx_zhi\":\"\"}', '', NULL, '', '', 0, '');
+INSERT INTO `cd_field` VALUES (5243, 6, '唯一登录', 'session_token', 1, 0, 1, 1, 1, '', NULL, 5243, '', '', 'varchar', '250', NULL, NULL, '', NULL, NULL, '{\"address_type\":\"1\",\"now_time\":false,\"placeholder\":\"\",\"rand_config\":\"\",\"filetype\":\"\",\"liandong_field\":\"\",\"shuxing\":[\"tooltip\"],\"jdt\":\"changtiao\",\"remote_research_field\":\"\",\"rename_status\":\"\",\"default_tabs_value\":\"\",\"application_id\":\"\",\"crop\":\"\",\"time_search_tempate\":true,\"guige\":[[]],\"maxrows\":4,\"inputRemark\":\"\",\"rangetime_type\":\"date\",\"tx_tiaojian\":\"\",\"tx_zhi\":\"\"}', '', NULL, '', '', 0, '');
 INSERT INTO `cd_field` VALUES (5257, 3, 'DSkey', 'deepseekkey', 1, 2, 1, 1, 1, '', NULL, 5257, '', '', 'varchar', '250', NULL, NULL, '', NULL, NULL, '{\"address_type\":\"1\",\"now_time\":false,\"placeholder\":\"\\u8bf7\\u8f93\\u5165deepseek-key\",\"rand_config\":\"\",\"filetype\":\"\",\"liandong_field\":\"\",\"shuxing\":[\"tooltip\"],\"jdt\":\"changtiao\",\"remote_research_field\":\"\",\"rename_status\":\"\",\"default_tabs_value\":\"\",\"application_id\":\"\",\"crop\":\"\",\"time_search_tempate\":true,\"guige\":[[]],\"maxrows\":4,\"inputRemark\":\"\",\"rangetime_type\":\"date\",\"tx_tiaojian\":\"\",\"tx_zhi\":\"\"}', '', NULL, '', '', 0, '');
 INSERT INTO `cd_field` VALUES (5308, 3, '百度地图KEY', 'bdKey', 1, 2, 1, 1, 1, '', NULL, 5308, '', '', 'varchar', '250', NULL, NULL, '', NULL, NULL, '{\"address_type\":\"1\",\"now_time\":false,\"placeholder\":\"\",\"rand_config\":\"\",\"filetype\":\"\",\"liandong_field\":\"\",\"shuxing\":[\"tooltip\"],\"jdt\":\"changtiao\",\"remote_research_field\":\"\",\"rename_status\":\"\",\"default_tabs_value\":\"\",\"application_id\":\"\",\"crop\":\"\",\"time_search_tempate\":true,\"guige\":[[]],\"maxrows\":4,\"inputRemark\":\"\",\"rangetime_type\":\"date\",\"tx_tiaojian\":\"\",\"tx_zhi\":\"\"}', '', NULL, '', '', 0, '');
 INSERT INTO `cd_field` VALUES (5309, 3, '高德地图KEY', 'gdKey', 1, 2, 1, 1, 1, '', NULL, 5309, '', '', 'varchar', '250', NULL, NULL, '', NULL, NULL, '{\"shuxing\":[\"tooltip\"],\"guige\":[[]],\"tx_tiaojian\":\"\",\"tx_zhi\":\"\"}', '', NULL, '', '', 0, '');
@@ -348,11 +347,15 @@ CREATE TABLE `cd_log`  (
   `type` smallint NULL DEFAULT NULL COMMENT '类型',
   `times` int NULL DEFAULT NULL COMMENT '日期',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 88 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 92 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of cd_log
 -- ----------------------------
+INSERT INTO `cd_log` VALUES (88, 'admin', 'admin', 'http://ys.jf.ivimoo.com/admin/Login/index.html', '45.91.83.117', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.6261.95 Safari/537.36', NULL, NULL, 1754556619, 1, NULL);
+INSERT INTO `cd_log` VALUES (89, 'admin', 'admin', 'http://ys.jf.ivimoo.com/admin/Role/delete', '45.91.83.117', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.6261.95 Safari/537.36', '{\"role_id\":59}', NULL, 1754557052, 2, NULL);
+INSERT INTO `cd_log` VALUES (90, 'admin', 'admin', 'http://ys.jf.ivimoo.com/admin/Adminuser/delete', '45.91.83.117', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.6261.95 Safari/537.36', '{\"user_id\":340}', NULL, 1754557059, 2, NULL);
+INSERT INTO `cd_log` VALUES (91, 'admin', 'admin', 'http://ys.jf.ivimoo.com/admin/Login/index.html', '112.98.93.24', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36', NULL, NULL, 1754557421, 1, NULL);
 
 -- ----------------------------
 -- Table structure for cd_menu
@@ -423,7 +426,6 @@ CREATE TABLE `cd_role`  (
 -- Records of cd_role
 -- ----------------------------
 INSERT INTO `cd_role` VALUES (1, '超级管理员', 1, 0, '超级管理员', '');
-INSERT INTO `cd_role` VALUES (59, '演示', 1, NULL, '', 'admin/Ziduan,admin/MyUser,admin/Ceshi,admin/ScCeshi,/admin/Index/main.html,/admin/Ziduan/index.html,/admin/Ziduan/updateExt.html,/admin/Ziduan/detail.html,/admin/MyUser/index.html,/admin/MyUser/updateExt.html,/admin/MyUser/detail.html,/admin/Ceshi/index.html,/admin/Ceshi/updateExt.html,/admin/Ceshi/detail.html,/admin/ScCeshi/index.html,/admin/ScCeshi/updateExt.html,/admin/ScCeshi/detail.html,Home');
 
 -- ----------------------------
 -- Table structure for cd_secrect
