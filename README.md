@@ -70,7 +70,7 @@ public function index(){
 
 部分代码来自互联网，若有异议可以联系作者进行删除。
 
-* 在线体验地址：http://open.jf.ivimoo.com/ （账号: yanshi 密码: yanshi123）
+* 在线体验地址：http://tfadmin.tiefen.net/ （账号: yanshi 密码: yanshi123）
 * Gitee仓库地址：https://gitee.com/yaofu888/codeTf.git
 * GitHub仓库地址：https://github.com/yangshuang-afk/codeTf.git
 
@@ -89,11 +89,11 @@ public function index(){
 
 ## 版权信息
 
-[**TfAdmin**](http://code.tiefen.net/) 遵循 [**MIT**](license) 开源协议发布，并免费提供使用。
+[**TfAdmin**](http://code.tiefen.net/) 遵循 [**MIT**](LICENSE) 开源协议发布，并免费提供使用。
 
 本项目包含的第三方源码和二进制文件的版权信息另行标注。
 
 版权所有 Copyright © 2005-2025 by TfAdmin (http://code.tiefen.net/) All rights reserved。
 
-更多细节参阅 [`LISENSE`](license) 文件
+更多细节参阅 [`LISENSE`](LICENSE) 文件
 
