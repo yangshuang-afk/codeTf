@@ -4,8 +4,8 @@
  Source Server         : 开源脚手架
  Source Server Type    : MySQL
  Source Server Version : 80036 (8.0.36)
- Source Host           : 47.104.130.199:3306
- Source Schema         : open_jf_ivimoo_c
+ Source Host           : 127.0.0.1:3306
+ Source Schema         : tfadmin
 
  Target Server Type    : MySQL
  Target Server Version : 80036 (8.0.36)
