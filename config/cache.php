@@ -25,11 +25,16 @@ return [
             'serialize'  => [],
         ],
         // 更多的缓存连接
-		'redis'   =>  [
+        'redis' => [
             // 驱动方式
-            'type'   => 'redis',
-            'host'       => '',
-			'password'=>'',
-        ],
+            'type'     => 'redis',
+            'host'     => '127.0.0.1',
+            'port'     => 6379,
+            'select'   => '',
+            'password' => '',
+            'prefix' => '',
+            'tag_prefix' => '',
+            'expire' => 24 * 60 * 60,
+        ]
     ],
 ];
