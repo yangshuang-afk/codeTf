@@ -71,8 +71,8 @@ public function index(){
 部分代码来自互联网，若有异议可以联系作者进行删除。
 
 * 在线体验地址：http://tfadmin.tiefen.net/ （账号: yanshi 密码: yanshi123）
-* Gitee仓库地址：https://gitee.com/yaofu888/codeTf.git
-* GitHub仓库地址：https://github.com/yangshuang-afk/codeTf.git
+* Gitee仓库地址：https://gitee.com/yaofu888/tfadmin.git
+* GitHub仓库地址：https://github.com/yangshuang-afk/tfadmin.git
 
 ## 技术支持
 
