@@ -679,7 +679,7 @@ class Base extends Admin
         }
         
         if (empty($field)) {
-            throw new ValidateException('字段不能为空不能为空');
+            throw new ValidateException('请选择需要同步的字段');
         }
         
         if (empty($menu_id)) {
