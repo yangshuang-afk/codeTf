@@ -12,7 +12,7 @@
 
 ### 项目介绍
 
-**TfAdmin** 是一款遵循 **MIT** 协议开源的快速开发框架，基于最新版本 **ThinkPHP8** 的极简后台管理系统，在使用 **TfAdmin** 前请认真阅读[《免责声明》](http://code.tiefen.net/index/index/mianze)并同意该声明。
+**TfAdmin** 是一款遵循 **MIT** 协议开源的快速开发框架，基于最新版本 **ThinkPHP8** 的极简后台管理系统，在使用 **TfAdmin** 前请认真阅读[《免责声明》](http://tfadmin.tiefen.net/index/index/mianze)并同意该声明。
 
 我们致力于快速开发的底层框架，让项目开发变得更容易。框架提供完善的基础组件以及对应的 API 支持，基于此框架可以快速开发各种 WEB 应用。任何一个系统都不能完全满足所有的业务场景，TfAdmin 免费提供基础底层的功能，这里包括系统权限管理，系统存储配置，站点信息配置，在线生成代码，以及其他常用功能集成等…… 因此 TfAdmin 也被大家定性为快速低代码开发系统。目前已经有许多公司及个人在使用 TfAdmin，通过数据聚合统计已有 3 万多在线运行的项目。
 
@@ -32,7 +32,7 @@
 
 * **TfAdmin** 是基于国内最流行的 **ThinkPHP8** 框架开发，要求在不低于 **PHP 8.0.0** 的版本上运行，如果使用低版本的 **PHP** 可能会影响 **Composer** 依赖组件的安装，或将存在一定的安全隐患；
 * 运行环境仅需满足ThinkPHP8的框架环境即可运行；
-* 代码仓库下载的文件没有appid和secrect，需要用户自行前往本司[官方平台](http://code.tiefen.net/customer/login/index)注册后获取；
+* 代码仓库下载的文件没有appid和secrect，需要用户自行前往本司[官方平台](http://tfadmin.tiefen.net/customer/login/index)注册后获取；
 * 为保持系统可持续在线升级，建议不要在 **app/admin/sys** 目录创建或修改文件，可以自行创建其他模块再编写自己的业务代码。
 * 系统是基于严格类型 **PHP** 新特性开发，务必使用专业的 **IDE** ( 如：**PhpStorm**、**NetBeans**、**VsCode**、**Eclipse for PHP** 等 ) 进行项目开发以达到更好的体验与更高的效率！
 
@@ -82,7 +82,7 @@
 
 部分代码来自互联网，若有异议可以联系作者进行删除。
 
-* 在线体验地址：http://tfadmin.tiefen.net/ （账号: yanshi 密码: yanshi123）
+* 在线体验地址：http://demo.tiefen.net/ （账号: yanshi 密码: yanshi123）
 * Gitee仓库地址：https://gitee.com/yaofu888/tfadmin.git
 * GitHub仓库地址：https://github.com/yangshuang-afk/tfadmin.git
 
@@ -96,16 +96,16 @@
 
 **2.官方微信**
 
-<img src="http://code.tiefen.net/wx.png"  width="250">
+<img src="http://tfadmin.tiefen.net/wx.png"  width="250">
 
 
 ## 版权信息
 
-[**TfAdmin**](http://code.tiefen.net/) 遵循 [**MIT**](LICENSE) 开源协议发布，并免费提供使用。
+[**TfAdmin**](http://tfadmin.tiefen.net/) 遵循 [**MIT**](LICENSE) 开源协议发布，并免费提供使用。
 
 本项目包含的第三方源码和二进制文件的版权信息另行标注。
 
-版权所有 Copyright © 2005-2025 by TfAdmin (http://code.tiefen.net/) All rights reserved。
+版权所有 Copyright © 2005-2025 by TfAdmin (http://tfadmin.tiefen.net/) All rights reserved。
 
 更多细节参阅 [`LISENSE`](LICENSE) 文件
 
