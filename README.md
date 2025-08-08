@@ -96,7 +96,7 @@
 
 **2.官方微信**
 
-<img src="http://tfadmin.tiefen.net/wx.png"  width="250">
+<img src="https://camo.githubusercontent.com/819a42a00ffc49b5f7795bf86460c99cc959e0334b806f02b57e7aece41b341b/687474703a2f2f746661646d696e2e74696566656e2e6e65742f77782e706e67"  width="250">
 
 
 ## 版权信息
