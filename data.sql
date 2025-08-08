@@ -1,7 +1,7 @@
 /*
  Navicat Premium Dump SQL
 
- Source Server         : 演示
+ Source Server         : 开源脚手架
  Source Server Type    : MySQL
  Source Server Version : 80036 (8.0.36)
  Source Host           : 127.0.0.1:3306
@@ -11,7 +11,7 @@
  Target Server Version : 80036 (8.0.36)
  File Encoding         : 65001
 
- Date: 07/08/2025 17:06:09
+ Date: 08/08/2025 14:35:33
 */
 
 SET NAMES utf8mb4;
@@ -149,7 +149,7 @@ CREATE TABLE `cd_admin_user`  (
 -- ----------------------------
 -- Records of cd_admin_user
 -- ----------------------------
-INSERT INTO `cd_admin_user` VALUES (1, '铁粉', 'admin', '35bfa44f104ddfe466d1889daeff6e35', 1, '超级管理员', 1, 1548558919, '09802fb8f9d98beca00994ca04c11dd4');
+INSERT INTO `cd_admin_user` VALUES (1, '铁粉', 'admin', '35bfa44f104ddfe466d1889daeff6e35', 1, '超级管理员', 1, 1548558919, '7a1425de5d3a5eef26869417d29bfc30');
 
 -- ----------------------------
 -- Table structure for cd_application
@@ -167,6 +167,7 @@ CREATE TABLE `cd_application`  (
   `pk` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '登录表主键',
   `connect` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '数据库连接',
   `project_id` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT 'apipost项目id',
+  `register` tinyint(1) NULL DEFAULT NULL COMMENT '是否开启注册 1开启 0禁用',
   PRIMARY KEY (`app_id`) USING BTREE,
   INDEX `status`(`status` ASC) USING BTREE,
   INDEX `app_type`(`app_type` ASC) USING BTREE,
@@ -177,7 +178,7 @@ CREATE TABLE `cd_application`  (
 -- ----------------------------
 -- Records of cd_application
 -- ----------------------------
-INSERT INTO `cd_application` VALUES (1, '后台管理', 'admin', 1, 1, '', '', '', '', NULL, NULL);
+INSERT INTO `cd_application` VALUES (1, '后台管理', 'admin', 1, 1, '', '', '', '', NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for cd_base_config
@@ -352,10 +353,6 @@ CREATE TABLE `cd_log`  (
 -- ----------------------------
 -- Records of cd_log
 -- ----------------------------
-INSERT INTO `cd_log` VALUES (88, 'admin', 'admin', 'http://ys.jf.ivimoo.com/admin/Login/index.html', '45.91.83.117', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.6261.95 Safari/537.36', NULL, NULL, 1754556619, 1, NULL);
-INSERT INTO `cd_log` VALUES (89, 'admin', 'admin', 'http://ys.jf.ivimoo.com/admin/Role/delete', '45.91.83.117', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.6261.95 Safari/537.36', '{\"role_id\":59}', NULL, 1754557052, 2, NULL);
-INSERT INTO `cd_log` VALUES (90, 'admin', 'admin', 'http://ys.jf.ivimoo.com/admin/Adminuser/delete', '45.91.83.117', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.6261.95 Safari/537.36', '{\"user_id\":340}', NULL, 1754557059, 2, NULL);
-INSERT INTO `cd_log` VALUES (91, 'admin', 'admin', 'http://ys.jf.ivimoo.com/admin/Login/index.html', '112.98.93.24', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36', NULL, NULL, 1754557421, 1, NULL);
 
 -- ----------------------------
 -- Table structure for cd_menu

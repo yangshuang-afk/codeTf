@@ -12,6 +12,7 @@ Vue.component('add', {
 				<el-form-item label="应用类型" prop="app_type">
 					<el-radio v-model="form.app_type" :label="1">后台应用</el-radio>
 					<el-radio v-model="form.app_type" :label="2">api应用</el-radio>
+					<el-radio v-model="form.app_type" :label="3">cms应用</el-radio>
 					<el-radio v-model="form.app_type" :label="4">空应用</el-radio>
 				</el-form-item>
 				<el-form-item v-if="['2','3','4'].includes(form.app_type)" label="访问域名" prop="domain">
@@ -32,6 +33,10 @@ Vue.component('add', {
 				</el-form-item>
 				<el-form-item v-if="form.app_type == 1" label="登录表主键" prop="pk">
 					<el-input v-model="form.pk" clearable placeholder="登录表主键id"/>
+				</el-form-item>
+				<el-form-item v-if="form.app_type == 1" label="登录页注册" prop="register">
+					<el-radio v-model="form.register" :label="1">启用</el-radio>
+					<el-radio v-model="form.register" :label="0">禁用</el-radio>
 				</el-form-item>
 				<el-form-item label="生成状态" prop="status">
 					<el-radio v-model="form.status" :label="1">启用</el-radio>
@@ -69,6 +74,7 @@ Vue.component('add', {
 				login_table:'',
 				login_fields:'',
 				pk:'',
+				register:1,
 				status:1,
 				app_type:1,
 				domain:'',
@@ -153,6 +159,7 @@ Vue.component('update', {
 				<el-form-item label="应用类型" prop="app_type">
 					<el-radio v-model="form.app_type" :label="1">后台应用</el-radio>
 					<el-radio v-model="form.app_type" :label="2">api应用</el-radio>
+					<el-radio v-model="form.app_type" :label="3">cms应用</el-radio>
 					<el-radio v-model="form.app_type" :label="4">空应用</el-radio>
 				</el-form-item>
 				<el-form-item v-if="['2','3','4'].includes(form.app_type)" label="访问域名" prop="domain">
@@ -173,6 +180,10 @@ Vue.component('update', {
 				</el-form-item>
 				<el-form-item v-if="form.app_type == 1" label="登录表主键" prop="pk">
 					<el-input v-model="form.pk" clearable placeholder="登录表主键id"/>
+				</el-form-item>
+				<el-form-item v-if="form.app_type == 1" label="登录页注册" prop="register">
+					<el-radio v-model="form.register" :label="1">启用</el-radio>
+					<el-radio v-model="form.register" :label="0">禁用</el-radio>
 				</el-form-item>
 				<el-form-item label="生成状态" prop="status">
 					<el-radio v-model="form.status" :label="1">启用</el-radio>
@@ -217,6 +228,7 @@ Vue.component('update', {
 				login_table:'',
 				login_fields:'',
 				pk:'',
+				register:1,
 				status:1,
 				app_type:1,
 				domain:'',
