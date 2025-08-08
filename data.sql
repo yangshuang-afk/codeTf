@@ -11,7 +11,7 @@
  Target Server Version : 80036 (8.0.36)
  File Encoding         : 65001
 
- Date: 08/08/2025 14:35:33
+ Date: 08/08/2025 15:37:16
 */
 
 SET NAMES utf8mb4;
@@ -149,7 +149,7 @@ CREATE TABLE `cd_admin_user`  (
 -- ----------------------------
 -- Records of cd_admin_user
 -- ----------------------------
-INSERT INTO `cd_admin_user` VALUES (1, '铁粉', 'admin', '35bfa44f104ddfe466d1889daeff6e35', 1, '超级管理员', 1, 1548558919, '7a1425de5d3a5eef26869417d29bfc30');
+INSERT INTO `cd_admin_user` VALUES (1, '铁粉', 'admin', '35bfa44f104ddfe466d1889daeff6e35', 1, '超级管理员', 1, 1548558919, 'b8f84bb1b6fa7e0500a967ad50d9da61');
 
 -- ----------------------------
 -- Table structure for cd_application
@@ -348,11 +348,12 @@ CREATE TABLE `cd_log`  (
   `type` smallint NULL DEFAULT NULL COMMENT '类型',
   `times` int NULL DEFAULT NULL COMMENT '日期',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 92 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of cd_log
 -- ----------------------------
+INSERT INTO `cd_log` VALUES (1, 'admin', 'admin', 'http://git.tiefen.net/admin/Login/index.html', '112.98.93.24', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36', NULL, NULL, 1754637533, 1, NULL);
 
 -- ----------------------------
 -- Table structure for cd_menu
@@ -384,7 +385,7 @@ CREATE TABLE `cd_menu`  (
   INDEX `controller_name`(`controller_name` ASC) USING BTREE,
   INDEX `module_id`(`app_id` ASC) USING BTREE,
   INDEX `pid`(`pid` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 179 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 180 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of cd_menu
@@ -404,6 +405,7 @@ INSERT INTO `cd_menu` VALUES (12, 11, 'Action', '方法管理', '', '', 1, 0, 12
 INSERT INTO `cd_menu` VALUES (13, 11, 'Field', '字段管理', '', '', 0, 0, 13, 0, '', '', NULL, 1, 0, NULL, 'mysql', 1, 0, NULL, NULL);
 INSERT INTO `cd_menu` VALUES (19, 9, 'Secrect', '秘钥管理', '', '', 0, 1, 19, 0, '/admin/Sys.Base/secrect', 'el-icon-s-tools', NULL, 1, 0, NULL, 'mysql', 2, 0, NULL, NULL);
 INSERT INTO `cd_menu` VALUES (104, 11, 'Actionremarks', '版本记录', 'id', 'action_remarks', 1, 0, 104, 1, '', NULL, NULL, 1, 0, 0, 'mysql', 1, 0, '', '');
+INSERT INTO `cd_menu` VALUES (179, 2, 'MyConfig', '系统配置', '', '', 1, 1, 179, 0, '', 'el-icon-cpu', NULL, 1, 0, 0, 'mysql', 1, 0, '', '');
 
 -- ----------------------------
 -- Table structure for cd_role

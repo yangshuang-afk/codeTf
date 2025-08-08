@@ -1,0 +1,737 @@
+{extend name='common/container'}
+{block name="content"}
+<div style="margin:0 15px 15px 15px;">
+    <el-card shadow="never" class="card" style="min-height:650px;">
+        <el-tabs v-model="activeName" type="border-card">
+            <!-- 文件上传设置 -->
+            <el-tab-pane label="文件上传设置" name="upload">
+                <el-form size="small" ref="form" :model="form" :rules="rules" :label-width="ismobile()?'90px':'111px'">
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="文件上传二级目录" prop="upload_subdir">
+                                <el-input v-model="form.upload_subdir" autoComplete="off" clearable
+                                          placeholder="标准的日期格式，例如：Ym"></el-input>
+                                <div class="el-form-item__help">日期格式说明：Y-年，m-月，d-日，例如Ym表示按年月划分目录
+                                </div>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="上传图片检测" prop="check_file_status">
+                                <el-switch v-model="form.check_file_status"
+                                           :active-value="true"
+                                           :inactive-value="false"
+                                           active-text="启用"
+                                           inactive-text="禁用"></el-switch>
+                                <div class="el-form-item__help">是否检测上传图片是否已存在</div>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="水印图片路径" prop="water_img">
+                                <el-input v-model="form.water_img" autoComplete="off" clearable
+                                          placeholder="水印图片的路径"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </el-tab-pane>
+            
+            <!-- 权限与安全设置 -->
+            <el-tab-pane label="权限与安全设置" name="security">
+                <el-form size="small" ref="form" :model="form" :rules="rules" :label-width="ismobile()?'90px':'111px'">
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="不需要验证权限的URL" prop="nocheck">
+                                <el-input
+                                        type="textarea"
+                                        v-model="form.nocheck.join('\n')"
+                                        autoComplete="off"
+                                        :rows="6"
+                                        placeholder="每行输入一个URL"
+                                ></el-input>
+                                <div class="el-form-item__help">这些URL不需要验证权限即可访问</div>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="密码加密秘钥" prop="password_secrect">
+                                <el-input v-model="form.password_secrect" autoComplete="off" show-password></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="后台单点登录" prop="multiple_login">
+                                <el-switch v-model="form.multiple_login"
+                                           :active-value="true"
+                                           :inactive-value="false"
+                                           active-text="允许多点登录"
+                                           inactive-text="只允许单点登录"></el-switch>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="后台登录验证码" prop="verify_status">
+                                <el-switch v-model="form.verify_status"
+                                           :active-value="true"
+                                           :inactive-value="false"
+                                           active-text="启用"
+                                           inactive-text="禁用"></el-switch>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </el-tab-pane>
+            
+            <!-- 日志与导出设置 -->
+            <el-tab-pane label="日志与导出设置" name="logexport">
+                <el-form size="small" ref="form" :model="form" :rules="rules" :label-width="ismobile()?'90px':'111px'">
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="写入日志的状态码" prop="error_log_code">
+                                <el-input v-model.number="form.error_log_code" autoComplete="off" clearable
+                                          placeholder="例如：500"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="默认导出格式" prop="dump_extension">
+                                <el-select v-model="form.dump_extension" clearable placeholder="请选择导出格式">
+                                    <el-option label="Excel(xlsx)" value="xlsx"></el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="显示首页图表" prop="show_home_chats">
+                                <el-switch v-model="form.show_home_chats"
+                                           :active-value="true"
+                                           :inactive-value="false"
+                                           active-text="显示"
+                                           inactive-text="隐藏"></el-switch>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </el-tab-pane>
+            
+            <!-- API设置 -->
+            <el-tab-pane label="API设置" name="api">
+                <el-form size="small" ref="form" :model="form" :rules="rules" :label-width="ismobile()?'90px':'111px'">
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="API上传验证token" prop="api_upload_auth">
+                                <el-switch v-model="form.api_upload_auth"
+                                           :active-value="true"
+                                           :inactive-value="false"
+                                           active-text="验证"
+                                           inactive-text="不验证"></el-switch>
+                                <div class="el-form-item__help">启用后API上传需要验证token</div>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </el-tab-pane>
+            
+            <!-- 短信配置 -->
+            <el-tab-pane label="短信配置" name="sms">
+                <el-form size="small" ref="form" :model="form" :rules="rules" :label-width="ismobile()?'90px':'111px'">
+                    <!-- 短信配置内容保持不变 -->
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="腾讯云短信AppID" prop="tencent_sms_appid">
+                                <el-input v-model="form.tencent_sms_appid" autoComplete="off" clearable></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="腾讯云短信AppKey" prop="tencent_sms_appkey">
+                                <el-input v-model="form.tencent_sms_appkey" autoComplete="off" clearable></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="腾讯云短信模板ID" prop="tencent_sms_tempCode">
+                                <el-input v-model="form.tencent_sms_tempCode" autoComplete="off" clearable></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="腾讯云短信签名" prop="tencent_sms_signname">
+                                <el-input v-model="form.tencent_sms_signname" autoComplete="off" clearable></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="阿里云短信AccessKeyId" prop="ali_sms_accessKeyId">
+                                <el-input v-model="form.ali_sms_accessKeyId" autoComplete="off" clearable></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="阿里云短信AccessKeySecret" prop="ali_sms_accessKeySecret">
+                                <el-input v-model="form.ali_sms_accessKeySecret" autoComplete="off"
+                                          clearable></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="阿里云短信签名" prop="ali_sms_signname">
+                                <el-input v-model="form.ali_sms_signname" autoComplete="off" clearable></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="阿里云短信模板Code" prop="ali_sms_tempCode">
+                                <el-input v-model="form.ali_sms_tempCode" autoComplete="off" clearable></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </el-tab-pane>
+            
+            <!-- OSS配置 -->
+            <el-tab-pane label="OSS配置" name="oss">
+                <el-form size="small" ref="form" :model="form" :rules="rules" :label-width="ismobile()?'90px':'111px'">
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="OSS启用状态" prop="oss_status">
+                                <el-switch v-model="form.oss_status"
+                                           :active-value="true"
+                                           :inactive-value="false"
+                                           active-text="启用"
+                                           inactive-text="禁用"></el-switch>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="OSS上传方式" prop="oss_upload_type">
+                                <el-select v-model="form.oss_upload_type" clearable placeholder="请选择上传方式">
+                                    <el-option label="客户端直传" value="client"></el-option>
+                                    <el-option label="服务端上传" value="server"></el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="默认OSS类型" prop="oss_default_type">
+                                <el-select v-model="form.oss_default_type" clearable placeholder="请选择OSS类型"
+                                           @change="handleOssTypeChange">
+                                    <el-option label="阿里云" value="ali"></el-option>
+                                    <el-option label="七牛云" value="qiniuyun"></el-option>
+                                    <el-option label="腾讯云" value="tencent"></el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    
+                    <!-- 阿里云OSS配置 -->
+                    <el-collapse v-model="activeOssPanels">
+                        <el-collapse-item title="阿里云OSS配置" name="ali_oss">
+                            <!-- 阿里云OSS配置内容 -->
+                            <el-row>
+                                <el-col :span="24">
+                                    <el-form-item label="AccessKeyId" prop="ali_oss_accessKeyId">
+                                        <el-input v-model="form.ali_oss_accessKeyId" autoComplete="off"
+                                                  clearable></el-input>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            
+                            <el-row>
+                                <el-col :span="24">
+                                    <el-form-item label="AccessKeySecret" prop="ali_oss_accessKeySecret">
+                                        <el-input v-model="form.ali_oss_accessKeySecret" autoComplete="off"
+                                                  clearable></el-input>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            
+                            <el-row>
+                                <el-col :span="24">
+                                    <el-form-item label="Endpoint" prop="ali_oss_endpoint">
+                                        <el-input v-model="form.ali_oss_endpoint" autoComplete="off" clearable
+                                                  placeholder="建议填写自己绑定的域名"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            
+                            <el-row>
+                                <el-col :span="24">
+                                    <el-form-item label="Bucket" prop="ali_oss_bucket">
+                                        <el-input v-model="form.ali_oss_bucket" autoComplete="off" clearable></el-input>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                        </el-collapse-item>
+                        
+                        <!-- 七牛云OSS配置 -->
+                        <el-collapse-item title="七牛云OSS配置" name="qny_oss">
+                            <!-- 七牛云OSS配置内容 -->
+                            <el-row>
+                                <el-col :span="24">
+                                    <el-form-item label="AccessKey" prop="qny_oss_accessKey">
+                                        <el-input v-model="form.qny_oss_accessKey" autoComplete="off"
+                                                  clearable></el-input>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            
+                            <el-row>
+                                <el-col :span="24">
+                                    <el-form-item label="SecretKey" prop="qny_oss_secretKey">
+                                        <el-input v-model="form.qny_oss_secretKey" autoComplete="off"
+                                                  clearable></el-input>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            
+                            <el-row>
+                                <el-col :span="24">
+                                    <el-form-item label="Bucket" prop="qny_oss_bucket">
+                                        <el-input v-model="form.qny_oss_bucket" autoComplete="off" clearable></el-input>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            
+                            <el-row>
+                                <el-col :span="24">
+                                    <el-form-item label="访问域名" prop="qny_oss_domain">
+                                        <el-input v-model="form.qny_oss_domain" autoComplete="off" clearable></el-input>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            
+                            <el-row>
+                                <el-col :span="24">
+                                    <el-form-item label="客户端直传地址" prop="qny_oss_client_uploadurl">
+                                        <el-input v-model="form.qny_oss_client_uploadurl" autoComplete="off"
+                                                  clearable></el-input>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                        </el-collapse-item>
+                        
+                        <!-- 腾讯云OSS配置 -->
+                        <el-collapse-item title="腾讯云OSS配置" name="tencent_oss">
+                            <!-- 腾讯云OSS配置内容 -->
+                            <el-row>
+                                <el-col :span="24">
+                                    <el-form-item label="SecretId" prop="tencent_oss_secretId">
+                                        <el-input v-model="form.tencent_oss_secretId" autoComplete="off"
+                                                  clearable></el-input>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            
+                            <el-row>
+                                <el-col :span="24">
+                                    <el-form-item label="SecretKey" prop="tencent_oss_secretKey">
+                                        <el-input v-model="form.tencent_oss_secretKey" autoComplete="off"
+                                                  clearable></el-input>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            
+                            <el-row>
+                                <el-col :span="24">
+                                    <el-form-item label="Bucket" prop="tencent_oss_bucket">
+                                        <el-input v-model="form.tencent_oss_bucket" autoComplete="off"
+                                                  clearable></el-input>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            
+                            <el-row>
+                                <el-col :span="24">
+                                    <el-form-item label="地区" prop="tencent_oss_region">
+                                        <el-input v-model="form.tencent_oss_region" autoComplete="off" clearable
+                                                  placeholder="例如：ap-guangzhou"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            
+                            <el-row>
+                                <el-col :span="24">
+                                    <el-form-item label="访问前缀" prop="tencent_oss_schema">
+                                        <el-select v-model="form.tencent_oss_schema" clearable placeholder="请选择">
+                                            <el-option label="http" value="http"></el-option>
+                                            <el-option label="https" value="https"></el-option>
+                                        </el-select>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                        </el-collapse-item>
+                    </el-collapse>
+                </el-form>
+            </el-tab-pane>
+            
+            <!-- 其他配置选项卡内容保持不变 -->
+            <!-- API TF鉴权配置 -->
+            <el-tab-pane label="API TF鉴权配置" name="tfauth">
+                <el-form size="small" ref="form" :model="form" :rules="rules" :label-width="ismobile()?'90px':'111px'">
+                    <!-- API TF鉴权配置内容保持不变 -->
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="过期时间" prop="tf_expire_time">
+                                <el-input v-model="form.tf_expire_time" autoComplete="off" clearable
+                                          placeholder="例如：+7 day"></el-input>
+                                <div class="el-form-item__help">格式：second秒 hour小时 minute分钟 day天</div>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="签名秘钥" prop="tf_secrect">
+                                <el-input v-model="form.tf_secrect" autoComplete="off" clearable></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="发送端" prop="tf_iss">
+                                <el-input v-model="form.tf_iss" autoComplete="off" clearable></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="接收端" prop="tf_aud">
+                                <el-input v-model="form.tf_aud" autoComplete="off" clearable></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    
+                    <el-row>
+                        <el-col :span="12">
+                            <el-form-item label="TF过期代码" prop="tfExpireCode">
+                                <el-input v-model.number="form.tfExpireCode" autoComplete="off" clearable></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="TF无效代码" prop="tfErrorCode">
+                                <el-input v-model.number="form.tfErrorCode" autoComplete="off" clearable></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </el-tab-pane>
+            
+            <!-- 小程序配置 -->
+            <el-tab-pane label="小程序配置" name="miniprogram">
+                <el-form size="small" ref="form" :model="form" :rules="rules" :label-width="ismobile()?'90px':'111px'">
+                    <!-- 小程序配置内容保持不变 -->
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="小程序AppID" prop="mini_program.app_id">
+                                <el-input v-model="form.mini_program.app_id" autoComplete="off" clearable></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="小程序Secret" prop="mini_program.secret">
+                                <el-input v-model="form.mini_program.secret" autoComplete="off" clearable></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </el-tab-pane>
+            
+            <!-- 公众号配置 -->
+            <el-tab-pane label="公众号配置" name="official">
+                <el-form size="small" ref="form" :model="form" :rules="rules" :label-width="ismobile()?'90px':'111px'">
+                    <!-- 公众号配置内容保持不变 -->
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="公众号AppID" prop="official_accounts.app_id">
+                                <el-input v-model="form.official_accounts.app_id" autoComplete="off"
+                                          clearable></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="公众号Secret" prop="official_accounts.secret">
+                                <el-input v-model="form.official_accounts.secret" autoComplete="off"
+                                          clearable></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="公众号Token" prop="official_accounts.token">
+                                <el-input v-model="form.official_accounts.token" autoComplete="off"
+                                          clearable></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="EncodingAESKey" prop="official_accounts.aes_key">
+                                <el-input v-model="form.official_accounts.aes_key" autoComplete="off"
+                                          clearable></el-input>
+                                <div class="el-form-item__help">兼容与安全模式下请一定要填写</div>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </el-tab-pane>
+            
+            <!-- 微信支付配置 -->
+            <el-tab-pane label="微信支付配置" name="payment">
+                <el-form size="small" ref="form" :model="form" :rules="rules" :label-width="ismobile()?'90px':'111px'">
+                    <!-- 微信支付配置内容保持不变 -->
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="商户号" prop="wechart_pay.mch_id">
+                                <el-input v-model="form.wechart_pay.mch_id" autoComplete="off" clearable></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="微信支付秘钥" prop="wechart_pay.key">
+                                <el-input v-model="form.wechart_pay.key" autoComplete="off" clearable></el-input>
+                                <div class="el-form-item__help">微信支付32位秘钥</div>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="证书路径" prop="wechart_pay.cert_path">
+                                <el-input v-model="form.wechart_pay.cert_path" autoComplete="off" clearable></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="密钥路径" prop="wechart_pay.key_path">
+                                <el-input v-model="form.wechart_pay.key_path" autoComplete="off" clearable></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </el-tab-pane>
+        </el-tabs>
+        
+        <div style="margin-top: 15px; text-align: right;">
+            <el-button size="small" type="primary" @click="submit">保存设置</el-button>
+        </div>
+    </el-card>
+</div>
+{/block}
+{block name="script"}
+<script src="__PUBLIC__/assets/js/app.js"></script>
+<script src="__PUBLIC__/assets/libs/crop/crop.js"></script>
+<script src="__PUBLIC__/assets/libs/vuedragable/Sortable.min.js"></script>
+<script src="__PUBLIC__/assets/libs/vuedragable/vuedraggable.umd.min.js"></script>
+
+<script>
+    new Vue({
+        el: '#app',
+        components: {
+            'draggable': window.vuedraggable,
+        },
+        data() {
+            return {
+                activeName: 'upload', // 默认显示文件上传设置选项卡
+                activeOssPanels: [], // 用于控制OSS配置面板的展开状态
+                form: {
+                    // 初始化默认值结构
+                    upload_subdir: '',
+                    nocheck: [],
+                    error_log_code: '',
+                    password_secrect: '',
+                    multiple_login: true,  // 布尔类型
+                    dump_extension: '',
+                    verify_status: false,  // 布尔类型
+                    water_img: '',
+                    check_file_status: true,  // 布尔类型
+                    show_home_chats: true,  // 布尔类型
+                    api_upload_auth: true,  // 布尔类型
+                    tencent_sms_appid: '',
+                    tencent_sms_appkey: '',
+                    tencent_sms_tempCode: '',
+                    tencent_sms_signname: '',
+                    ali_sms_accessKeyId: '',
+                    ali_sms_accessKeySecret: '',
+                    ali_sms_signname: '',
+                    ali_sms_tempCode: '',
+                    oss_status: false,
+                    oss_upload_type: '',
+                    oss_default_type: '',
+                    // 阿里云OSS配置
+                    ali_oss_accessKeyId: '',
+                    ali_oss_accessKeySecret: '',
+                    ali_oss_endpoint: '',
+                    ali_oss_bucket: '',
+                    // 七牛云OSS配置
+                    qny_oss_accessKey: '',
+                    qny_oss_secretKey: '',
+                    qny_oss_bucket: '',
+                    qny_oss_domain: '',
+                    qny_oss_client_uploadurl: '',
+                    // 腾讯云OSS配置
+                    tencent_oss_secretId: '',
+                    tencent_oss_secretKey: '',
+                    tencent_oss_bucket: '',
+                    tencent_oss_region: '',
+                    tencent_oss_schema: '',
+                    tf_expire_time: '',
+                    tf_secrect: '',
+                    tf_iss: '',
+                    tf_aud: '',
+                    tfExpireCode: '',
+                    tfErrorCode: '',
+                    mini_program: {
+                        app_id: '',
+                        secret: ''
+                    },
+                    official_accounts: {
+                        app_id: '',
+                        secret: '',
+                        token: '',
+                        aes_key: ''
+                    },
+                    wechart_pay: {
+                        mch_id: '',
+                        key: '',
+                        cert_path: '',
+                        key_path: ''
+                    }
+                },
+                loading: false,
+                show: false,
+                rules: {
+                    upload_subdir: [
+                        {required: true, message: '文件上传二级目录格式不能为空', trigger: 'blur'}
+                    ],
+                    password_secrect: [
+                        {required: true, message: '密码加密秘钥不能为空', trigger: 'blur'}
+                    ],
+                    error_log_code: [
+                        {required: true, message: '写入日志的状态码不能为空', trigger: 'blur'},
+                        {type: 'number', message: '请输入有效的状态码', trigger: 'blur'}
+                    ]
+                }
+            }
+        },
+        mounted() {
+            axios.post(base_url + '/MyConfig/getInfo').then(res => {
+                if (res.data.status == 200) {
+                    // 处理数组类型的nocheck，将其转换为字符串以便在textarea中显示
+                    const data = res.data.data || {};
+                    if (Array.isArray(data.nocheck)) {
+                        this.form.nocheck = data.nocheck;
+                    }
+                    
+                    // 合并获取到的配置数据
+                    this.form = {...this.form, ...data};
+                    
+                    // 初始化OSS面板展开状态
+                    this.setOssPanelByType(this.form.oss_default_type);
+                    
+                    // 确保嵌套对象存在
+                    this.form.mini_program = {...this.form.mini_program, ...(data.mini_program || {})};
+                    this.form.official_accounts = {...this.form.official_accounts, ...(data.official_accounts || {})};
+                    this.form.wechart_pay = {...this.form.wechart_pay, ...(data.wechart_pay || {})};
+                }
+                this.show = true;
+            })
+        },
+        methods: {
+            // 处理OSS类型变更
+            handleOssTypeChange(type) {
+                this.setOssPanelByType(type);
+            },
+            
+            // 根据OSS类型设置面板展开状态
+            setOssPanelByType(type) {
+                // 清空所有展开状态
+                this.activeOssPanels = [];
+                
+                // 根据选中的类型展开对应的面板
+                switch (type) {
+                    case 'ali':
+                        this.activeOssPanels.push('ali_oss');
+                        break;
+                    case 'qiniuyun':
+                        this.activeOssPanels.push('qny_oss');
+                        break;
+                    case 'tencent':
+                        this.activeOssPanels.push('tencent_oss');
+                        break;
+                    default:
+                        // 未选择类型时不展开任何面板
+                        break;
+                }
+            },
+            // 提交
+            submit() {
+                // 将textarea中的nocheck转换回数组
+                if (typeof this.form.nocheck === 'string') {
+                    this.form.nocheck = this.form.nocheck.split('\n')
+                            .map(item => item.trim())
+                            .filter(item => item);
+                }
+                
+                this.loading = true;
+                axios.post(base_url + '/MyConfig/index', this.form).then(res => {
+                    this.loading = false;
+                    if (res.data.status == 200) {
+                        this.$message({message: res.data.msg, type: 'success'});
+                    } else {
+                        this.$message.error(res.data.msg);
+                    }
+                }).catch(() => {
+                    this.loading = false;
+                    this.$message.error('保存失败，请重试');
+                })
+            }
+        }
+    })
+</script>
+{/block}
