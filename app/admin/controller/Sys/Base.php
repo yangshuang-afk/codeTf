@@ -139,7 +139,7 @@ class Base extends Admin
         $secrect = $this->getSecrect();
         
         if (empty($secrect['appid']) || empty($secrect['secrect'])) {
-            $this->error('appid或者秘钥不能为空');
+            $this->error('请在工具管理-秘钥管理中配置appid及secrect');
         }
         
         $menu_id = Db::name("menu")->where("table_name", $info["login_table"])->value("menu_id");
@@ -161,7 +161,7 @@ class Base extends Admin
         }
         
         foreach ($res as $k => $v) {
-            if (strpos($k, 'index.html') > 0 && file_get_contents($rootPath . $k) && file_get_contents($rootPath . $k) <> '欢迎使用xhadmin') {
+            if (strpos($k, 'index.html') > 0 && file_get_contents($rootPath . $k) && file_get_contents($rootPath . $k) <> '欢迎使用tfAdmin') {
                 filePutContents(file_get_contents($rootPath . $k), $rootPath . $k, $type = 2);
             } else {
                 filePutContents($v, $rootPath . $k, 2);
@@ -1400,7 +1400,7 @@ class Base extends Admin
         $secrect = $this->getSecrect();
         
         if (empty($secrect['appid']) || empty($secrect['secrect'])) {
-            $this->error('appid或者秘钥不能为空');
+            $this->error('请在工具管理-秘钥管理中配置appid及secrect');
         }
         
         $data['secrect'] = $secrect;
