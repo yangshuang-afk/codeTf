@@ -41,7 +41,7 @@
 
 通过 git 下载源码, 前往本司
 [官方平台]
-(http://code.tiefen.net/customer/login/index)
+(http://tfadmin.tiefen.net/customer/login/index)
 注册账号，创建应用已获取生成代码appid和secrect。
 
 

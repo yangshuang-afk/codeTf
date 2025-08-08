@@ -152,7 +152,7 @@ class Base extends Admin
         $info['sign'] = md5(md5(json_encode($info, JSON_UNESCAPED_UNICODE) . $secrect['secrect']));
         
         $info['domain'] = $_SERVER['HTTP_HOST'];
-        $res = $this->curlRequest('http://code.tiefen.net/produce/createApp/buildCode', 'POST', $info);
+        $res = $this->curlRequest('http://tfadmin.tiefen.net/produce/createApp/buildCode', 'POST', $info);
         
         $res = json_decode($res, true);
         
@@ -1410,7 +1410,7 @@ class Base extends Admin
         
         $data['domain'] = $_SERVER['HTTP_HOST'];
         $data['base_config'] = Db::name('base_config')->column('data', 'name');
-        $res = $this->curlRequest('http://code.tiefen.net/produce/CreateCode/buildCode', 'POST', $data);
+        $res = $this->curlRequest('http://tfadmin.tiefen.net/produce/CreateCode/buildCode', 'POST', $data);
         
         $res = str_replace("search_visible:true,", "search_visible:false,", $res);
         $res = str_replace("<el-table-column", "<el-table-column header-align='center'", $res);
