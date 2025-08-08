@@ -552,7 +552,7 @@ Vue.component('AdminAdd', {
 								<el-input type="textarea" v-model="form.sql" clearable placeholder="单选/下拉/多选选项/session/隐藏域, sql数据源"/>
 							</el-form-item>
 						</el-row>
-						<el-row v-if="form.type == 2 && dbtype !== 'mongo'">
+					    <el-row v-if="[2,4].includes(form.type) && dbtype !== 'mongo'">
 							<el-form-item label="联动字段" prop="liandong_field">
 								<el-input v-model="form.other_config.liandong_field" clearable placeholder="二级联动字段名"/>
 							</el-form-item>
