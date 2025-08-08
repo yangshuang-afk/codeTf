@@ -103,6 +103,8 @@
 
 [**TfAdmin**](http://tfadmin.tiefen.net/) 遵循 [**MIT**](LICENSE) 开源协议发布，并免费提供使用。
 
+使用本代码需遵守 [LICENSE](LICENSE) 及[《免责声明》](http://tfadmin.tiefen.net/index/index/mianze)。作者不对任何直接/间接后果负责，请自行评估风险。
+
 本项目包含的第三方源码和二进制文件的版权信息另行标注。
 
 版权所有 Copyright © 2005-2025 by TfAdmin (http://tfadmin.tiefen.net/) All rights reserved。
