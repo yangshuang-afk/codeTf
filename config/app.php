@@ -30,8 +30,8 @@ return [
     'domain_bind'      => [
 		//'tp8.me'	=> 'admin',
 		//'supplier.me'	=> 'supplier',
-		//'api.xhadmin.com'	=> 'api',
-        //'supplier.xhadmin.me'=> 'supp'
+		//'api.tfadmin.com'	=> 'api',
+        //'supplier.tfadmin.me'=> 'supp'
 	],
     // 禁止URL访问的应用列表（自动多应用模式有效）
     'deny_app_list'    => [],
