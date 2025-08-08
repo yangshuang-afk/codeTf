@@ -120,7 +120,7 @@ class ApiPost extends Admin
 		$data['sort'] = $val['menu_id']*100000+$val['id']*100+$k;
 		$data['request']['url'] = $this->getUrl().'/'.str_replace('/','.',$this->menu['controller_name']).'/'.$val['action_name'];
 		if($val['type'] == 50){
-			$data['request']['description'] = '说明:token有效期'.config('my.jwt_expire_time');
+			$data['request']['description'] = '说明:token有效期'.config('my.tf_expire_time');
 		}
 		$data['request']['event'] = [
 			'pre_script'=>'',
