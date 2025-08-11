@@ -1,6 +1,6 @@
 //添加
 Vue.component('AdminAdd', {
-	template: `
+    template: `
 	<el-dialog title="创建菜单" width="580px" class="icon-dialog" :visible.sync="show" @open="open" :before-close="closeForm" append-to-body>
 		<el-form :size="size" ref="form" :model="form" :rules="rules" label-width="90px">
             <el-tabs v-model="activeName">
@@ -140,147 +140,151 @@ Vue.component('AdminAdd', {
 		<Icon :iconshow.sync="iconDialogStatus" :icon.sync="form.icon" size="small"></Icon>
     </el-dialog>
 	`
-	,
-	components:{
-		'treeselect':VueTreeselect.Treeselect
-	},
-	props: {
-		show: {
-			type: Boolean,
-			default: false
-		},
-		size: {
-			type: String,
-			default: 'small'
-		},
-		app_id:{
-			type:String,
-			default:'1',
-		},
-		list:{
-			type:Array,
-		},
-		connects:{
-			type:Array,
-		},
-		page_type_list:{
-			type:Array,
-		}
-	},
-	data() {
-		return {
-			form: {
-				status:1,
-				create_table:1,
-				is_post:0,
-				create_code:1,
-				connect:'mysql',
-				app_id:'',
-				page_type:1,
-				table_name:'',
-				pk:'',
-				url:'',
-				upload_config_id:'',
-				controller_name:'',
-				title:'',
-				home_show:0,
-				menu_pic:'',
-				notice:'',
-			},
-			dbtype:'',
-			disabledPk:false,
-			activeName: 'first',
-			upload_list:[],
-			iconDialogStatus:false,
-			loading:false,
-			rules: {
-				title: [{ required: true, message: '菜单名称不能为空', trigger: 'blur' }],
-				controller_name:[
-					{pattern:/^[a-zA-Z\/|0-9]+$/, message: '访问路径格式错误'}
-				],
-			},
-		}
-	},
-	methods: {
-		submit(){
-			this.$refs['form'].validate(valid => {
-				if (valid) {
-					this.loading = true
-					axios.post(base_url+'/Sys.Base/createMenu',this.form).then(res => {
-						if(res.data.status == 200){
-							this.$message({message: '操作成功', type: 'success'})
-							this.$emit('refesh_list')
-							this.closeForm()
-						}else{
-							this.$message.error(res.data.msg)
-							this.loading = false
-						}
-					}).catch(()=>{
-						this.loading = false
-					})
-				}
-			})
-		},
-		open(){
-			this.form.app_id = this.app_id
-			axios.post(base_url+'/Sys.Base/getUploadList',{app_id:this.app_id}).then(res => {
-				if(res.data.status == 200){
-					this.upload_list = res.data.data
-				}
-			})
-		},
-		/** 转换菜单数据结构 */
-		normalizer(node) {
-			if (node.children && !node.children.length) {
-				delete node.children
-			}
-			return {
-				id: node.menu_id,
-				label: node.title,
-				children: node.children
-			}
-		},
-		changeCode(val){
-			if(!val){
-				this.form.create_table = 0
-				this.form.pk = ''
-				this.form.table_name = ''
-			}
-		},
-		setComponent(val){
-			axios.post(base_url+'/Sys.Base/getAppInfo',{'controller_name':val}).then(res => {
-				if(res.data.status == 200){
-					this.form.table_name = res.data.table_name.toLowerCase()
-					this.form.pk = res.data.pk.toLowerCase()
-				}
-			})
-		},
-		selectdb(val){
-			axios.post(base_url+'/Sys.Base/getDbType',{dbname:val}).then(res => {
-				if(res.data.status == 200){
-					this.dbtype = res.data.data
-					if(this.dbtype == 'mongo'){
-						this.form.pk = '_id'
-						this.disabledPk = true
-					}else{
-						this.disabledPk = false
-					}
-				}
-			})
-		},
-		closeForm(){
-			this.$emit('update:show', false)
-			this.loading = false
-			if (this.$refs['form']!==undefined) {
-				this.$refs['form'].resetFields()
-			}
-		}
-	},
+    ,
+    components: {
+        'treeselect': VueTreeselect.Treeselect
+    },
+    props: {
+        show: {
+            type: Boolean,
+            default: false
+        },
+        size: {
+            type: String,
+            default: 'small'
+        },
+        app_id: {
+            type: String,
+            default: '1',
+        },
+        list: {
+            type: Array,
+        },
+        connects: {
+            type: Array,
+        },
+        page_type_list: {
+            type: Array,
+        }
+    },
+    data() {
+        return {
+            form: {
+                status: 1,
+                create_table: 1,
+                is_post: 0,
+                create_code: 1,
+                connect: 'mysql',
+                app_id: '',
+                page_type: 1,
+                table_name: '',
+                pk: '',
+                url: '',
+                upload_config_id: '',
+                controller_name: '',
+                title: '',
+                home_show: 0,
+                menu_pic: '',
+                notice: '',
+            },
+            dbtype: '',
+            disabledPk: false,
+            activeName: 'first',
+            upload_list: [],
+            iconDialogStatus: false,
+            loading: false,
+            rules: {
+                title: [{required: true, message: '菜单名称不能为空', trigger: 'blur'}],
+                controller_name: [{
+                    pattern: /^[a-zA-Z0-9_]+$/,
+                    message: '仅允许输入字母、数字和下划线',
+                    trigger: 'blur'
+                }],
+                table_name: [{pattern: /^[a-zA-Z0-9_]+$/, message: '仅允许输入字母、数字和下划线', trigger: 'blur'}],
+                pk: [{pattern: /^[a-zA-Z0-9_]+$/, message: '仅允许输入字母、数字和下划线', trigger: 'blur'}],
+            },
+        }
+    },
+    methods: {
+        submit() {
+            this.$refs['form'].validate(valid => {
+                if (valid) {
+                    this.loading = true
+                    axios.post(base_url + '/Sys.Base/createMenu', this.form).then(res => {
+                        if (res.data.status == 200) {
+                            this.$message({message: '操作成功', type: 'success'})
+                            this.$emit('refesh_list')
+                            this.closeForm()
+                        } else {
+                            this.$message.error(res.data.msg)
+                            this.loading = false
+                        }
+                    }).catch(() => {
+                        this.loading = false
+                    })
+                }
+            })
+        },
+        open() {
+            this.form.app_id = this.app_id
+            axios.post(base_url + '/Sys.Base/getUploadList', {app_id: this.app_id}).then(res => {
+                if (res.data.status == 200) {
+                    this.upload_list = res.data.data
+                }
+            })
+        },
+        /** 转换菜单数据结构 */
+        normalizer(node) {
+            if (node.children && !node.children.length) {
+                delete node.children
+            }
+            return {
+                id: node.menu_id,
+                label: node.title,
+                children: node.children
+            }
+        },
+        changeCode(val) {
+            if (!val) {
+                this.form.create_table = 0
+                this.form.pk = ''
+                this.form.table_name = ''
+            }
+        },
+        setComponent(val) {
+            axios.post(base_url + '/Sys.Base/getAppInfo', {'controller_name': val}).then(res => {
+                if (res.data.status == 200) {
+                    this.form.table_name = res.data.table_name.toLowerCase()
+                    this.form.pk = res.data.pk.toLowerCase()
+                }
+            })
+        },
+        selectdb(val) {
+            axios.post(base_url + '/Sys.Base/getDbType', {dbname: val}).then(res => {
+                if (res.data.status == 200) {
+                    this.dbtype = res.data.data
+                    if (this.dbtype == 'mongo') {
+                        this.form.pk = '_id'
+                        this.disabledPk = true
+                    } else {
+                        this.disabledPk = false
+                    }
+                }
+            })
+        },
+        closeForm() {
+            this.$emit('update:show', false)
+            this.loading = false
+            if (this.$refs['form'] !== undefined) {
+                this.$refs['form'].resetFields()
+            }
+        }
+    },
 });
 
 //admin修改
 Vue.component('AdminUpdate', {
-	template: `
+    template: `
 		<el-dialog title="更新菜单" width="580px" class="icon-dialog" :visible.sync="show" @open="open" :before-close="closeForm" append-to-body>
         <el-form :size="size" ref="form" :model="form" :rules="rules" label-width="90px">
              <el-tabs v-model="activeName">
@@ -366,7 +370,7 @@ Vue.component('AdminUpdate', {
                     </el-row>
 					<el-row v-if="form.create_code == 0 && form.status == 1">
                         <el-form-item label="跳转地址" prop="url">
-                            <el-input v-model="form.url" placeholder="请输入跳转地址" clearable></el-input> 
+                            <el-input v-model="form.url" placeholder="请输入跳转地址" clearable></el-input>
                         </el-form-item>
                     </el-row>
                 </el-tab-pane>
@@ -421,159 +425,165 @@ Vue.component('AdminUpdate', {
         <Icon :iconshow.sync="iconDialogStatus" :icon.sync="form.icon" size="small"></Icon>
     </el-dialog>
 	`
-	,
-	components:{
-		'treeselect':VueTreeselect.Treeselect
-	},
-	props: {
-		show: {
-			type: Boolean,
-			default: false
-		},
-		size: {
-			type: String,
-			default: 'small'
-		},
-		info:{
-			type:Object,
-		},
-		list:{
-			type:Array,
-		},
-		connects:{
-			type:Array,
-		},
-		page_type_list:{
-			type:Array,
-		}
-	},
-	data() {
-		return {
-			form: {
-				status:'',
-				create_table:'',
-				is_post:'',
-				create_code:'',
-				connect:'',
-				app_id:'',
-				page_type:'',
-				table_name:'',
-				pk:'',
-				pid:'',
-				url:'',
-				upload_config_id:'',
-				controller_name:'',
-				title:'',
-				home_show:0,
-				menu_pic:'',
-				notice:'',
-			},
-			dbtype:'',
-			disabledPk:false,
-			activeName: 'first',
-			iconDialogStatus:false,
-			currentIconModel:'',
-			loading:false,
-			upload_list:[],
-			rules: {
-				title: [{ required: true, message: '菜单名称不能为空', trigger: 'blur' }],
-			},
-		}
-	},
-	methods: {
-		submit(){
-			this.$refs['form'].validate(valid => {
-				if (valid) {
-					this.loading = true
-					axios.post(base_url+'/Sys.Base/updateMenu',this.form).then(res => {
-						if(res.data.status == '200'){
-							this.$message({message: '操作成功', type: 'success'})
-							this.$emit('refesh_list')
-							this.closeForm()
-						}else{
-							this.loading = false
-							this.$message.error(res.data.msg)
-						}
-					}).catch(()=>{
-						this.loading = false
-					})
-				}
-			})
-		},
-		open(){
-			if(this.info.pid == '0' ){
-				this.$delete(this.info,'pid')
-			}
-			this.form = this.info
-			axios.post(base_url+'/Sys.Base/getUploadList',{app_id:this.app_id}).then(res => {
-				if(res.data.status == 200){
-					this.upload_list = res.data.data
-				}
-			})
-			axios.post(base_url+'/Sys.Base/getDbType',{dbname:this.form.connect}).then(res => {
-				if(res.data.status == 200){
-					this.dbtype = res.data.data
-					if(res.data.data == 'mongo'){
-						this.disabledPk = true
-					}
-				}
-			})
-		},
-		/** 转换菜单数据结构 */
-		normalizer(node) {
-			if (node.children && !node.children.length) {
-				delete node.children;
-			}
-			return {
-				id: node.menu_id,
-				label: node.title,
-				children: node.children
-			};
-		},
-		changeCode(val){
-			if(!val){
-				this.form.component_path = ''
-				this.form.create_table = 0
-				this.form.pk = ''
-				this.form.table_name = ''
-			}
-		},
-		setComponent(val){
-			axios.post(base_url+'/Sys.Base/getAppInfo',{'controller_name':val}).then(res => {
-				if(res.data.status == 200){
-					this.form.table_name = res.data.table_name.toLowerCase()
-					this.form.pk = res.data.pk.toLowerCase()
-				}
-			})
-		},
-		selectdb(val){
-			axios.post(base_url+'/Sys.Base/getDbType',{dbname:val}).then(res => {
-				if(res.data.status == 200){
-					this.dbtype = res.data.data
-					if(this.dbtype == 'mongo'){
-						this.form.pk = '_id'
-						this.disabledPk = true
-					}else{
-						this.disabledPk = false
-					}
-				}
-			})
-		},
-		closeForm(){
-		   this.$emit('update:show', false)
-		   this.loading = false
-		   if (this.$refs['form']!==undefined) {
-				this.$refs['form'].resetFields()
-		   }
-		}
-	},
+    ,
+    components: {
+        'treeselect': VueTreeselect.Treeselect
+    },
+    props: {
+        show: {
+            type: Boolean,
+            default: false
+        },
+        size: {
+            type: String,
+            default: 'small'
+        },
+        info: {
+            type: Object,
+        },
+        list: {
+            type: Array,
+        },
+        connects: {
+            type: Array,
+        },
+        page_type_list: {
+            type: Array,
+        }
+    },
+    data() {
+        return {
+            form: {
+                status: '',
+                create_table: '',
+                is_post: '',
+                create_code: '',
+                connect: '',
+                app_id: '',
+                page_type: '',
+                table_name: '',
+                pk: '',
+                pid: '',
+                url: '',
+                upload_config_id: '',
+                controller_name: '',
+                title: '',
+                home_show: 0,
+                menu_pic: '',
+                notice: '',
+            },
+            dbtype: '',
+            disabledPk: false,
+            activeName: 'first',
+            iconDialogStatus: false,
+            currentIconModel: '',
+            loading: false,
+            upload_list: [],
+            rules: {
+                title: [{required: true, message: '菜单名称不能为空', trigger: 'blur'}],
+                controller_name: [{
+                    pattern: /^[a-zA-Z0-9_]+$/,
+                    message: '仅允许输入字母、数字和下划线',
+                    trigger: 'blur'
+                }],
+                table_name: [{pattern: /^[a-zA-Z0-9_]+$/, message: '仅允许输入字母、数字和下划线', trigger: 'blur'}],
+                pk: [{pattern: /^[a-zA-Z0-9_]+$/, message: '仅允许输入字母、数字和下划线', trigger: 'blur'}],
+            },
+        }
+    },
+    methods: {
+        submit() {
+            this.$refs['form'].validate(valid => {
+                if (valid) {
+                    this.loading = true
+                    axios.post(base_url + '/Sys.Base/updateMenu', this.form).then(res => {
+                        if (res.data.status == '200') {
+                            this.$message({message: '操作成功', type: 'success'})
+                            this.$emit('refesh_list')
+                            this.closeForm()
+                        } else {
+                            this.loading = false
+                            this.$message.error(res.data.msg)
+                        }
+                    }).catch(() => {
+                        this.loading = false
+                    })
+                }
+            })
+        },
+        open() {
+            if (this.info.pid == '0') {
+                this.$delete(this.info, 'pid')
+            }
+            this.form = this.info
+            axios.post(base_url + '/Sys.Base/getUploadList', {app_id: this.app_id}).then(res => {
+                if (res.data.status == 200) {
+                    this.upload_list = res.data.data
+                }
+            })
+            axios.post(base_url + '/Sys.Base/getDbType', {dbname: this.form.connect}).then(res => {
+                if (res.data.status == 200) {
+                    this.dbtype = res.data.data
+                    if (res.data.data == 'mongo') {
+                        this.disabledPk = true
+                    }
+                }
+            })
+        },
+        /** 转换菜单数据结构 */
+        normalizer(node) {
+            if (node.children && !node.children.length) {
+                delete node.children;
+            }
+            return {
+                id: node.menu_id,
+                label: node.title,
+                children: node.children
+            };
+        },
+        changeCode(val) {
+            if (!val) {
+                this.form.component_path = ''
+                this.form.create_table = 0
+                this.form.pk = ''
+                this.form.table_name = ''
+            }
+        },
+        setComponent(val) {
+            axios.post(base_url + '/Sys.Base/getAppInfo', {'controller_name': val}).then(res => {
+                if (res.data.status == 200) {
+                    this.form.table_name = res.data.table_name.toLowerCase()
+                    this.form.pk = res.data.pk.toLowerCase()
+                }
+            })
+        },
+        selectdb(val) {
+            axios.post(base_url + '/Sys.Base/getDbType', {dbname: val}).then(res => {
+                if (res.data.status == 200) {
+                    this.dbtype = res.data.data
+                    if (this.dbtype == 'mongo') {
+                        this.form.pk = '_id'
+                        this.disabledPk = true
+                    } else {
+                        this.disabledPk = false
+                    }
+                }
+            })
+        },
+        closeForm() {
+            this.$emit('update:show', false)
+            this.loading = false
+            if (this.$refs['form'] !== undefined) {
+                this.$refs['form'].resetFields()
+            }
+        }
+    },
 });
-
 
 
 //api添加
 Vue.component('ApiAdd', {
-	template: `
+    template: `
 	<el-dialog title="创建菜单" width="580px" class="icon-dialog" :visible.sync="show" @open="open" :before-close="closeForm" append-to-body>
         <el-form  :size="size" ref="form" :model="form" :rules="rules" label-width="90px">
             <el-row>
@@ -642,125 +652,129 @@ Vue.component('ApiAdd', {
         </div>
     </el-dialog>
 	`
-	,
-	components:{
-		'treeselect':VueTreeselect.Treeselect
-	},
-	props: {
-		show: {
-			type: Boolean,
-			default: false
-		},
-		size: {
-			type: String,
-			default: 'small'
-		},
-		app_id:{
-			type:String,
-			default:'1',
-		},
-		list:{
-			type:Array,
-		},
-		connects:{
-			type:Array,
-		}
-	},
-	data() {
-		return {
-			form: {
-				status:1,
-				create_table:1,
-				is_post:1,
-				create_code:1,
-				connect:'mysql',
-				app_id:'',
-				page_type:1,
-				table_name:'',
-				pid:0,
-				pk:'',
-			},
-			dbtype:'',
-			disabledPk:false,
-			iconDialogStatus:false,
-			loading:false,
-			rules: {
-				title: [{ required: true, message: '菜单名称不能为空', trigger: 'blur' }],
-				controller_name:[
-					{pattern:/^[a-zA-Z\/|0-9]+$/, message: '访问路径格式错误'}
-				],
-			},
-		}
-	},
-	methods: {
-		submit(){
-			this.$refs['form'].validate(valid => {
-				if (valid) {
-					this.loading = true
-					axios.post(base_url+'/Sys.Base/createMenu',this.form).then(res => {
-						if(res.data.status == 200){
-							this.$message({message: '操作成功', type: 'success'})
-							this.$emit('refesh_list')
-							this.closeForm()
-						}else{
-							this.loading = false
-							this.$message.error(res.data.msg)
-						}
-					}).catch(()=>{
-						this.loading = false
-					})
-				}
-			})
-		},
-		open(){
-			this.form.app_id = this.app_id
-		},
-		/** 转换菜单数据结构 */
-		normalizer(node) {
-			if (node.children && !node.children.length) {
-				delete node.children
-			}
-			return {
-				id: node.menu_id,
-				label: node.title,
-				children: node.children
-			}
-		},
-		setComponent(val){
-			axios.post(base_url+'/Sys.Base/getAppInfo',{'controller_name':val}).then(res => {
-				if(res.data.status == 200){
-					this.form.table_name = res.data.table_name.toLowerCase()
-					this.form.pk = res.data.pk.toLowerCase()
-				}
-			})
-		},
-		selectdb(val){
-			axios.post(base_url+'/Sys.Base/getDbType',{dbname:val}).then(res => {
-				if(res.data.status == 200){
-					this.dbtype = res.data.data
-					if(this.dbtype == 'mongo'){
-						this.form.pk = '_id'
-						this.disabledPk = true
-					}else{
-						this.disabledPk = false
-					}
-				}
-			})
-		},
-		closeForm(){
-		   this.$emit('update:show', false)
-		   this.loading = false
-		   if (this.$refs['form']!==undefined) {
-				this.$refs['form'].resetFields()
-		   }
-		}
-	},
+    ,
+    components: {
+        'treeselect': VueTreeselect.Treeselect
+    },
+    props: {
+        show: {
+            type: Boolean,
+            default: false
+        },
+        size: {
+            type: String,
+            default: 'small'
+        },
+        app_id: {
+            type: String,
+            default: '1',
+        },
+        list: {
+            type: Array,
+        },
+        connects: {
+            type: Array,
+        }
+    },
+    data() {
+        return {
+            form: {
+                status: 1,
+                create_table: 1,
+                is_post: 1,
+                create_code: 1,
+                connect: 'mysql',
+                app_id: '',
+                page_type: 1,
+                table_name: '',
+                pid: 0,
+                pk: '',
+            },
+            dbtype: '',
+            disabledPk: false,
+            iconDialogStatus: false,
+            loading: false,
+            rules: {
+                title: [{required: true, message: '菜单名称不能为空', trigger: 'blur'}],
+                controller_name: [{
+                    pattern: /^[a-zA-Z0-9_]+$/,
+                    message: '仅允许输入字母、数字和下划线',
+                    trigger: 'blur'
+                }],
+                table_name: [{pattern: /^[a-zA-Z0-9_]+$/, message: '仅允许输入字母、数字和下划线', trigger: 'blur'}],
+                pk: [{pattern: /^[a-zA-Z0-9_]+$/, message: '仅允许输入字母、数字和下划线', trigger: 'blur'}],
+            },
+        }
+    },
+    methods: {
+        submit() {
+            this.$refs['form'].validate(valid => {
+                if (valid) {
+                    this.loading = true
+                    axios.post(base_url + '/Sys.Base/createMenu', this.form).then(res => {
+                        if (res.data.status == 200) {
+                            this.$message({message: '操作成功', type: 'success'})
+                            this.$emit('refesh_list')
+                            this.closeForm()
+                        } else {
+                            this.loading = false
+                            this.$message.error(res.data.msg)
+                        }
+                    }).catch(() => {
+                        this.loading = false
+                    })
+                }
+            })
+        },
+        open() {
+            this.form.app_id = this.app_id
+        },
+        /** 转换菜单数据结构 */
+        normalizer(node) {
+            if (node.children && !node.children.length) {
+                delete node.children
+            }
+            return {
+                id: node.menu_id,
+                label: node.title,
+                children: node.children
+            }
+        },
+        setComponent(val) {
+            axios.post(base_url + '/Sys.Base/getAppInfo', {'controller_name': val}).then(res => {
+                if (res.data.status == 200) {
+                    this.form.table_name = res.data.table_name.toLowerCase()
+                    this.form.pk = res.data.pk.toLowerCase()
+                }
+            })
+        },
+        selectdb(val) {
+            axios.post(base_url + '/Sys.Base/getDbType', {dbname: val}).then(res => {
+                if (res.data.status == 200) {
+                    this.dbtype = res.data.data
+                    if (this.dbtype == 'mongo') {
+                        this.form.pk = '_id'
+                        this.disabledPk = true
+                    } else {
+                        this.disabledPk = false
+                    }
+                }
+            })
+        },
+        closeForm() {
+            this.$emit('update:show', false)
+            this.loading = false
+            if (this.$refs['form'] !== undefined) {
+                this.$refs['form'].resetFields()
+            }
+        }
+    },
 });
 
 
 //api修改
 Vue.component('ApiUpdate', {
-	template: `
+    template: `
 	<el-dialog title="创建菜单" width="580px" class="icon-dialog" :visible.sync="show" @open="open" :before-close="closeForm" append-to-body>
         <el-form  :size="size" ref="form" :model="form" :rules="rules" label-width="90px">
             <el-row>
@@ -829,11 +843,11 @@ Vue.component('ApiUpdate', {
         </div>
     </el-dialog>
 	`
-	,
-	components:{
-		'treeselect':VueTreeselect.Treeselect
-	},
-	props: {
+    ,
+    components: {
+        'treeselect': VueTreeselect.Treeselect
+    },
+    props: {
         show: {
             type: Boolean,
             default: false
@@ -842,71 +856,78 @@ Vue.component('ApiUpdate', {
             type: String,
             default: 'small'
         },
-        info:{
-            type:Object,
+        info: {
+            type: Object,
         },
-        list:{
-            type:Array,
+        list: {
+            type: Array,
         },
-        connects:{
-            type:Array,
+        connects: {
+            type: Array,
         },
     },
     data() {
         return {
             form: {
-                status:'',
-				create_table:'',
-				is_post:'',
-				create_code:'',
-				connect:'',
-				app_id:'',
-				page_type:'',
-				table_name:'',
-				pid:'',
-				pk:'',
+                status: '',
+                create_table: '',
+                is_post: '',
+                create_code: '',
+                connect: '',
+                app_id: '',
+                page_type: '',
+                table_name: '',
+                pid: '',
+                pk: '',
             },
-			dbtype:'',
-			disabledPk:false,
-            loading:false,
+            dbtype: '',
+            disabledPk: false,
+            loading: false,
             rules: {
-                title: [{ required: true, message: '菜单名称不能为空', trigger: 'blur' }],
+                title: [{required: true, message: '菜单名称不能为空', trigger: 'blur'}],
+                controller_name: [{
+                    pattern: /^[a-zA-Z0-9_]+$/,
+                    message: '仅允许输入字母、数字和下划线',
+                    trigger: 'blur'
+                }],
+                table_name: [{pattern: /^[a-zA-Z0-9_]+$/, message: '仅允许输入字母、数字和下划线', trigger: 'blur'}],
+                pk: [{pattern: /^[a-zA-Z0-9_]+$/, message: '仅允许输入字母、数字和下划线', trigger: 'blur'}],
             },
         }
     },
     methods: {
-        submit(){
+        submit() {
             this.$refs['form'].validate(valid => {
                 if (valid) {
                     this.loading = true
-                    axios.post(base_url+'/Sys.Base/updateMenu',this.form).then(res => {
-                        if(res.data.status == '200'){
+                    axios.post(base_url + '/Sys.Base/updateMenu', this.form).then(res => {
+                        if (res.data.status == '200') {
                             this.$message({message: '操作成功', type: 'success'})
                             this.$emit('refesh_list')
                             this.closeForm()
-                        }else{
+                        } else {
                             this.loading = false
-							this.$message.error(res.data.msg)
+                            this.$message.error(res.data.msg)
                         }
-                    }).catch(()=>{
+                    }).catch(() => {
                         this.loading = false
                     })
                 }
             })
         },
-        open(){
-            if(this.info.pid == '0' ){
-                this.$delete(this.info,'pid')
+        open() {
+            if (this.info.pid == '0') {
+                this.$delete(this.info, 'pid')
             }
             this.form = this.info
-			axios.post(base_url+'/Sys.Base/getDbType',{dbname:this.form.connect}).then(res => {
-				if(res.data.status == 200){
-					this.dbtype = res.data.data
-					if(res.data.data == 'mongo'){
-						this.disabledPk = true
-					}
-				}
-			})
+            axios.post(base_url + '/Sys.Base/getDbType', {dbname: this.form.connect}).then(res => {
+                if (res.data.status == 200) {
+                    this.dbtype = res.data.data
+                    if (res.data.data == 'mongo') {
+                        this.disabledPk = true
+                    }
+                }
+            })
         },
         /** 转换菜单数据结构 */
         normalizer(node) {
@@ -919,31 +940,31 @@ Vue.component('ApiUpdate', {
                 children: node.children
             };
         },
-		setComponent(val){
-			axios.post(base_url+'/Sys.Base/getAppInfo',{'controller_name':val}).then(res => {
-				if(res.data.status == 200){
-					this.form.table_name = res.data.table_name.toLowerCase()
-					this.form.pk = res.data.pk.toLowerCase()
-				}
-			})
-		},
-		selectdb(val){
-			axios.post(base_url+'/Sys.Base/getDbType',{dbname:val}).then(res => {
-				if(res.data.status == 200){
-					this.dbtype = res.data.data
-					if(this.dbtype == 'mongo'){
-						this.form.pk = '_id'
-						this.disabledPk = true
-					}else{
-						this.disabledPk = false
-					}
-				}
-			})
-		},
-        closeForm(){
+        setComponent(val) {
+            axios.post(base_url + '/Sys.Base/getAppInfo', {'controller_name': val}).then(res => {
+                if (res.data.status == 200) {
+                    this.form.table_name = res.data.table_name.toLowerCase()
+                    this.form.pk = res.data.pk.toLowerCase()
+                }
+            })
+        },
+        selectdb(val) {
+            axios.post(base_url + '/Sys.Base/getDbType', {dbname: val}).then(res => {
+                if (res.data.status == 200) {
+                    this.dbtype = res.data.data
+                    if (this.dbtype == 'mongo') {
+                        this.form.pk = '_id'
+                        this.disabledPk = true
+                    } else {
+                        this.disabledPk = false
+                    }
+                }
+            })
+        },
+        closeForm() {
             this.$emit('update:show', false)
             this.loading = false
-            if (this.$refs['form']!==undefined) {
+            if (this.$refs['form'] !== undefined) {
                 this.$refs['form'].resetFields()
             }
         }
@@ -951,10 +972,9 @@ Vue.component('ApiUpdate', {
 });
 
 
-
 //cms添加
 Vue.component('CmsAdd', {
-	template: `
+    template: `
 	<el-dialog title="创建内容模型" width="580px" class="icon-dialog" :visible.sync="show" @open="open" :before-close="closeForm" append-to-body>
         <el-form  :size="size" ref="form" :model="form" :rules="rules" label-width="90px">
             <el-row>
@@ -989,8 +1009,8 @@ Vue.component('CmsAdd', {
         </div>
     </el-dialog>
 	`
-	,
-	props: {
+    ,
+    props: {
         show: {
             type: Boolean,
             default: false
@@ -999,51 +1019,51 @@ Vue.component('CmsAdd', {
             type: String,
             default: 'small'
         },
-        app_id:{
-            type:String,
-            default:'1',
+        app_id: {
+            type: String,
+            default: '1',
         },
     },
     data() {
         return {
             form: {
-                create_table:1,
-                app_type:3,
-				page_type:1,
+                create_table: 1,
+                app_type: 3,
+                page_type: 1,
             },
-            loading:false,
+            loading: false,
             rules: {
-                title: [{ required: true, message: '菜单名称不能为空', trigger: 'blur' }],
+                title: [{required: true, message: '菜单名称不能为空', trigger: 'blur'}],
             },
         }
     },
     methods: {
-        submit(){
+        submit() {
             this.$refs['form'].validate(valid => {
                 if (valid) {
                     this.loading = true
-                    axios.post(base_url+'/Sys.Base/createMenu',this.form).then(res => {
-                        if(res.data.status == 200){
+                    axios.post(base_url + '/Sys.Base/createMenu', this.form).then(res => {
+                        if (res.data.status == 200) {
                             this.$message({message: '操作成功', type: 'success'})
                             this.$emit('refesh_list')
                             this.closeForm()
-                        }else{
+                        } else {
                             this.loading = false
-							this.$message.error('操作失败')
+                            this.$message.error('操作失败')
                         }
-                    }).catch(()=>{
+                    }).catch(() => {
                         this.loading = false
                     })
                 }
             })
         },
-        open(){
+        open() {
             this.form.app_id = this.app_id
         },
-        closeForm(){
+        closeForm() {
             this.$emit('update:show', false)
             this.loading = false
-            if (this.$refs['form']!==undefined) {
+            if (this.$refs['form'] !== undefined) {
                 this.$refs['form'].resetFields()
             }
         }
@@ -1053,7 +1073,7 @@ Vue.component('CmsAdd', {
 
 //cms修改
 Vue.component('CmsUpdate', {
-	template: `
+    template: `
 	<el-dialog title="修改内容模型" width="580px" class="icon-dialog" :visible.sync="show" @open="open" :before-close="closeForm" append-to-body>
         <el-form  :size="size" ref="form" :model="form" :rules="rules" label-width="90px">
             <el-row>
@@ -1087,8 +1107,8 @@ Vue.component('CmsUpdate', {
         </div>
     </el-dialog>
 	`
-	,
-	props: {
+    ,
+    props: {
         show: {
             type: Boolean,
             default: false
@@ -1097,49 +1117,49 @@ Vue.component('CmsUpdate', {
             type: String,
             default: 'small'
         },
-        info:{
-            type:Object,
+        info: {
+            type: Object,
         },
     },
     data() {
         return {
             form: {
-                app_type:3,
-				page_type:1
+                app_type: 3,
+                page_type: 1
             },
-            loading:false,
+            loading: false,
             rules: {
-                title: [{ required: true, message: '模型名称不能为空', trigger: 'blur' }],
+                title: [{required: true, message: '模型名称不能为空', trigger: 'blur'}],
             },
         }
     },
     methods: {
-        submit(){
+        submit() {
             this.$refs['form'].validate(valid => {
                 if (valid) {
                     this.loading = true
-                    axios.post(base_url+'/Sys.Base/updateMenu',this.form).then(res => {
-                        if(res.data.status == '200'){
+                    axios.post(base_url + '/Sys.Base/updateMenu', this.form).then(res => {
+                        if (res.data.status == '200') {
                             this.$message({message: '操作成功', type: 'success'})
                             this.$emit('refesh_list')
                             this.closeForm()
-                        }else{
+                        } else {
                             this.loading = false
-							this.$message.error(res.data.msg)
+                            this.$message.error(res.data.msg)
                         }
-                    }).catch(()=>{
+                    }).catch(() => {
                         this.loading = false
                     })
                 }
             })
         },
-        open(){
+        open() {
             this.form = this.info
         },
-        closeForm(){
+        closeForm() {
             this.$emit('update:show', false)
             this.loading = false
-            if (this.$refs['form']!==undefined) {
+            if (this.$refs['form'] !== undefined) {
                 this.$refs['form'].resetFields()
             }
         }
