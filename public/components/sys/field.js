@@ -887,7 +887,10 @@ Vue.component('AdminAdd', {
 			dbtype:'',
 			rules: {
 				title: [{ required: true, message: '字段中文名不能为空', trigger: 'blur' }],
-				field: [{ required: true, message: '字段英文名不能为空', trigger: 'blur' }],
+                field: [
+                    {required: true, message: '字段英文名不能为空', trigger: 'blur'},
+                    {pattern: /^[a-zA-Z0-9_]+$/, message: '仅允许输入字母、数字和下划线', trigger: 'blur'}
+                ],
 				type: [{ required: true, message: '字段类型不能为空', trigger: 'blur' }],
 				login_fields: [{ required: true, message: '请配置登录账号密码字段', trigger: 'blur' }],
                 
@@ -1671,7 +1674,10 @@ Vue.component('AdminUpdate', {
 			dbtype:'',
 			rules: {
 				title: [{ required: true, message: '字段中文名不能为空', trigger: 'blur' }],
-				field: [{ required: true, message: '字段英文名不能为空', trigger: 'blur' }],
+                field: [
+                    {required: true, message: '字段英文名不能为空', trigger: 'blur'},
+                    {pattern: /^[a-zA-Z0-9_]+$/, message: '仅允许输入字母、数字和下划线', trigger: 'blur'}
+                ],
 				type: [{ required: true, message: '字段类型不能为空', trigger: 'blur' }],
 				login_fields: [{ required: true, message: '请配置登录账号密码字段', trigger: 'blur' }],
                 'other_config.key_placeholder': [{ max: 50, message: '长度不能超过50个字符', trigger: 'blur' }],
@@ -2209,7 +2215,10 @@ Vue.component('ApiAdd', {
 			dbtype:'',
 			rules: {
 				title: [{ required: true, message: '字段中文名不能为空', trigger: 'blur' }],
-				field: [{ required: true, message: '字段英文名不能为空', trigger: 'blur' }],
+                field: [
+                    {required: true, message: '字段英文名不能为空', trigger: 'blur'},
+                    {pattern: /^[a-zA-Z0-9_]+$/, message: '仅允许输入字母、数字和下划线', trigger: 'blur'}
+                ],
 				type: [{ required: true, message: '字段类型不能为空', trigger: 'blur' }],
 				login_fields: [{ required: true, message: '请配置登录账号密码字段', trigger: 'blur' }],
 			},
@@ -2583,7 +2592,10 @@ Vue.component('ApiUpdate', {
 			dbtype:'',
 			rules: {
 				title: [{ required: true, message: '字段中文名不能为空', trigger: 'blur' }],
-				field: [{ required: true, message: '字段英文名不能为空', trigger: 'blur' }],
+                field: [
+                    {required: true, message: '字段英文名不能为空', trigger: 'blur'},
+                    {pattern: /^[a-zA-Z0-9_]+$/, message: '仅允许输入字母、数字和下划线', trigger: 'blur'}
+                ],
 				type: [{ required: true, message: '字段类型不能为空', trigger: 'blur' }],
 				login_fields: [{ required: true, message: '请配置登录账号密码字段', trigger: 'blur' }],
 			},
@@ -2924,7 +2936,10 @@ Vue.component('CmsAdd', {
 			tableList:[],
 			rules: {
 				title: [{ required: true, message: '字段中文名不能为空', trigger: 'blur' }],
-				field: [{ required: true, message: '字段英文名不能为空', trigger: 'blur' }],
+                field: [
+                    {required: true, message: '字段英文名不能为空', trigger: 'blur'},
+                    {pattern: /^[a-zA-Z0-9_]+$/, message: '仅允许输入字母、数字和下划线', trigger: 'blur'}
+                ],
 				type: [{ required: true, message: '字段类型不能为空', trigger: 'blur' }],
 				login_fields: [{ required: true, message: '请配置登录账号密码字段', trigger: 'blur' }],
 			},
@@ -3213,7 +3228,10 @@ Vue.component('CmsUpdate', {
 			tableList:[],
 			rules: {
 				title: [{ required: true, message: '字段中文名不能为空', trigger: 'blur' }],
-				field: [{ required: true, message: '字段英文名不能为空', trigger: 'blur' }],
+                field: [
+                    {required: true, message: '字段英文名不能为空', trigger: 'blur'},
+                    {pattern: /^[a-zA-Z0-9_]+$/, message: '仅允许输入字母、数字和下划线', trigger: 'blur'}
+                ],
 				type: [{ required: true, message: '字段类型不能为空', trigger: 'blur' }],
 				login_fields: [{ required: true, message: '请配置登录账号密码字段', trigger: 'blur' }],
 			},

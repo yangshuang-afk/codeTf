@@ -746,7 +746,7 @@ Vue.component('AdminAdd', {
 			restaurants: [{'value':'null'},{'value':'not null'}],
 			rules: {
 				name: [{ required: true, message: '方法中文名不能为空', trigger: 'blur' }],
-				action_name: [{ required: true, message: '方法英文名不能为空', trigger: 'blur' }],
+				action_name: [{ required: true, message: '方法英文名不能为空', trigger: 'blur' },{pattern: /^[a-zA-Z0-9_]+$/, message: '仅允许输入字母、数字和下划线', trigger: 'blur'}],
 				type: [{ required: true, message: '方法类型不能为空', trigger: 'blur' }],
 			},
 		}
@@ -1366,7 +1366,7 @@ Vue.component('AdminUpdate', {
 			restaurants: [{'value':'null'},{'value':'not null'}],
 			rules: {
 				name: [{ required: true, message: '方法中文名不能为空', trigger: 'blur' }],
-				action_name: [{ required: true, message: '方法英文名不能为空', trigger: 'blur' }],
+				action_name: [{ required: true, message: '方法英文名不能为空', trigger: 'blur' },{pattern: /^[a-zA-Z0-9_]+$/, message: '仅允许输入字母、数字和下划线', trigger: 'blur'}],
 				type: [{ required: true, message: '方法类型不能为空', trigger: 'blur' }],
 			},
 		}
@@ -1859,7 +1859,7 @@ Vue.component('ApiAdd', {
 			afterHookChecked:false,
 			rules: {
 				name: [{ required: true, message: '方法中文名不能为空', trigger: 'blur' }],
-				action_name: [{ required: true, message: '方法英文名不能为空', trigger: 'blur' }],
+				action_name: [{ required: true, message: '方法英文名不能为空', trigger: 'blur' },{pattern: /^[a-zA-Z0-9_]+$/, message: '仅允许输入字母、数字和下划线', trigger: 'blur'}],
 				type: [{ required: true, message: '方法类型不能为空', trigger: 'blur' }],
 			},
 		}
@@ -2241,7 +2241,7 @@ Vue.component('ApiUpdate', {
 			restaurants: [{'value':'null'},{'value':'not null'}],
 			rules: {
 				name: [{ required: true, message: '方法中文名不能为空', trigger: 'blur' }],
-				action_name: [{ required: true, message: '方法英文名不能为空', trigger: 'blur' }],
+				action_name: [{ required: true, message: '方法英文名不能为空', trigger: 'blur' },{pattern: /^[a-zA-Z0-9_]+$/, message: '仅允许输入字母、数字和下划线', trigger: 'blur'}],
 				type: [{ required: true, message: '方法类型不能为空', trigger: 'blur' }],
 			},
 		}
