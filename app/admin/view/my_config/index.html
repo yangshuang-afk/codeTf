@@ -423,6 +423,14 @@
                     
                     <el-row>
                         <el-col :span="24">
+                            <el-form-item label="APIPOST鉴权token" prop="tf_token">
+                                <el-input v-model="form.tf_token" autoComplete="off" clearable></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    
+                    <el-row>
+                        <el-col :span="24">
                             <el-form-item label="发送端" prop="tf_iss">
                                 <el-input v-model="form.tf_iss" autoComplete="off" clearable></el-input>
                             </el-form-item>

@@ -422,6 +422,19 @@ Vue.component('AdminAdd', {
 								</el-form-item>
 							</el-col>
 						</el-row>
+
+						<!-- 图片预览 -->
+                        <el-row>
+                            <el-col v-if="[13,14].includes(form.type)" :span="24">
+                                <el-form-item label="图片预览" prop="previewImage">
+                                    <el-radio-group v-model="form.other_config.previewImage">
+                                        <el-radio :label="1">是</el-radio>
+                                        <el-radio :label="0">否</el-radio>
+                                    </el-radio-group>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        
 						<el-row v-if="form.type == 31">
 							<el-form-item label="随机数格式" prop="form.other_config.rand_config">
 								<el-select style="width:100%" :size="size" v-model="form.other_config.rand_config" clearable  filterable placeholder="请选择随机数格式">
@@ -852,6 +865,7 @@ Vue.component('AdminAdd', {
         			value_placeholder: '', // 新增value-placeholder字段
 					tx_tiaojian: '', // 新增字段提醒条件类型
 					tx_zhi: '',      // 新增字段提醒条件值
+                    previewImage:0,   // 图片预览
 				},
 				sql:'',
 				datatype:'',
@@ -1188,6 +1202,19 @@ Vue.component('AdminUpdate', {
 								</el-form-item>
 							</el-col>
 						</el-row>
+						
+                        <!-- 图片预览 -->
+                        <el-row>
+                            <el-col v-if="[13,14].includes(form.type)" :span="24">
+                                <el-form-item label="图片预览" prop="previewImage">
+                                    <el-radio-group v-model="form.other_config.previewImage">
+                                        <el-radio :label="1">是</el-radio>
+                                        <el-radio :label="0">否</el-radio>
+                                    </el-radio-group>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        
 						<el-row v-if="form.type == 19">
 							<el-col :span="24">
 								<el-form-item label="进度条样式" prop="jdt">
@@ -1622,6 +1649,8 @@ Vue.component('AdminUpdate', {
   					value_placeholder: '', // 新增value-placeholder字段
   					tx_tiaojian: '', // 新增字段提醒条件类型
                     tx_zhi: '',      // 新增字段提醒条件值
+                    
+                    previewImage:0,   // 图片预览
 				},
 				sql:'',
 				datatype:'',
