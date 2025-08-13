@@ -291,7 +291,7 @@ html {
 document.head.appendChild(style);
 //添加admin字段 TODO
 Vue.component('AdminAdd', {
-	template: `
+    template: `
 		<el-dialog title="创建字段" width="95%" class="icon-dialog" :visible.sync="show" :before-close="closeForm" @open="open"  append-to-body>
         <el-form :size="size" ref="form" :model="form" :rules="rules" label-width="120px">
         	<div class="field-container">
@@ -435,15 +435,6 @@ Vue.component('AdminAdd', {
                             </el-col>
                         </el-row>
                         
-						<el-row v-if="form.type == 31">
-							<el-form-item label="随机数格式" prop="form.other_config.rand_config">
-								<el-select style="width:100%" :size="size" v-model="form.other_config.rand_config" clearable  filterable placeholder="请选择随机数格式">
-										<el-option key="1" label="字母大小写数字组合" value="all"></el-option>
-										<el-option key="2" label="字母大小写组合" value="letter"></el-option>
-										<el-option key="3" label="纯数字组合" value="number"></el-option>
-								</el-select>
-							</el-form-item>
-						</el-row>
 						<el-row v-if="form.type == 19">
 							<el-col :span="24">
 								<el-form-item label="进度条样式" prop="jdt">
@@ -454,6 +445,17 @@ Vue.component('AdminAdd', {
 								</el-form-item>
 							</el-col>
 						</el-row>
+						
+                        <el-row v-if="form.type == 31">
+							<el-form-item label="随机数格式" prop="form.other_config.rand_config">
+								<el-select style="width:100%" :size="size" v-model="form.other_config.rand_config" clearable  filterable placeholder="请选择随机数格式">
+										<el-option key="1" label="字母大小写数字组合" value="all"></el-option>
+										<el-option key="2" label="字母大小写组合" value="letter"></el-option>
+										<el-option key="3" label="纯数字组合" value="number"></el-option>
+								</el-select>
+							</el-form-item>
+						</el-row>
+						
 						<el-row v-if="form.type == 39">
 							<el-form-item label="规格配置" prop="guige">
 								<draggable v-model="form.other_config.guige" v-bind="{group:'item'}" handle=".jzd-handle">
@@ -489,7 +491,7 @@ Vue.component('AdminAdd', {
 									<el-col :span="4">
 										<el-button type="danger" size="mini" style="position:relative;left:16px"  icon="el-icon-close" @click="deleteGuigeItem('item_config',i)"></el-button>
 										<el-button class="jzd-handle" type="success" size="mini" style="position:relative;left:12px" icon="el-icon-rank"></el-button>
-									</el-col> 
+									</el-col>
 								</el-row>
 								</draggable>
 								<div>
@@ -548,7 +550,7 @@ Vue.component('AdminAdd', {
 									<el-col :span="4">
 										<el-button type="danger" size="mini" style="position:relative;left:15px"  icon="el-icon-close" @click="deleteItem('item_config',i)"></el-button>
 										<el-button class="jzd-handle" type="success" size="mini" style="position:relative;left:12px" icon="el-icon-rank"></el-button>
-									</el-col> 
+									</el-col>
 								</el-row>
 								</draggable>
 								<div>
@@ -600,6 +602,10 @@ Vue.component('AdminAdd', {
 									<el-select @focus="getTablesByMenuId" @change="setPostStatus" style="width:100%" clearable v-model="form.belong_table" filterable  placeholder="关联字段所属表（配置多表专属，其它勿设置）">
 										<el-option v-for="(item,i) in tableList" :key="i" :value="item.table_name">{{item.table_name}}({{item.title}})</el-option>
 									</el-select>
+									<label style="color:red;font-size:13px;display:block;">
+                                        关联字段规则：关联字段小驼峰__需要反显字段<br>
+                                        示例：memberId__member_name
+									</label>
 								</el-form-item>
 							</el-col>
 						</el-row>
@@ -753,7 +759,7 @@ Vue.component('AdminAdd', {
 								<el-input v-model="form.show_condition" clearable placeholder="输入框显示条件 如 form.status == 1"/>
 							</el-form-item>
 						</el-row>
-						<el-row>					
+						<el-row>
 							<!-- 新增的字段提醒设置 -->
 							<el-form-item label="字段提醒" prop="tx_tiaojian">
 								<el-col :span="6">
@@ -810,271 +816,278 @@ Vue.component('AdminAdd', {
         <Icon :iconshow.sync="iconDialogStatus" :icon.sync="form.icon" size="small"></Icon>
     </el-dialog>
 	`
-	,
-	 props: {
-		show: {
-			type: Boolean,
-			default: false
-		},
-		size: {
-			type: String,
-			default: 'small'
-		},
-		menuid: {
-			type: String,
-		},
-		field: {
-			type: Array,
-		},
-		item_field: {
-			type: Array,
-		}
-	},
-	data() {
-		return {
-			form: {
-				title:'',
-				field:'',
-				type:'',
-				post_status:1,
-				create_table_field:1,
-				list_show:2,
-				validate:[],
-				item_config:[],
-				other_config:{
-					address_type : '1',
-					now_time:false,
-					placeholder:'',
-					rand_config:'',
-					filetype:'',
-					liandong_field:'',
-					shuxing:['tooltip'],
-					jdt:'changtiao',
-					remote_research_field:'',
-					rename_status:'',
-					default_tabs_value:'',
-					application_id:'',
-					crop:'',
-					time_search_tempate:true,
-					guige:[{}],
-					maxrows:4,
-					inputRemark:'',
-					rangetime_type:'date',
+    ,
+    props: {
+        show: {
+            type: Boolean,
+            default: false
+        },
+        size: {
+            type: String,
+            default: 'small'
+        },
+        menuid: {
+            type: String,
+        },
+        field: {
+            type: Array,
+        },
+        item_field: {
+            type: Array,
+        }
+    },
+    data() {
+        return {
+            form: {
+                title: '',
+                field: '',
+                type: '',
+                post_status: 1,
+                create_table_field: 1,
+                list_show: 2,
+                validate: [],
+                item_config: [],
+                other_config: {
+                    address_type: '1',
+                    now_time: false,
+                    placeholder: '',
+                    rand_config: '',
+                    filetype: '',
+                    liandong_field: '',
+                    shuxing: ['tooltip'],
+                    jdt: 'changtiao',
+                    remote_research_field: '',
+                    rename_status: '',
+                    default_tabs_value: '',
+                    application_id: '',
+                    crop: '',
+                    time_search_tempate: true,
+                    guige: [{}],
+                    maxrows: 4,
+                    inputRemark: '',
+                    rangetime_type: 'date',
                     
                     key_placeholder: '',   // 新增key-placeholder字段
-        			value_placeholder: '', // 新增value-placeholder字段
-					tx_tiaojian: '', // 新增字段提醒条件类型
-					tx_zhi: '',      // 新增字段提醒条件值
-                    previewImage:0,   // 图片预览
-				},
-				sql:'',
-				datatype:'',
-				length:'',
-				belong_table:'',
-				default_value:'',
-				menu_id:this.menuid,
-			},
-			iconDialogStatus:false,
-			activeName: 'first',
-			list_item:false,
-			loading:false,
-			propertyField:[],
-			default_config:'',
-			default_rules:'',
-			ruleList:[],
-			tableList:[],
-			application_list:[],
-			dbtype:'',
-			rules: {
-				title: [{ required: true, message: '字段中文名不能为空', trigger: 'blur' }],
+                    value_placeholder: '', // 新增value-placeholder字段
+                    tx_tiaojian: '', // 新增字段提醒条件类型
+                    tx_zhi: '',      // 新增字段提醒条件值
+                    previewImage: 0,   // 图片预览
+                },
+                sql: '',
+                datatype: '',
+                length: '',
+                belong_table: '',
+                default_value: '',
+                menu_id: this.menuid,
+            },
+            iconDialogStatus: false,
+            activeName: 'first',
+            list_item: false,
+            loading: false,
+            propertyField: [],
+            default_config: '',
+            default_rules: '',
+            ruleList: [],
+            tableList: [],
+            application_list: [],
+            dbtype: '',
+            rules: {
+                title: [{required: true, message: '字段中文名不能为空', trigger: 'blur'}],
                 field: [
                     {required: true, message: '字段英文名不能为空', trigger: 'blur'},
                     {pattern: /^[a-zA-Z0-9_]+$/, message: '仅允许输入字母、数字和下划线', trigger: 'blur'}
                 ],
-				type: [{ required: true, message: '字段类型不能为空', trigger: 'blur' }],
-				login_fields: [{ required: true, message: '请配置登录账号密码字段', trigger: 'blur' }],
+                type: [{required: true, message: '字段类型不能为空', trigger: 'blur'}],
+                login_fields: [{required: true, message: '请配置登录账号密码字段', trigger: 'blur'}],
                 
                 'other_config.key_placeholder': [{ max: 50, message: '长度不能超过50个字符', trigger: 'blur' }],
-      			'other_config.value_placeholder': [{ max: 50, message: '长度不能超过50个字符', trigger: 'blur' }]},
-				'other_config.tx_tiaojian': [{ required: false, message: '请选择条件类型', trigger: 'change' }],
-				'other_config.tx_zhi': [{ required: false, message: '请输入条件值', trigger: 'blur' }]
-		}
-	},
-	methods: {
-		submit(){
-			this.$refs['form'].validate(valid => {
-				if (valid) {
-					this.loading = true
-					axios.post(base_url+'/Sys.Base/createField',this.form).then(res => {
-						if(res.data.status == 200){
-							this.$message({message: '操作成功', type: 'success'})
-							this.$emit('refesh_list')
-							this.closeForm()
-						}else{
-							this.loading = false
-							this.$message.error(res.data.msg)
-						}
-					}).catch(()=>{
-						this.loading = false
-					})
-				}
-			})
-		},
-		open(){
-			axios.post(base_url+'/Sys.Base/configList',{menu_id:this.menuid}).then(res => {
-				this.ruleList = res.data.ruleList
-				this.propertyField = res.data.propertyField
-				this.dbtype = res.data.dbtype
-				this.application_list = res.data.applist
-			})
-		},
-		selectType(){
-			if(this.dbtype !== 'mongo'){
-				this.field.forEach(item=>{
-					if(this.form.type == item.type){
-                    
-                        if(this.form.type == 21) {
-                          this.list_item = true; // 确保选项配置部分显示
-                          // 可以设置键值对特定的默认值
-                          this.form.other_config.key_placeholder = '请输入键名';
-                          this.form.other_config.value_placeholder = '请输入值';
-                        }                    
-                    
-                    
-                    
-                    
-						if(this.form.type == 40){
-							this.form.create_table_field = 0
-							this.form.post_status = 0
-						}
-						this.propertyField.forEach(vo=>{
-							if(item.property == vo.type){
-								this.form.datatype = vo.name
-								this.form.length = vo.decimal ? vo.maxlen+','+vo.decimal : vo.maxlen
-							}
-						})
-						this.list_item = item.item
-						// 添加以下代码，使得特定类型也能显示SQL配置
-                        if([2,3,4,5,30].includes(this.form.type)) { // 这些是下拉框、单选框等类型
+                'other_config.value_placeholder': [{ max: 50, message: '长度不能超过50个字符', trigger: 'blur' }]},
+            'other_config.tx_tiaojian': [{ required: false, message: '请选择条件类型', trigger: 'change' }],
+            'other_config.tx_zhi': [{ required: false, message: '请输入条件值', trigger: 'blur' }]
+        }
+    },
+    methods: {
+        submit() {
+            if (this.form.create_table_field == 0) {
+                const str = this.form.field;
+                const regex = /^[a-z][a-zA-Z0-9]*(?:[A-Z][a-z0-9]*)*__.+$/;
+                if (!regex.test(str)) {
+                    this.$message.error(this.form.title + "的格式有误，请重新修改");
+                    return;
+                }
+            }
+            
+            this.$refs['form'].validate(valid => {
+                if (valid) {
+                    this.loading = true
+                    axios.post(base_url + '/Sys.Base/createField', this.form).then(res => {
+                        if (res.data.status == 200) {
+                            this.$message({message: '操作成功', type: 'success'})
+                            this.$emit('refesh_list')
+                            this.closeForm()
+                        } else {
+                            this.loading = false
+                            this.$message.error(res.data.msg)
+                        }
+                    }).catch(() => {
+                        this.loading = false
+                    })
+                }
+            })
+        },
+        open() {
+            axios.post(base_url + '/Sys.Base/configList', {menu_id: this.menuid}).then(res => {
+                this.ruleList = res.data.ruleList
+                this.propertyField = res.data.propertyField
+                this.dbtype = res.data.dbtype
+                this.application_list = res.data.applist
+            })
+        },
+        selectType() {
+            if (this.dbtype !== 'mongo') {
+                this.field.forEach(item => {
+                    if (this.form.type == item.type) {
+                        
+                        if (this.form.type == 21) {
+                            this.list_item = true; // 确保选项配置部分显示
+                            // 可以设置键值对特定的默认值
+                            this.form.other_config.key_placeholder = '请输入键名';
+                            this.form.other_config.value_placeholder = '请输入值';
+                        }
+                        
+                        
+                        if (this.form.type == 40) {
+                            this.form.create_table_field = 0
+                            this.form.post_status = 0
+                        }
+                        this.propertyField.forEach(vo => {
+                            if (item.property == vo.type) {
+                                this.form.datatype = vo.name
+                                this.form.length = vo.decimal ? vo.maxlen + ',' + vo.decimal : vo.maxlen
+                            }
+                        })
+                        this.list_item = item.item
+                        // 添加以下代码，使得特定类型也能显示SQL配置
+                        if ([2, 3, 4, 5, 30].includes(this.form.type)) { // 这些是下拉框、单选框等类型
                             this.list_item = true
                         }
-                        if(!item.item && ![2,3,4,5,30].includes(this.form.type)){
+                        if (!item.item && ![2, 3, 4, 5, 30].includes(this.form.type)) {
                             this.form.item_config = []
                         }
-				// 		if(!item.item){
-				// 			this.form.item_config = []
-				// 		}
-					}
-				})
-			}else{
-				this.field.forEach(item=>{
-					if(this.form.type == item.type){
-						if(this.form.type == 40){
-							this.form.create_table_field = 0
-							this.form.post_status = 0
-						}
-						this.propertyField.forEach(vo=>{
-							if(item.mongoProperty == vo.type){
-								this.form.datatype = vo.name
-							}
-						})
-						this.list_item = item.item
-						if(!item.item){
-							this.form.item_config = []
-						}
-					}
-				})
-			}
-		},
-		setDefaultRule(){
-			this.form.rule = this.default_rules
-		},
-		setFieldLength(){
-			if(this.dbtype !== 'mongo'){
-				this.propertyField.forEach(item =>{
-				   if(this.form.datatype == item.name){
-					   this.form.length = item.decimal ? item.maxlen+','+item.decimal : item.maxlen
-				   }
-				})
-			}
-		},
-		addItem(key){
-			this.form[key].push({})
-		},
-		deleteItem(key,index){
-		   this.form[key].splice(index,1)
-		},
-		clearItem(key){
-			this.form[key] = []
-		},
-		setDefaultItem(val){
-			this.form['item_config'] = val
-		},
-		addGuigeItem(key){
-			this.form.other_config.guige.push({})
-		},
-		deleteGuigeItem(key,index){
-		   this.form.other_config.guige.splice(index,1)
-		},
-		clearGuigeItem(key){
-			this.form.other_config.guige = []
-		},
-		getTablesByMenuId(){
-			axios.post(base_url+'/Sys.Base/getTablesByMenuId',{menu_id:this.menuid}).then(res => {
-				this.tableList = res.data.data
-			})
-		},
-		setPostStatus(){
-			this.form.post_status = 0
-		},
-		selectDate(val){
-			if(this.dbtype !== 'mongo'){
-				if(['year','month','yearmonth','time','dates'].includes(val)){
-					if(val == 'dates'){
-						this.form.datatype = 'text'
-						this.form.length = 0
-					}else{
-						this.form.datatype = 'varchar'
-						this.form.length = 250
-					}
-				}else{
-					this.form.datatype = 'int'
-					this.form.length = 10
-				}
-			}else{
-				if(['year','month','yearmonth','time','dates'].includes(val)){
-					this.form.datatype = 'string'
-					this.form.length = 250
-				}else{
-					this.form.datatype = 'int'
-					this.form.length = 10
-				}
-			}
-		},
-		closeForm(){
-			this.$emit('update:show', false)
-			this.loading = false
-			this.$nextTick(()=>{
-				this.$refs['form'].resetFields();//清空表单
-				this.default_rules = ''
-				this.list_item = false
-				this.form.other_config = {
-					shuxing:['tooltip'],
-					guige:[{}],
+                        // 		if(!item.item){
+                        // 			this.form.item_config = []
+                        // 		}
+                    }
+                })
+            } else {
+                this.field.forEach(item => {
+                    if (this.form.type == item.type) {
+                        if (this.form.type == 40) {
+                            this.form.create_table_field = 0
+                            this.form.post_status = 0
+                        }
+                        this.propertyField.forEach(vo => {
+                            if (item.mongoProperty == vo.type) {
+                                this.form.datatype = vo.name
+                            }
+                        })
+                        this.list_item = item.item
+                        if (!item.item) {
+                            this.form.item_config = []
+                        }
+                    }
+                })
+            }
+        },
+        setDefaultRule() {
+            this.form.rule = this.default_rules
+        },
+        setFieldLength() {
+            if (this.dbtype !== 'mongo') {
+                this.propertyField.forEach(item => {
+                    if (this.form.datatype == item.name) {
+                        this.form.length = item.decimal ? item.maxlen + ',' + item.decimal : item.maxlen
+                    }
+                })
+            }
+        },
+        addItem(key) {
+            this.form[key].push({})
+        },
+        deleteItem(key, index) {
+            this.form[key].splice(index, 1)
+        },
+        clearItem(key) {
+            this.form[key] = []
+        },
+        setDefaultItem(val) {
+            this.form['item_config'] = val
+        },
+        addGuigeItem(key) {
+            this.form.other_config.guige.push({})
+        },
+        deleteGuigeItem(key, index) {
+            this.form.other_config.guige.splice(index, 1)
+        },
+        clearGuigeItem(key) {
+            this.form.other_config.guige = []
+        },
+        getTablesByMenuId() {
+            axios.post(base_url + '/Sys.Base/getTablesByMenuId', {menu_id: this.menuid}).then(res => {
+                this.tableList = res.data.data
+            })
+        },
+        setPostStatus() {
+            this.form.post_status = 0
+        },
+        selectDate(val) {
+            if (this.dbtype !== 'mongo') {
+                if (['year', 'month', 'yearmonth', 'time', 'dates'].includes(val)) {
+                    if (val == 'dates') {
+                        this.form.datatype = 'text'
+                        this.form.length = 0
+                    } else {
+                        this.form.datatype = 'varchar'
+                        this.form.length = 250
+                    }
+                } else {
+                    this.form.datatype = 'int'
+                    this.form.length = 10
+                }
+            } else {
+                if (['year', 'month', 'yearmonth', 'time', 'dates'].includes(val)) {
+                    this.form.datatype = 'string'
+                    this.form.length = 250
+                } else {
+                    this.form.datatype = 'int'
+                    this.form.length = 10
+                }
+            }
+        },
+        closeForm() {
+            this.$emit('update:show', false)
+            this.loading = false
+            this.$nextTick(() => {
+                this.$refs['form'].resetFields();//清空表单
+                this.default_rules = ''
+                this.list_item = false
+                this.form.other_config = {
+                    shuxing: ['tooltip'],
+                    guige: [{}],
                     
-					key_placeholder: '',   // 保留字段
-      				value_placeholder: ''  // 保留字段
-				}
-				this.activeName = 'first'
-			})
-		}
-	},
+                    key_placeholder: '',   // 保留字段
+                    value_placeholder: ''  // 保留字段
+                }
+                this.activeName = 'first'
+            })
+        }
+    },
 });
 
 
 //修改admin字段 TODO
 Vue.component('AdminUpdate', {
-	template: `
+    template: `
 		<el-dialog title="更新字段" width="95%" class="icon-dialog" :visible.sync="show" :before-close="closeForm" @open="open"  append-to-body>
         <el-form :size="size" ref="form" :model="form" :rules="rules" label-width="120px">
             <div class="field-container">
@@ -1273,7 +1286,7 @@ Vue.component('AdminUpdate', {
 									<el-col :span="4">
 										<el-button type="danger" size="mini" style="position:relative;left:16px"  icon="el-icon-close" @click="deleteGuigeItem('item_config',i)"></el-button>
 										<el-button class="jzd-handle" type="success" size="mini" style="position:relative;left:12px" icon="el-icon-rank"></el-button>
-									</el-col> 
+									</el-col>
 								</el-row>
 								</draggable>
 								<div>
@@ -1332,7 +1345,7 @@ Vue.component('AdminUpdate', {
 									<el-col :span="4">
 										<el-button type="danger" size="mini" style="position:relative;left:15px"  icon="el-icon-close" @click="deleteItem('item_config',i)"></el-button>
 										<el-button class="jzd-handle" type="success" size="mini" style="position:relative;left:12px" icon="el-icon-rank"></el-button>
-									</el-col> 
+									</el-col>
 								</el-row>
 								</draggable>
 								<div>
@@ -1350,7 +1363,7 @@ Vue.component('AdminUpdate', {
 								<el-input type="textarea" v-model="form.sql" clearable placeholder="单选/下拉/多选选项 sql数据源"/>
 							</el-form-item>
 						</el-row>
-						<el-row v-if="form.type == 2 && dbtype !== 'mongo'">
+						<el-row v-if="[2,4].includes(form.type) && dbtype !== 'mongo'">
 							<el-form-item label="联动字段" prop="liandong_field">
 								<el-input v-model="form.other_config.liandong_field" clearable placeholder="二级联动字段名"/>
 							</el-form-item>
@@ -1385,6 +1398,10 @@ Vue.component('AdminUpdate', {
 									<el-select @focus="getTablesByMenuId" @change="setPostStatus" style="width:100%" clearable v-model="form.belong_table" filterable  placeholder="关联字段所属表（配置多表专属，其它勿设置）">
 										<el-option v-for="(item,i) in tableList" :key="i" :value="item.table_name">{{item.table_name}}({{item.title}})</el-option>
 									</el-select>
+									<label style="color:red;font-size:13px;display:block;">
+                                        关联字段规则：关联字段小驼峰__需要反显字段<br>
+                                        示例：memberId__member_name
+									</label>
 								</el-form-item>
 							</el-col>
 						</el-row>
@@ -1404,7 +1421,7 @@ Vue.component('AdminUpdate', {
 								</el-form-item>
 							</el-col>
 						</el-row>
-                        
+      
 <el-row v-if="form.type == 21">
   <el-col :span="12">
     <el-form-item label="键占位文本" prop="key_placeholder">
@@ -1416,11 +1433,11 @@ Vue.component('AdminUpdate', {
       <el-input v-model="form.other_config.value_placeholder" clearable placeholder="值输入框的占位文本"/>
     </el-form-item>
   </el-col>
-</el-row>                        
-                        
-                        
-                        
-                        
+</el-row>
+      
+      
+      
+      
 						<el-row v-if="form.type != 40">
 							<el-col :span="20">
 								<el-form-item label="验证规则" prop="rule">
@@ -1538,7 +1555,7 @@ Vue.component('AdminUpdate', {
 							</el-form-item>
 						</el-row>
 						
-						<el-row>					
+						<el-row>
 							<!-- 新增的字段提醒设置 -->
 							<el-form-item label="字段提醒" prop="tx_tiaojian">
 								<el-col :span="6">
@@ -1598,384 +1615,391 @@ Vue.component('AdminUpdate', {
         <Icon :iconshow.sync="iconDialogStatus" :icon.sync="form.icon" size="small"></Icon>
     </el-dialog>
 	`
-	,
-	 props: {
-		show: {
-			type: Boolean,
-			default: false
-		},
-		size: {
-			type: String,
-			default: 'small'
-		},
-		menu_id: {
-			type: String,
-		},
-		field: {
-			type: Array,
-		},
-		item_field: {
-			type: Array,
-		},
-		info: {
-			type: Object,
-		},
-	},
-	data() {
-		return {
-			form: {
-				title:'',
-				field:'',
-				type:'',
-				post_status:1,
-				create_table_field:1,
-				list_show:2,
-				validate:[],
-				item_config:[],
-				other_config:{
-					address_type : 1,
-					now_time:false,
-					placeholder:'',
-					liandong_field:'',
-					shuxing:[],
-					jdt:'',
-					remote_research_field:'',
-					rename_status:'',
-					default_tabs_value:'',
-					application_id:'',
-					crop:'',
-					time_search_tempate:true,
-					guige:[{}],
-					maxrows:4,
-					inputRemark:'',
+    ,
+    props: {
+        show: {
+            type: Boolean,
+            default: false
+        },
+        size: {
+            type: String,
+            default: 'small'
+        },
+        menu_id: {
+            type: String,
+        },
+        field: {
+            type: Array,
+        },
+        item_field: {
+            type: Array,
+        },
+        info: {
+            type: Object,
+        },
+    },
+    data() {
+        return {
+            form: {
+                title: '',
+                field: '',
+                type: '',
+                post_status: 1,
+                create_table_field: 1,
+                list_show: 2,
+                validate: [],
+                item_config: [],
+                other_config: {
+                    address_type: 1,
+                    now_time: false,
+                    placeholder: '',
+                    liandong_field: '',
+                    shuxing: [],
+                    jdt: '',
+                    remote_research_field: '',
+                    rename_status: '',
+                    default_tabs_value: '',
+                    application_id: '',
+                    crop: '',
+                    time_search_tempate: true,
+                    guige: [{}],
+                    maxrows: 4,
+                    inputRemark: '',
                     key_placeholder: '',   // 新增key-placeholder字段
-  					value_placeholder: '', // 新增value-placeholder字段
-  					tx_tiaojian: '', // 新增字段提醒条件类型
+                    value_placeholder: '', // 新增value-placeholder字段
+                    tx_tiaojian: '', // 新增字段提醒条件类型
                     tx_zhi: '',      // 新增字段提醒条件值
                     
-                    previewImage:0,   // 图片预览
-				},
-				sql:'',
-				datatype:'',
-				length:'',
-				belong_table:'',
-				default_value:''
-			},
-			iconDialogStatus:false,
-			activeName: 'first',
-			list_item:false,
-			loading:false,
-			propertyField:[],
-			default_config:'',
-			default_rules:'',
-			ruleList:[],
-			tableList:[],
-			application_list:[],
-			dbtype:'',
-			rules: {
-				title: [{ required: true, message: '字段中文名不能为空', trigger: 'blur' }],
+                    previewImage: 0,   // 图片预览
+                },
+                sql: '',
+                datatype: '',
+                length: '',
+                belong_table: '',
+                default_value: ''
+            },
+            iconDialogStatus: false,
+            activeName: 'first',
+            list_item: false,
+            loading: false,
+            propertyField: [],
+            default_config: '',
+            default_rules: '',
+            ruleList: [],
+            tableList: [],
+            application_list: [],
+            dbtype: '',
+            rules: {
+                title: [{required: true, message: '字段中文名不能为空', trigger: 'blur'}],
                 field: [
                     {required: true, message: '字段英文名不能为空', trigger: 'blur'},
                     {pattern: /^[a-zA-Z0-9_]+$/, message: '仅允许输入字母、数字和下划线', trigger: 'blur'}
                 ],
-				type: [{ required: true, message: '字段类型不能为空', trigger: 'blur' }],
-				login_fields: [{ required: true, message: '请配置登录账号密码字段', trigger: 'blur' }],
-                'other_config.key_placeholder': [{ max: 50, message: '长度不能超过50个字符', trigger: 'blur' }],
-  				'other_config.value_placeholder': [{ max: 50, message: '长度不能超过50个字符', trigger: 'blur' }],
-  				'other_config.tx_tiaojian': [{ required: false, message: '请选择条件类型', trigger: 'change' }],
-                'other_config.tx_zhi': [{ required: false, message: '请输入条件值', trigger: 'blur' }]
-			},
-		}
-	},
-	methods: {
-submit(){
-  this.$refs['form'].validate(valid => {
-    if (valid) {
-      // 将键值对占位符保存到主表字段
-      this.form.key_placeholder = this.form.other_config.key_placeholder
-      this.form.value_placeholder = this.form.other_config.value_placeholder
-		const conditionOptions = [
-			{label: "大于", value: "1"},
-			{label: "小于", value: "2"},
-			{label: "等于", value: "3"},
-			{label: "大于等于", value: "4"},
-			{label: "小于等于", value: "5"},
-			{label: "包含", value: "6"},
-			{label: "不包含", value: "7"},
-			{label: "不等于", value: "8"},
-			{label: "为空", value: "9"},
-			{label: "不为空", value: "10"}
-		]
-
-		const selectedvalue = conditionOptions.find(
-			opt => opt.label == this.form.other_config.tx_tiaojian
-		)
-      this.form.tx_tiaojian = this.form.other_config.tx_tiaojian = selectedvalue ? selectedvalue.value : this.form.other_config.tx_tiaojian,
-      this.form.tx_zhi = this.form.other_config.tx_zhi
-      this.loading = true
-      axios.post(base_url+'/Sys.Base/updateField',this.form).then(res => {
-        if(res.data.status == 200){
-          this.$message({message: '操作成功', type: 'success'})
-          this.$emit('refesh_list')
-          this.closeForm()
-        }else{
-          this.loading = false
-          this.$message.error(res.data.msg)
+                type: [{required: true, message: '字段类型不能为空', trigger: 'blur'}],
+                login_fields: [{required: true, message: '请配置登录账号密码字段', trigger: 'blur'}],
+                'other_config.key_placeholder': [{max: 50, message: '长度不能超过50个字符', trigger: 'blur'}],
+                'other_config.value_placeholder': [{max: 50, message: '长度不能超过50个字符', trigger: 'blur'}],
+                'other_config.tx_tiaojian': [{required: false, message: '请选择条件类型', trigger: 'change'}],
+                'other_config.tx_zhi': [{required: false, message: '请输入条件值', trigger: 'blur'}]
+            },
         }
-      }).catch(()=>{
-        this.loading = false
-      })
-    }
-  })
-},
-open() {
-  // 深拷贝info数据避免引用问题
-  this.form = JSON.parse(JSON.stringify(this.info))
-	// 获取选中的条件类型的label而不是value
-	const conditionOptions = [
-		{label: "大于", value: "1"},
-		{label: "小于", value: "2"},
-		{label: "等于", value: "3"},
-		{label: "大于等于", value: "4"},
-		{label: "小于等于", value: "5"},
-		{label: "包含", value: "6"},
-		{label: "不包含", value: "7"},
-		{label: "不等于", value: "8"},
-		{label: "为空", value: "9"},
-		{label: "不为空", value: "10"}
-	]
-
-	const selectedCondition = conditionOptions.find(
-		opt => opt.value == this.info.tx_tiaojian
-	)
-  // 处理other_config初始化
-  if (!this.form.other_config || this.form.other_config === '[]' || this.form.other_config === '{}') {
-
-    this.form.other_config = {
-      shuxing: ['tooltip'],
-      guige: [{}],
-      key_placeholder: this.info.key_placeholder || '',
-      value_placeholder: this.info.value_placeholder || '',
-		tx_tiaojian: selectedCondition ? selectedCondition.label : '',
-		tx_zhi: this.info.tx_zhi || ''
-    }
-  } else if (typeof this.form.other_config === 'string') {
-    try {
-      this.form.other_config = JSON.parse(this.form.other_config)
-    } catch (e) {
-      this.form.other_config = {
-        shuxing: ['tooltip'],
-        guige: [{}],
-        key_placeholder: '',
-        value_placeholder: '',
-		  tx_tiaojian: '',
-		  tx_zhi: ''
-      }
-    }
-  }
-
-  // 确保关键字段存在
-  this.form.other_config = {
-    ...this.form.other_config,
-    shuxing: this.form.other_config.shuxing || ['tooltip'],
-    guige: this.form.other_config.guige || [{}],
-    key_placeholder: this.form.other_config.key_placeholder || this.info.key_placeholder || '',
-    value_placeholder: this.form.other_config.value_placeholder || this.info.value_placeholder || '',
-	  tx_tiaojian: selectedCondition ? selectedCondition.label : '',
-	  tx_zhi: this.form.other_config.tx_zhi || this.info.tx_zhi || ''
-  }
-
-  // 初始化其他数据
-  this.setDefaultVal('item_config')
-  this.field.forEach(item => {
-    if (this.form.type == item.type) {
-      this.list_item = item.item
-    }
-  })
-
-  // 获取配置列表
-  axios.post(base_url+'/Sys.Base/configList', {menu_id: this.menuid || this.menu_id}).then(res => {
-    this.ruleList = res.data.ruleList
-    this.propertyField = res.data.propertyField
-    this.dbtype = res.data.dbtype
-    this.application_list = res.data.applist
-  })
-},
-		selectType(){
-			if(this.dbtype !== 'mongo'){
-				this.field.forEach(item=>{
-					if(this.form.type == item.type){
+    },
+    methods: {
+        submit() {
+            if (this.form.create_table_field == 0) {
+                const str = this.form.field;
+                const regex = /^[a-z][a-zA-Z0-9]*(?:[A-Z][a-z0-9]*)*__.+$/;
+                if (!regex.test(str)) {
+                    this.$message.error(this.form.title + "的格式有误，请重新修改");
+                    return;
+                }
+            }
+            this.$refs['form'].validate(valid => {
+                if (valid) {
+                    // 将键值对占位符保存到主表字段
+                    this.form.key_placeholder = this.form.other_config.key_placeholder
+                    this.form.value_placeholder = this.form.other_config.value_placeholder
+                    const conditionOptions = [
+                        {label: "大于", value: "1"},
+                        {label: "小于", value: "2"},
+                        {label: "等于", value: "3"},
+                        {label: "大于等于", value: "4"},
+                        {label: "小于等于", value: "5"},
+                        {label: "包含", value: "6"},
+                        {label: "不包含", value: "7"},
+                        {label: "不等于", value: "8"},
+                        {label: "为空", value: "9"},
+                        {label: "不为空", value: "10"}
+                    ]
                     
-                       	if(this.form.type == 21) {
-                          this.list_item = true; // 确保选项配置部分显示
-                              if(!this.form.other_config.key_placeholder) {
-                                this.form.other_config.key_placeholder = '请输入键名'
-                              }
-                              if(!this.form.other_config.value_placeholder) {
-                                this.form.other_config.value_placeholder = '请输入值'
-                              }
+                    const selectedvalue = conditionOptions.find(
+                        opt => opt.label == this.form.other_config.tx_tiaojian
+                    )
+                    this.form.tx_tiaojian = this.form.other_config.tx_tiaojian = selectedvalue ? selectedvalue.value : this.form.other_config.tx_tiaojian,
+                        this.form.tx_zhi = this.form.other_config.tx_zhi
+                    this.loading = true
+                    axios.post(base_url + '/Sys.Base/updateField', this.form).then(res => {
+                        if (res.data.status == 200) {
+                            this.$message({message: '操作成功', type: 'success'})
+                            this.$emit('refesh_list')
+                            this.closeForm()
+                        } else {
+                            this.loading = false
+                            this.$message.error(res.data.msg)
                         }
-                    
-                    
-                    
-						if(this.form.type == 40){
-							this.form.create_table_field = 0
-							this.form.post_status = 0
-						}
-						this.propertyField.forEach(vo=>{
-							if(item.property == vo.type){
-								this.form.datatype = vo.name
-								this.form.length = vo.decimal ? vo.maxlen+','+vo.decimal : vo.maxlen
-							}
-						})
-						this.list_item = item.item
-						// 添加以下代码，使得特定类型也能显示SQL配置
-                        if([2,3,4,5,30].includes(this.form.type)) { // 这些是下拉框、单选框等类型
+                    }).catch(() => {
+                        this.loading = false
+                    })
+                }
+            })
+        },
+        open() {
+            // 深拷贝info数据避免引用问题
+            this.form = JSON.parse(JSON.stringify(this.info))
+            // 获取选中的条件类型的label而不是value
+            const conditionOptions = [
+                {label: "大于", value: "1"},
+                {label: "小于", value: "2"},
+                {label: "等于", value: "3"},
+                {label: "大于等于", value: "4"},
+                {label: "小于等于", value: "5"},
+                {label: "包含", value: "6"},
+                {label: "不包含", value: "7"},
+                {label: "不等于", value: "8"},
+                {label: "为空", value: "9"},
+                {label: "不为空", value: "10"}
+            ]
+            
+            const selectedCondition = conditionOptions.find(
+                opt => opt.value == this.info.tx_tiaojian
+            )
+            // 处理other_config初始化
+            if (!this.form.other_config || this.form.other_config === '[]' || this.form.other_config === '{}') {
+                
+                this.form.other_config = {
+                    shuxing: ['tooltip'],
+                    guige: [{}],
+                    key_placeholder: this.info.key_placeholder || '',
+                    value_placeholder: this.info.value_placeholder || '',
+                    tx_tiaojian: selectedCondition ? selectedCondition.label : '',
+                    tx_zhi: this.info.tx_zhi || ''
+                }
+            } else if (typeof this.form.other_config === 'string') {
+                try {
+                    this.form.other_config = JSON.parse(this.form.other_config)
+                } catch (e) {
+                    this.form.other_config = {
+                        shuxing: ['tooltip'],
+                        guige: [{}],
+                        key_placeholder: '',
+                        value_placeholder: '',
+                        tx_tiaojian: '',
+                        tx_zhi: ''
+                    }
+                }
+            }
+            
+            // 确保关键字段存在
+            this.form.other_config = {
+                ...this.form.other_config,
+                shuxing: this.form.other_config.shuxing || ['tooltip'],
+                guige: this.form.other_config.guige || [{}],
+                key_placeholder: this.form.other_config.key_placeholder || this.info.key_placeholder || '',
+                value_placeholder: this.form.other_config.value_placeholder || this.info.value_placeholder || '',
+                tx_tiaojian: selectedCondition ? selectedCondition.label : '',
+                tx_zhi: this.form.other_config.tx_zhi || this.info.tx_zhi || ''
+            }
+            
+            // 初始化其他数据
+            this.setDefaultVal('item_config')
+            this.field.forEach(item => {
+                if (this.form.type == item.type) {
+                    this.list_item = item.item
+                }
+            })
+            
+            // 获取配置列表
+            axios.post(base_url + '/Sys.Base/configList', {menu_id: this.menuid || this.menu_id}).then(res => {
+                this.ruleList = res.data.ruleList
+                this.propertyField = res.data.propertyField
+                this.dbtype = res.data.dbtype
+                this.application_list = res.data.applist
+            })
+        },
+        selectType() {
+            if (this.dbtype !== 'mongo') {
+                this.field.forEach(item => {
+                    if (this.form.type == item.type) {
+                        
+                        if (this.form.type == 21) {
+                            this.list_item = true; // 确保选项配置部分显示
+                            if (!this.form.other_config.key_placeholder) {
+                                this.form.other_config.key_placeholder = '请输入键名'
+                            }
+                            if (!this.form.other_config.value_placeholder) {
+                                this.form.other_config.value_placeholder = '请输入值'
+                            }
+                        }
+                        
+                        
+                        if (this.form.type == 40) {
+                            this.form.create_table_field = 0
+                            this.form.post_status = 0
+                        }
+                        this.propertyField.forEach(vo => {
+                            if (item.property == vo.type) {
+                                this.form.datatype = vo.name
+                                this.form.length = vo.decimal ? vo.maxlen + ',' + vo.decimal : vo.maxlen
+                            }
+                        })
+                        this.list_item = item.item
+                        // 添加以下代码，使得特定类型也能显示SQL配置
+                        if ([2, 3, 4, 5, 30].includes(this.form.type)) { // 这些是下拉框、单选框等类型
                             this.list_item = true
                         }
-                        if(!item.item && ![2,3,4,5,30].includes(this.form.type)){
+                        if (!item.item && ![2, 3, 4, 5, 30].includes(this.form.type)) {
                             this.form.item_config = []
                         }
-				// 		if(!item.item){
-				// 			this.form.item_config = []
-				// 		}
-					}
-				})
-			}else{
-				this.field.forEach(item=>{
-					if(this.form.type == item.type){
-						if(this.form.type == 40){
-							this.form.create_table_field = 0
-							this.form.post_status = 0
-						}
-						this.propertyField.forEach(vo=>{
-							if(item.mongoProperty == vo.type){
-								this.form.datatype = vo.name
-							}
-						})
-						this.list_item = item.item
-						if(!item.item){
-							this.form.item_config = []
-						}
-					}
-				})
-			}
-		},
-		setDefaultVal(key){
-			if(this.form[key] == null || this.form[key] == ''){
-				this.form[key] = []
-			}
-		},
-		setDefaultRule(){
-			this.form.rule = this.default_rules
-		},
-		setFieldLength(){
-			if(this.dbtype !== 'mongo'){
-				this.propertyField.forEach(item =>{
-				   if(this.form.datatype == item.name){
-					   this.form.length = item.decimal ? item.maxlen+','+item.decimal : item.maxlen
-				   }
-				})
-			}
-		},
-		addItem(key){
-			this.form[key].push({})
-		},
-		deleteItem(key,index){
-		   this.form[key].splice(index,1)
-		},
-		clearItem(key){
-			this.form[key] = []
-		},
-		setDefaultItem(val){
-			this.form['item_config'] = val
-		},
-		addGuigeItem(key){
-			this.form.other_config.guige.push({})
-		},
-		deleteGuigeItem(key,index){
-		   this.form.other_config.guige.splice(index,1)
-		},
-		clearGuigeItem(key){
-			this.form.other_config.guige = []
-		},
-		getTablesByMenuId(){
-			axios.post(base_url+'/Sys.Base/getTablesByMenuId',{menu_id:this.menu_id}).then(res => {
-				this.tableList = res.data.data
-			})
-		},
-		setPostStatus(){
-			this.form.post_status = 0
-		},
-		selectDate(val){
-			if(this.dbtype !== 'mongo'){
-				if(['year','month','yearmonth','time','dates'].includes(val)){
-					if(val == 'dates'){
-						this.form.datatype = 'text'
-						this.form.length = 0
-					}else{
-						this.form.datatype = 'varchar'
-						this.form.length = 250
-					}
-				}else{
-					this.form.datatype = 'int'
-					this.form.length = 10
-				}
-			}else{
-				if(['year','month','yearmonth','time','dates'].includes(val)){
-					this.form.datatype = 'string'
-					this.form.length = 250
-				}else{
-					this.form.datatype = 'int'
-					this.form.length = 10
-				}
-			}
-		},
-closeForm() {
-  this.$emit('update:show', false)
-  this.loading = false
-  this.$nextTick(() => {
-    this.$refs['form'].resetFields()
-    this.default_rules = ''
-    this.list_item = false
-    
-    // 重置表单数据（保持与添加组件一致）
-    this.form = {
-      title: '',
-      field: '',
-      type: '',
-      post_status: 1,
-      create_table_field: 1,
-      list_show: 2,
-      validate: [],
-      item_config: [],
-      other_config: {
-        shuxing: ['tooltip'],
-        guige: [{}],
-        key_placeholder: '',
-        value_placeholder: '',
-		  tx_tiaojian: '',
-		  tx_zhi: ''
-      },
-      sql: '',
-      datatype: '',
-      length: '',
-      belong_table: '',
-      default_value: '',
-      menu_id: this.menuid || this.menu_id
-    }
-    
-    this.activeName = 'first'
-  })
-}
-	},
+                        // 		if(!item.item){
+                        // 			this.form.item_config = []
+                        // 		}
+                    }
+                })
+            } else {
+                this.field.forEach(item => {
+                    if (this.form.type == item.type) {
+                        if (this.form.type == 40) {
+                            this.form.create_table_field = 0
+                            this.form.post_status = 0
+                        }
+                        this.propertyField.forEach(vo => {
+                            if (item.mongoProperty == vo.type) {
+                                this.form.datatype = vo.name
+                            }
+                        })
+                        this.list_item = item.item
+                        if (!item.item) {
+                            this.form.item_config = []
+                        }
+                    }
+                })
+            }
+        },
+        setDefaultVal(key) {
+            if (this.form[key] == null || this.form[key] == '') {
+                this.form[key] = []
+            }
+        },
+        setDefaultRule() {
+            this.form.rule = this.default_rules
+        },
+        setFieldLength() {
+            if (this.dbtype !== 'mongo') {
+                this.propertyField.forEach(item => {
+                    if (this.form.datatype == item.name) {
+                        this.form.length = item.decimal ? item.maxlen + ',' + item.decimal : item.maxlen
+                    }
+                })
+            }
+        },
+        addItem(key) {
+            this.form[key].push({})
+        },
+        deleteItem(key, index) {
+            this.form[key].splice(index, 1)
+        },
+        clearItem(key) {
+            this.form[key] = []
+        },
+        setDefaultItem(val) {
+            this.form['item_config'] = val
+        },
+        addGuigeItem(key) {
+            this.form.other_config.guige.push({})
+        },
+        deleteGuigeItem(key, index) {
+            this.form.other_config.guige.splice(index, 1)
+        },
+        clearGuigeItem(key) {
+            this.form.other_config.guige = []
+        },
+        getTablesByMenuId() {
+            axios.post(base_url + '/Sys.Base/getTablesByMenuId', {menu_id: this.menu_id}).then(res => {
+                this.tableList = res.data.data
+            })
+        },
+        setPostStatus() {
+            this.form.post_status = 0
+        },
+        selectDate(val) {
+            if (this.dbtype !== 'mongo') {
+                if (['year', 'month', 'yearmonth', 'time', 'dates'].includes(val)) {
+                    if (val == 'dates') {
+                        this.form.datatype = 'text'
+                        this.form.length = 0
+                    } else {
+                        this.form.datatype = 'varchar'
+                        this.form.length = 250
+                    }
+                } else {
+                    this.form.datatype = 'int'
+                    this.form.length = 10
+                }
+            } else {
+                if (['year', 'month', 'yearmonth', 'time', 'dates'].includes(val)) {
+                    this.form.datatype = 'string'
+                    this.form.length = 250
+                } else {
+                    this.form.datatype = 'int'
+                    this.form.length = 10
+                }
+            }
+        },
+        closeForm() {
+            this.$emit('update:show', false)
+            this.loading = false
+            this.$nextTick(() => {
+                this.$refs['form'].resetFields()
+                this.default_rules = ''
+                this.list_item = false
+                
+                // 重置表单数据（保持与添加组件一致）
+                this.form = {
+                    title: '',
+                    field: '',
+                    type: '',
+                    post_status: 1,
+                    create_table_field: 1,
+                    list_show: 2,
+                    validate: [],
+                    item_config: [],
+                    other_config: {
+                        shuxing: ['tooltip'],
+                        guige: [{}],
+                        key_placeholder: '',
+                        value_placeholder: '',
+                        tx_tiaojian: '',
+                        tx_zhi: ''
+                    },
+                    sql: '',
+                    datatype: '',
+                    length: '',
+                    belong_table: '',
+                    default_value: '',
+                    menu_id: this.menuid || this.menu_id
+                }
+                
+                this.activeName = 'first'
+            })
+        }
+    },
 });
 
 //添加api字段
 Vue.component('ApiAdd', {
-	template: `
+    template: `
 		<el-dialog title="创建字段" width="600px" class="icon-dialog" :visible.sync="show" :before-close="closeForm" @open="open"  append-to-body>
-        <el-form :size="size" ref="form" :model="form" :rules="rules" label-width="90px"> 
+        <el-form :size="size" ref="form" :model="form" :rules="rules" label-width="90px">
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="字段标题" prop="title">
@@ -2075,7 +2099,7 @@ Vue.component('ApiAdd', {
 						<el-col :span="4">
 							<el-button type="danger" size="mini" style="position:relative;left:15px"  icon="el-icon-close" @click="deleteItem('item_config',i)"></el-button>
 							<el-button class="jzd-handle" type="success" size="mini" style="position:relative;left:12px" icon="el-icon-rank"></el-button>
-						</el-col> 
+						</el-col>
 					</el-row>
 					</draggable>
 					<div>
@@ -2103,6 +2127,10 @@ Vue.component('ApiAdd', {
 						<el-select @focus="getTablesByMenuId" @change="setPostStatus" style="width:100%" clearable v-model="form.belong_table" filterable  placeholder="关联字段所属表（配置多表专属，其它勿设置）">
 							<el-option v-for="(item,i) in tableList" :key="i" :value="item.table_name">{{item.table_name}}({{item.title}})</el-option>
 						</el-select>
+						<label style="color:red;font-size:13px;display:block;">
+                            关联字段规则：关联字段小驼峰__需要反显字段<br>
+                            示例：memberId__member_name
+                        </label>
 					</el-form-item>
 				</el-col>
 			</el-row>
@@ -2166,191 +2194,199 @@ Vue.component('ApiAdd', {
         </div>
     </el-dialog>
 	`
-	,
-	 props: {
-		show: {
-			type: Boolean,
-			default: false
-		},
-		size: {
-			type: String,
-			default: 'small'
-		},
-		menuid: {
-			type: String,
-		},
-		field: {
-			type: Array,
-		},
-		item_field: {
-			type: Array,
-		}
-	},
-	data() {
-		return {
-			form: {
-				title:'',
-				field:'',
-				post_status:1,
-				create_table_field:1,
-				validate:[],
-				item_config:[],
-				other_config:{
-					address_type : 1,
-				},
-				datatype:'',
-				length:'',
-				belong_table:'',
-				default_value:'',
-				menu_id:this.menuid,
-			},
-			activeName: 'first',
-			list_item:false,
-			loading:false,
-			propertyField:[],
-			default_config:'',
-			default_rules:'',
-			ruleList:[],
-			tableList:[],
-			dbtype:'',
-			rules: {
-				title: [{ required: true, message: '字段中文名不能为空', trigger: 'blur' }],
+    ,
+    props: {
+        show: {
+            type: Boolean,
+            default: false
+        },
+        size: {
+            type: String,
+            default: 'small'
+        },
+        menuid: {
+            type: String,
+        },
+        field: {
+            type: Array,
+        },
+        item_field: {
+            type: Array,
+        }
+    },
+    data() {
+        return {
+            form: {
+                title: '',
+                field: '',
+                post_status: 1,
+                create_table_field: 1,
+                validate: [],
+                item_config: [],
+                other_config: {
+                    address_type: 1,
+                },
+                datatype: '',
+                length: '',
+                belong_table: '',
+                default_value: '',
+                menu_id: this.menuid,
+            },
+            activeName: 'first',
+            list_item: false,
+            loading: false,
+            propertyField: [],
+            default_config: '',
+            default_rules: '',
+            ruleList: [],
+            tableList: [],
+            dbtype: '',
+            rules: {
+                title: [{required: true, message: '字段中文名不能为空', trigger: 'blur'}],
                 field: [
                     {required: true, message: '字段英文名不能为空', trigger: 'blur'},
                     {pattern: /^[a-zA-Z0-9_]+$/, message: '仅允许输入字母、数字和下划线', trigger: 'blur'}
                 ],
-				type: [{ required: true, message: '字段类型不能为空', trigger: 'blur' }],
-				login_fields: [{ required: true, message: '请配置登录账号密码字段', trigger: 'blur' }],
-			},
-		}
-	},
-	methods: {
-		submit(){
-			this.$refs['form'].validate(valid => {
-				if (valid) {
-					this.loading = true
-					axios.post(base_url+'/Sys.Base/createField',this.form).then(res => {
-						if(res.data.status == 200){
-							this.$message({message: '操作成功', type: 'success'})
-							this.$emit('refesh_list')
-							this.closeForm()
-						}else{
-							this.loading = false
-							this.$message.error(res.data.msg)
-						}
-					}).catch(()=>{
-						this.loading = false
-					})
-				}
-			})
-		},
-		open(){
-			axios.post(base_url+'/Sys.Base/configList',{menu_id:this.menuid}).then(res => {
-				this.ruleList = res.data.ruleList
-				this.propertyField = res.data.propertyField
-				this.dbtype = res.data.dbtype
-			})
-		},
-		selectType(){
-			if(this.dbtype !== 'mongo'){
-				this.field.forEach(item=>{
-					if(this.form.type == item.type){
-						this.propertyField.forEach(vo=>{
-							if(item.property == vo.type){
-								this.form.datatype = vo.name
-								this.form.length = vo.decimal ? vo.maxlen+','+vo.decimal : vo.maxlen
-							}
-						})
-						this.list_item = item.item
-						if(!item.item){
-							this.form.item_config = []
-						}
-					}
-				})
-			}else{
-				this.field.forEach(item=>{
-					if(this.form.type == item.type){
-						this.propertyField.forEach(vo=>{
-							if(item.mongoProperty == vo.type){
-								this.form.datatype = vo.name
-							}
-						})
-						this.list_item = item.item
-						if(!item.item){
-							this.form.item_config = []
-						}
-					}
-				})
-			}
-		},
-		setDefaultRule(){
-			this.form.rule = this.default_rules
-		},
-		setFieldLength(){
-			if(this.dbtype !== 'mongo'){
-				this.propertyField.forEach(item =>{
-				   if(this.form.datatype == item.name){
-					   this.form.length = item.decimal ? item.maxlen+','+item.decimal : item.maxlen
-				   }
-				})
-			}
-		},
-		addItem(key){
-			this.form[key].push({})
-		},
-		deleteItem(key,index){
-		   this.form[key].splice(index,1)
-		},
-		clearItem(key){
-			this.form[key] = []
-		},
-		setDefaultItem(val){
-			this.form['item_config'] = val
-		},
-		selectDate(val){
-			if(this.dbtype !== 'mongo'){
-				if(['year','month','time','dates'].includes(val)){
-					this.form.datatype = 'varchar'
-					this.form.length = 250
-				}else{
-					this.form.datatype = 'int'
-					this.form.length = 10
-				}
-			}else{
-				if(['year','month','time','dates'].includes(val)){
-					this.form.datatype = 'string'
-					this.form.length = 250
-				}else{
-					this.form.datatype = 'int'
-					this.form.length = 10
-				}
-			}
-		},
-		getTablesByMenuId(){
-			axios.post(base_url+'/Sys.Base/getTablesByMenuId',{menu_id:this.menuid}).then(res => {
-				this.tableList = res.data.data
-			})
-		},
-		closeForm(){
-			this.$emit('update:show', false)
-			this.loading = false
-			this.$nextTick(()=>{
-				this.$refs['form'].resetFields();//清空表单
-				this.default_rules = ''
-				this.list_item = false
-				this.form.other_config = {}
-				this.activeName = 'first'
-			})
-		}
-	},
+                type: [{required: true, message: '字段类型不能为空', trigger: 'blur'}],
+                login_fields: [{required: true, message: '请配置登录账号密码字段', trigger: 'blur'}],
+            },
+        }
+    },
+    methods: {
+        submit() {
+            if (this.form.create_table_field == 0) {
+                const str = this.form.field;
+                const regex = /^[a-z][a-zA-Z0-9]*(?:[A-Z][a-z0-9]*)*__.+$/;
+                if (!regex.test(str)) {
+                    this.$message.error(this.form.title + "的格式有误，请重新修改");
+                    return;
+                }
+            }
+            this.$refs['form'].validate(valid => {
+                if (valid) {
+                    this.loading = true
+                    axios.post(base_url + '/Sys.Base/createField', this.form).then(res => {
+                        if (res.data.status == 200) {
+                            this.$message({message: '操作成功', type: 'success'})
+                            this.$emit('refesh_list')
+                            this.closeForm()
+                        } else {
+                            this.loading = false
+                            this.$message.error(res.data.msg)
+                        }
+                    }).catch(() => {
+                        this.loading = false
+                    })
+                }
+            })
+        },
+        open() {
+            axios.post(base_url + '/Sys.Base/configList', {menu_id: this.menuid}).then(res => {
+                this.ruleList = res.data.ruleList
+                this.propertyField = res.data.propertyField
+                this.dbtype = res.data.dbtype
+            })
+        },
+        selectType() {
+            if (this.dbtype !== 'mongo') {
+                this.field.forEach(item => {
+                    if (this.form.type == item.type) {
+                        this.propertyField.forEach(vo => {
+                            if (item.property == vo.type) {
+                                this.form.datatype = vo.name
+                                this.form.length = vo.decimal ? vo.maxlen + ',' + vo.decimal : vo.maxlen
+                            }
+                        })
+                        this.list_item = item.item
+                        if (!item.item) {
+                            this.form.item_config = []
+                        }
+                    }
+                })
+            } else {
+                this.field.forEach(item => {
+                    if (this.form.type == item.type) {
+                        this.propertyField.forEach(vo => {
+                            if (item.mongoProperty == vo.type) {
+                                this.form.datatype = vo.name
+                            }
+                        })
+                        this.list_item = item.item
+                        if (!item.item) {
+                            this.form.item_config = []
+                        }
+                    }
+                })
+            }
+        },
+        setDefaultRule() {
+            this.form.rule = this.default_rules
+        },
+        setFieldLength() {
+            if (this.dbtype !== 'mongo') {
+                this.propertyField.forEach(item => {
+                    if (this.form.datatype == item.name) {
+                        this.form.length = item.decimal ? item.maxlen + ',' + item.decimal : item.maxlen
+                    }
+                })
+            }
+        },
+        addItem(key) {
+            this.form[key].push({})
+        },
+        deleteItem(key, index) {
+            this.form[key].splice(index, 1)
+        },
+        clearItem(key) {
+            this.form[key] = []
+        },
+        setDefaultItem(val) {
+            this.form['item_config'] = val
+        },
+        selectDate(val) {
+            if (this.dbtype !== 'mongo') {
+                if (['year', 'month', 'time', 'dates'].includes(val)) {
+                    this.form.datatype = 'varchar'
+                    this.form.length = 250
+                } else {
+                    this.form.datatype = 'int'
+                    this.form.length = 10
+                }
+            } else {
+                if (['year', 'month', 'time', 'dates'].includes(val)) {
+                    this.form.datatype = 'string'
+                    this.form.length = 250
+                } else {
+                    this.form.datatype = 'int'
+                    this.form.length = 10
+                }
+            }
+        },
+        getTablesByMenuId() {
+            axios.post(base_url + '/Sys.Base/getTablesByMenuId', {menu_id: this.menuid}).then(res => {
+                this.tableList = res.data.data
+            })
+        },
+        closeForm() {
+            this.$emit('update:show', false)
+            this.loading = false
+            this.$nextTick(() => {
+                this.$refs['form'].resetFields();//清空表单
+                this.default_rules = ''
+                this.list_item = false
+                this.form.other_config = {}
+                this.activeName = 'first'
+            })
+        }
+    },
 });
 
 
 //修改api字段
 Vue.component('ApiUpdate', {
-	template: `
+    template: `
 		<el-dialog title="更新字段" width="600px" class="icon-dialog" :visible.sync="show" :before-close="closeForm" @open="open"  append-to-body>
-        <el-form :size="size" ref="form" :model="form" :rules="rules" label-width="90px"> 
+        <el-form :size="size" ref="form" :model="form" :rules="rules" label-width="90px">
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="字段标题" prop="title">
@@ -2450,7 +2486,7 @@ Vue.component('ApiUpdate', {
 						<el-col :span="4">
 							<el-button type="danger" size="mini" style="position:relative;left:15px"  icon="el-icon-close" @click="deleteItem('item_config',i)"></el-button>
 							<el-button class="jzd-handle" type="success" size="mini" style="position:relative;left:12px" icon="el-icon-rank"></el-button>
-						</el-col> 
+						</el-col>
 					</el-row>
 					</draggable>
 					<div>
@@ -2478,6 +2514,10 @@ Vue.component('ApiUpdate', {
 						<el-select @focus="getTablesByMenuId" @change="setPostStatus" style="width:100%" clearable v-model="form.belong_table" filterable  placeholder="关联字段所属表（配置多表专属，其它勿设置）">
 							<el-option v-for="(item,i) in tableList" :key="i" :value="item.table_name">{{item.table_name}}({{item.title}})</el-option>
 						</el-select>
+						<label style="color:red;font-size:13px;display:block;">
+                            关联字段规则：关联字段小驼峰__需要反显字段<br>
+                            示例：memberId__member_name
+                        </label>
 					</el-form-item>
 				</el-col>
 			</el-row>
@@ -2541,208 +2581,216 @@ Vue.component('ApiUpdate', {
         </div>
     </el-dialog>
 	`
-	,
-	 props: {
-		show: {
-			type: Boolean,
-			default: false
-		},
-		size: {
-			type: String,
-			default: 'small'
-		},
-		menu_id: {
-			type: String,
-		},
-		field: {
-			type: Array,
-		},
-		item_field: {
-			type: Array,
-		},
-		info: {
-			type: Object,
-		},
-	},
-	data() {
-		return {
-			form: {
-				title:'',
-				post_status:1,
-				create_table_field:1,
-				list_show:2,
-				validate:[],
-				item_config:[],
-				other_config:{
-					address_type : 1,
-				},
-				datatype:'',
-				length:'',
-				belong_table:'',
-				default_value:''
-			},
-			activeName: 'first',
-			list_item:false,
-			loading:false,
-			propertyField:[],
-			default_config:'',
-			default_rules:'',
-			ruleList:[],
-			tableList:[],
-			dbtype:'',
-			rules: {
-				title: [{ required: true, message: '字段中文名不能为空', trigger: 'blur' }],
+    ,
+    props: {
+        show: {
+            type: Boolean,
+            default: false
+        },
+        size: {
+            type: String,
+            default: 'small'
+        },
+        menu_id: {
+            type: String,
+        },
+        field: {
+            type: Array,
+        },
+        item_field: {
+            type: Array,
+        },
+        info: {
+            type: Object,
+        },
+    },
+    data() {
+        return {
+            form: {
+                title: '',
+                post_status: 1,
+                create_table_field: 1,
+                list_show: 2,
+                validate: [],
+                item_config: [],
+                other_config: {
+                    address_type: 1,
+                },
+                datatype: '',
+                length: '',
+                belong_table: '',
+                default_value: ''
+            },
+            activeName: 'first',
+            list_item: false,
+            loading: false,
+            propertyField: [],
+            default_config: '',
+            default_rules: '',
+            ruleList: [],
+            tableList: [],
+            dbtype: '',
+            rules: {
+                title: [{required: true, message: '字段中文名不能为空', trigger: 'blur'}],
                 field: [
                     {required: true, message: '字段英文名不能为空', trigger: 'blur'},
                     {pattern: /^[a-zA-Z0-9_]+$/, message: '仅允许输入字母、数字和下划线', trigger: 'blur'}
                 ],
-				type: [{ required: true, message: '字段类型不能为空', trigger: 'blur' }],
-				login_fields: [{ required: true, message: '请配置登录账号密码字段', trigger: 'blur' }],
-			},
-		}
-	},
-	methods: {
-		submit(){
-			this.$refs['form'].validate(valid => {
-				if (valid) {
-					this.loading = true
-					axios.post(base_url+'/Sys.Base/updateField',this.form).then(res => {
-						if(res.data.status == 200){
-							this.$message({message: '操作成功', type: 'success'})
-							this.$emit('refesh_list')
-							this.closeForm()
-						}else{
-							this.loading = false
-							this.$message.error(res.data.msg)
-						}
-					}).catch(()=>{
-						this.loading = false
-					})
-				}
-			})
-		},
-		open(){
-			this.form = this.info
-			if(this.form.other_config == '' || this.form.other_config == '[]' || this.form.other_config == null){
-				this.form.other_config = {}
-			}else{
-				this.form.other_config = JSON.parse(this.info.other_config)
-			}
-			this.setDefaultVal('item_config')
-			this.field.forEach(item=>{
-				if(this.form.type == item.type){
-					this.list_item = item.item
-				}
-			})
-			axios.post(base_url+'/Sys.Base/configList',{menu_id:this.menu_id}).then(res => {
-				this.ruleList = res.data.ruleList
-				this.propertyField = res.data.propertyField
-				this.dbtype = res.data.dbtype
-			})
-		},
-		selectType(){
-			if(this.dbtype !== 'mongo'){
-				this.field.forEach(item=>{
-					if(this.form.type == item.type){
-						this.propertyField.forEach(vo=>{
-							if(item.property == vo.type){
-								this.form.datatype = vo.name
-								this.form.length = vo.decimal ? vo.maxlen+','+vo.decimal : vo.maxlen
-							}
-						})
-						this.list_item = item.item
-						if(!item.item){
-							this.form.item_config = []
-						}
-					}
-				})
-			}else{
-				this.field.forEach(item=>{
-					if(this.form.type == item.type){
-						this.propertyField.forEach(vo=>{
-							if(item.mongoProperty == vo.type){
-								this.form.datatype = vo.name
-							}
-						})
-						this.list_item = item.item
-						if(!item.item){
-							this.form.item_config = []
-						}
-					}
-				})
-			}
-		},
-		setDefaultVal(key){
-			if(this.form[key] == null || this.form[key] == ''){
-				this.form[key] = []
-			}
-		},
-		setDefaultRule(){
-			this.form.rule = this.default_rules
-		},
-		setFieldLength(){
-			if(this.dbtype !== 'mongo'){
-				this.propertyField.forEach(item =>{
-				   if(this.form.datatype == item.name){
-					   this.form.length = item.decimal ? item.maxlen+','+item.decimal : item.maxlen
-				   }
-				})
-			}
-		},
-		getTablesByMenuId(){
-			axios.post(base_url+'/Sys.Base/getTablesByMenuId',{menu_id:this.menu_id}).then(res => {
-				this.tableList = res.data.data
-			})
-		},
-		addItem(key){
-			this.form[key].push({})
-		},
-		deleteItem(key,index){
-		   this.form[key].splice(index,1)
-		},
-		clearItem(key){
-			this.form[key] = []
-		},
-		setDefaultItem(val){
-			this.form['item_config'] = val
-		},
-		selectDate(val){
-			if(this.dbtype !== 'mongo'){
-				if(['year','month','time','dates'].includes(val)){
-					this.form.datatype = 'varchar'
-					this.form.length = 250
-				}else{
-					this.form.datatype = 'int'
-					this.form.length = 10
-				}
-			}else{
-				if(['year','month','time','dates'].includes(val)){
-					this.form.datatype = 'string'
-					this.form.length = 250
-				}else{
-					this.form.datatype = 'int'
-					this.form.length = 10
-				}
-			}
-		},
-		closeForm(){
-			this.$emit('update:show', false)
-			this.loading = false
-			this.$nextTick(()=>{
-				this.$refs['form'].resetFields();//清空表单
-				this.default_rules = ''
-				this.list_item = false
-				this.form.other_config = {}
-				this.activeName = 'first'
-			})
-		}
-	},
+                type: [{required: true, message: '字段类型不能为空', trigger: 'blur'}],
+                login_fields: [{required: true, message: '请配置登录账号密码字段', trigger: 'blur'}],
+            },
+        }
+    },
+    methods: {
+        submit() {
+            if (this.form.create_table_field == 0) {
+                const str = this.form.field;
+                const regex = /^[a-z][a-zA-Z0-9]*(?:[A-Z][a-z0-9]*)*__.+$/;
+                if (!regex.test(str)) {
+                    this.$message.error(this.form.title + "的格式有误，请重新修改");
+                    return;
+                }
+            }
+            this.$refs['form'].validate(valid => {
+                if (valid) {
+                    this.loading = true
+                    axios.post(base_url + '/Sys.Base/updateField', this.form).then(res => {
+                        if (res.data.status == 200) {
+                            this.$message({message: '操作成功', type: 'success'})
+                            this.$emit('refesh_list')
+                            this.closeForm()
+                        } else {
+                            this.loading = false
+                            this.$message.error(res.data.msg)
+                        }
+                    }).catch(() => {
+                        this.loading = false
+                    })
+                }
+            })
+        },
+        open() {
+            this.form = this.info
+            if (this.form.other_config == '' || this.form.other_config == '[]' || this.form.other_config == null) {
+                this.form.other_config = {}
+            } else {
+                this.form.other_config = JSON.parse(this.info.other_config)
+            }
+            this.setDefaultVal('item_config')
+            this.field.forEach(item => {
+                if (this.form.type == item.type) {
+                    this.list_item = item.item
+                }
+            })
+            axios.post(base_url + '/Sys.Base/configList', {menu_id: this.menu_id}).then(res => {
+                this.ruleList = res.data.ruleList
+                this.propertyField = res.data.propertyField
+                this.dbtype = res.data.dbtype
+            })
+        },
+        selectType() {
+            if (this.dbtype !== 'mongo') {
+                this.field.forEach(item => {
+                    if (this.form.type == item.type) {
+                        this.propertyField.forEach(vo => {
+                            if (item.property == vo.type) {
+                                this.form.datatype = vo.name
+                                this.form.length = vo.decimal ? vo.maxlen + ',' + vo.decimal : vo.maxlen
+                            }
+                        })
+                        this.list_item = item.item
+                        if (!item.item) {
+                            this.form.item_config = []
+                        }
+                    }
+                })
+            } else {
+                this.field.forEach(item => {
+                    if (this.form.type == item.type) {
+                        this.propertyField.forEach(vo => {
+                            if (item.mongoProperty == vo.type) {
+                                this.form.datatype = vo.name
+                            }
+                        })
+                        this.list_item = item.item
+                        if (!item.item) {
+                            this.form.item_config = []
+                        }
+                    }
+                })
+            }
+        },
+        setDefaultVal(key) {
+            if (this.form[key] == null || this.form[key] == '') {
+                this.form[key] = []
+            }
+        },
+        setDefaultRule() {
+            this.form.rule = this.default_rules
+        },
+        setFieldLength() {
+            if (this.dbtype !== 'mongo') {
+                this.propertyField.forEach(item => {
+                    if (this.form.datatype == item.name) {
+                        this.form.length = item.decimal ? item.maxlen + ',' + item.decimal : item.maxlen
+                    }
+                })
+            }
+        },
+        getTablesByMenuId() {
+            axios.post(base_url + '/Sys.Base/getTablesByMenuId', {menu_id: this.menu_id}).then(res => {
+                this.tableList = res.data.data
+            })
+        },
+        addItem(key) {
+            this.form[key].push({})
+        },
+        deleteItem(key, index) {
+            this.form[key].splice(index, 1)
+        },
+        clearItem(key) {
+            this.form[key] = []
+        },
+        setDefaultItem(val) {
+            this.form['item_config'] = val
+        },
+        selectDate(val) {
+            if (this.dbtype !== 'mongo') {
+                if (['year', 'month', 'time', 'dates'].includes(val)) {
+                    this.form.datatype = 'varchar'
+                    this.form.length = 250
+                } else {
+                    this.form.datatype = 'int'
+                    this.form.length = 10
+                }
+            } else {
+                if (['year', 'month', 'time', 'dates'].includes(val)) {
+                    this.form.datatype = 'string'
+                    this.form.length = 250
+                } else {
+                    this.form.datatype = 'int'
+                    this.form.length = 10
+                }
+            }
+        },
+        closeForm() {
+            this.$emit('update:show', false)
+            this.loading = false
+            this.$nextTick(() => {
+                this.$refs['form'].resetFields();//清空表单
+                this.default_rules = ''
+                this.list_item = false
+                this.form.other_config = {}
+                this.activeName = 'first'
+            })
+        }
+    },
 });
 
 
 //cms添加字段
 Vue.component('CmsAdd', {
-	template: `
+    template: `
 		<el-dialog title="创建字段" width="600px" class="icon-dialog" :visible.sync="show" :before-close="closeForm" @open="open"  append-to-body>
         <el-form :size="size" ref="form" :model="form" :rules="rules" label-width="90px">
             <el-row>
@@ -2843,7 +2891,7 @@ Vue.component('CmsAdd', {
 						<el-col :span="4">
 							<el-button type="danger" size="mini" style="position:relative;left:15px"  icon="el-icon-close" @click="deleteItem('item_config',i)"></el-button>
 							<el-button class="jzd-handle" type="success" size="mini" style="position:relative;left:12px" icon="el-icon-rank"></el-button>
-						</el-col> 
+						</el-col>
 					</el-row>
 					</draggable>
 					<div>
@@ -2887,153 +2935,153 @@ Vue.component('CmsAdd', {
         </div>
     </el-dialog>
 	`
-	,
-	 props: {
-		show: {
-			type: Boolean,
-			default: false
-		},
-		size: {
-			type: String,
-			default: 'small'
-		},
-		menuid: {
-			type: String,
-		},
-		field: {
-			type: Array,
-		},
-		item_field: {
-			type: Array,
-		}
-	},
-	data() {
-		return {
-			form: {
-				title:'',
-				post_status:1,
-				create_table_field:1,
-				list_show:2,
-				validate:[],
-				item_config:[],
-				other_config:{
-					address_type : 1,
-				},
-				datatype:'',
-				length:'',
-				belong_table:'',
-				default_value:'',
-				menu_id:this.menuid,
-			},
-			iconDialogStatus:false,
-			activeName: 'first',
-			list_item:false,
-			loading:false,
-			propertyField:[],
-			default_config:'',
-			default_rules:'',
-			ruleList:[],
-			tableList:[],
-			rules: {
-				title: [{ required: true, message: '字段中文名不能为空', trigger: 'blur' }],
+    ,
+    props: {
+        show: {
+            type: Boolean,
+            default: false
+        },
+        size: {
+            type: String,
+            default: 'small'
+        },
+        menuid: {
+            type: String,
+        },
+        field: {
+            type: Array,
+        },
+        item_field: {
+            type: Array,
+        }
+    },
+    data() {
+        return {
+            form: {
+                title: '',
+                post_status: 1,
+                create_table_field: 1,
+                list_show: 2,
+                validate: [],
+                item_config: [],
+                other_config: {
+                    address_type: 1,
+                },
+                datatype: '',
+                length: '',
+                belong_table: '',
+                default_value: '',
+                menu_id: this.menuid,
+            },
+            iconDialogStatus: false,
+            activeName: 'first',
+            list_item: false,
+            loading: false,
+            propertyField: [],
+            default_config: '',
+            default_rules: '',
+            ruleList: [],
+            tableList: [],
+            rules: {
+                title: [{required: true, message: '字段中文名不能为空', trigger: 'blur'}],
                 field: [
                     {required: true, message: '字段英文名不能为空', trigger: 'blur'},
                     {pattern: /^[a-zA-Z0-9_]+$/, message: '仅允许输入字母、数字和下划线', trigger: 'blur'}
                 ],
-				type: [{ required: true, message: '字段类型不能为空', trigger: 'blur' }],
-				login_fields: [{ required: true, message: '请配置登录账号密码字段', trigger: 'blur' }],
-			},
-		}
-	},
-	methods: {
-		submit(){
-			this.$refs['form'].validate(valid => {
-				if (valid) {
-					this.loading = true
-					axios.post(base_url+'/Sys.Base/createField',this.form).then(res => {
-						if(res.data.status == 200){
-							this.$message({message: '操作成功', type: 'success'})
-							this.$emit('refesh_list')
-							this.closeForm()
-						}else{
-							this.loading = false
-							this.$message.error(res.data.msg)
-						}
-					}).catch(()=>{
-						this.loading = false
-					})
-				}
-			})
-		},
-		open(){
-			axios.post(base_url+'/Sys.Base/configList').then(res => {
-				this.ruleList = res.data.ruleList
-				this.propertyField = res.data.propertyField
-			})
-		},
-		checkCmsField(){
-			axios.post(base_url+'/Sys.Base/checkCmsField',{field:this.form.field}).then(res => {
-				if(res.data.status !== 200){
-					this.$message.error('字段已存在')
-				}
-			})
+                type: [{required: true, message: '字段类型不能为空', trigger: 'blur'}],
+                login_fields: [{required: true, message: '请配置登录账号密码字段', trigger: 'blur'}],
+            },
+        }
+    },
+    methods: {
+        submit() {
+            this.$refs['form'].validate(valid => {
+                if (valid) {
+                    this.loading = true
+                    axios.post(base_url + '/Sys.Base/createField', this.form).then(res => {
+                        if (res.data.status == 200) {
+                            this.$message({message: '操作成功', type: 'success'})
+                            this.$emit('refesh_list')
+                            this.closeForm()
+                        } else {
+                            this.loading = false
+                            this.$message.error(res.data.msg)
+                        }
+                    }).catch(() => {
+                        this.loading = false
+                    })
+                }
+            })
         },
-		selectType(){
-			this.field.forEach(item=>{
-				if(this.form.type == item.type){
-					this.propertyField.forEach(vo=>{
-						if(item.property == vo.type){
-							this.form.datatype = vo.name
-							this.form.length = vo.decimal ? vo.maxlen+','+vo.decimal : vo.maxlen
-						}
-					})
-					this.list_item = item.item
-					if(!item.item){
-						this.form.item_config = []
-					}
-				}
-			})
-		},
-		setDefaultRule(){
-			this.form.rule = this.default_rules
-		},
-		setFieldLength(){
-			this.propertyField.forEach(item =>{
-			   if(this.form.datatype == item.name){
-				   this.form.length = item.decimal ? item.maxlen+','+item.decimal : item.maxlen
-			   }
-			})
-		},
-		addItem(key){
-			this.form[key].push({})
-		},
-		deleteItem(key,index){
-		   this.form[key].splice(index,1)
-		},
-		clearItem(key){
-			this.form[key] = []
-		},
-		setDefaultItem(val){
-			this.form['item_config'] = val
-		},
-		closeForm(){
-			this.$emit('update:show', false)
-			this.loading = false
-			this.$nextTick(()=>{
-				this.$refs['form'].resetFields();//清空表单
-				this.default_rules = ''
-				this.list_item = false
-				this.form.other_config = {}
-				this.activeName = 'first'
-			})
-		}
-	},
+        open() {
+            axios.post(base_url + '/Sys.Base/configList').then(res => {
+                this.ruleList = res.data.ruleList
+                this.propertyField = res.data.propertyField
+            })
+        },
+        checkCmsField() {
+            axios.post(base_url + '/Sys.Base/checkCmsField', {field: this.form.field}).then(res => {
+                if (res.data.status !== 200) {
+                    this.$message.error('字段已存在')
+                }
+            })
+        },
+        selectType() {
+            this.field.forEach(item => {
+                if (this.form.type == item.type) {
+                    this.propertyField.forEach(vo => {
+                        if (item.property == vo.type) {
+                            this.form.datatype = vo.name
+                            this.form.length = vo.decimal ? vo.maxlen + ',' + vo.decimal : vo.maxlen
+                        }
+                    })
+                    this.list_item = item.item
+                    if (!item.item) {
+                        this.form.item_config = []
+                    }
+                }
+            })
+        },
+        setDefaultRule() {
+            this.form.rule = this.default_rules
+        },
+        setFieldLength() {
+            this.propertyField.forEach(item => {
+                if (this.form.datatype == item.name) {
+                    this.form.length = item.decimal ? item.maxlen + ',' + item.decimal : item.maxlen
+                }
+            })
+        },
+        addItem(key) {
+            this.form[key].push({})
+        },
+        deleteItem(key, index) {
+            this.form[key].splice(index, 1)
+        },
+        clearItem(key) {
+            this.form[key] = []
+        },
+        setDefaultItem(val) {
+            this.form['item_config'] = val
+        },
+        closeForm() {
+            this.$emit('update:show', false)
+            this.loading = false
+            this.$nextTick(() => {
+                this.$refs['form'].resetFields();//清空表单
+                this.default_rules = ''
+                this.list_item = false
+                this.form.other_config = {}
+                this.activeName = 'first'
+            })
+        }
+    },
 });
 
 
 //修改api字段
 Vue.component('CmsUpdate', {
-	template: `
+    template: `
 		<el-dialog title="创建字段" width="600px" class="icon-dialog" :visible.sync="show" :before-close="closeForm" @open="open"  append-to-body>
         <el-form :size="size" ref="form" :model="form" :rules="rules" label-width="90px">
             <el-row>
@@ -3134,7 +3182,7 @@ Vue.component('CmsUpdate', {
 						<el-col :span="4">
 							<el-button type="danger" size="mini" style="position:relative;left:15px"  icon="el-icon-close" @click="deleteItem('item_config',i)"></el-button>
 							<el-button class="jzd-handle" type="success" size="mini" style="position:relative;left:12px" icon="el-icon-rank"></el-button>
-						</el-col> 
+						</el-col>
 					</el-row>
 					</draggable>
 					<div>
@@ -3178,163 +3226,163 @@ Vue.component('CmsUpdate', {
         </div>
     </el-dialog>
 	`
-	,
-	 props: {
-		show: {
-			type: Boolean,
-			default: false
-		},
-		size: {
-			type: String,
-			default: 'small'
-		},
-		menu_id: {
-			type: String,
-		},
-		field: {
-			type: Array,
-		},
-		item_field: {
-			type: Array,
-		},
-		info: {
-			type: Object,
-		},
-	},
-	data() {
-		return {
-			form: {
-				title:'',
-				post_status:1,
-				create_table_field:1,
-				list_show:2,
-				validate:[],
-				item_config:[],
-				other_config:{
-					address_type : 1,
-				},
-				datatype:'',
-				length:'',
-				belong_table:'',
-				default_value:''
-			},
-			activeName: 'first',
-			list_item:false,
-			loading:false,
-			propertyField:[],
-			default_config:'',
-			default_rules:'',
-			ruleList:[],
-			tableList:[],
-			rules: {
-				title: [{ required: true, message: '字段中文名不能为空', trigger: 'blur' }],
+    ,
+    props: {
+        show: {
+            type: Boolean,
+            default: false
+        },
+        size: {
+            type: String,
+            default: 'small'
+        },
+        menu_id: {
+            type: String,
+        },
+        field: {
+            type: Array,
+        },
+        item_field: {
+            type: Array,
+        },
+        info: {
+            type: Object,
+        },
+    },
+    data() {
+        return {
+            form: {
+                title: '',
+                post_status: 1,
+                create_table_field: 1,
+                list_show: 2,
+                validate: [],
+                item_config: [],
+                other_config: {
+                    address_type: 1,
+                },
+                datatype: '',
+                length: '',
+                belong_table: '',
+                default_value: ''
+            },
+            activeName: 'first',
+            list_item: false,
+            loading: false,
+            propertyField: [],
+            default_config: '',
+            default_rules: '',
+            ruleList: [],
+            tableList: [],
+            rules: {
+                title: [{required: true, message: '字段中文名不能为空', trigger: 'blur'}],
                 field: [
                     {required: true, message: '字段英文名不能为空', trigger: 'blur'},
                     {pattern: /^[a-zA-Z0-9_]+$/, message: '仅允许输入字母、数字和下划线', trigger: 'blur'}
                 ],
-				type: [{ required: true, message: '字段类型不能为空', trigger: 'blur' }],
-				login_fields: [{ required: true, message: '请配置登录账号密码字段', trigger: 'blur' }],
-			},
-		}
-	},
-	methods: {
-		submit(){
-			this.$refs['form'].validate(valid => {
-				if (valid) {
-					this.loading = true
-					axios.post(base_url+'/Sys.Base/updateField',this.form).then(res => {
-						if(res.data.status == 200){
-							this.$message({message: '操作成功', type: 'success'})
-							this.$emit('refesh_list')
-							this.closeForm()
-						}else{
-							this.loading = false
-							this.$message.error(res.data.msg)
-						}
-					}).catch(()=>{
-						this.loading = false
-					})
-				}
-			})
-		},
-		open(){
-			this.form = this.info
-			if(this.form.other_config == '' || this.form.other_config == '[]' || this.form.other_config == null){
-				this.form.other_config = {}
-			}else{
-				this.form.other_config = JSON.parse(this.info.other_config)
-			}
-			this.setDefaultVal('item_config')
-			this.field.forEach(item=>{
-				if(this.form.type == item.type){
-					this.list_item = item.item
-				}
-			})
-			axios.post(base_url+'/Sys.Base/configList').then(res => {
-				this.ruleList = res.data.ruleList
-				this.propertyField = res.data.propertyField
-			})
-		},
-		checkCmsField(){
-			axios.post(base_url+'/Sys.Base/checkCmsField',{field:this.form.field}).then(res => {
-				if(res.data.status !== 200){
-					this.$message.error('字段已存在')
-				}
-			})
+                type: [{required: true, message: '字段类型不能为空', trigger: 'blur'}],
+                login_fields: [{required: true, message: '请配置登录账号密码字段', trigger: 'blur'}],
+            },
+        }
+    },
+    methods: {
+        submit() {
+            this.$refs['form'].validate(valid => {
+                if (valid) {
+                    this.loading = true
+                    axios.post(base_url + '/Sys.Base/updateField', this.form).then(res => {
+                        if (res.data.status == 200) {
+                            this.$message({message: '操作成功', type: 'success'})
+                            this.$emit('refesh_list')
+                            this.closeForm()
+                        } else {
+                            this.loading = false
+                            this.$message.error(res.data.msg)
+                        }
+                    }).catch(() => {
+                        this.loading = false
+                    })
+                }
+            })
         },
-		selectType(){
-			this.field.forEach(item=>{
-				if(this.form.type == item.type){
-					this.propertyField.forEach(vo=>{
-						if(item.property == vo.type){
-							this.form.datatype = vo.name
-							this.form.length = vo.decimal ? vo.maxlen+','+vo.decimal : vo.maxlen
-						}
-					})
-					this.list_item = item.item
-					if(!item.item){
-						this.form.item_config = []
-					}
-				}
-			})
-		},
-		setDefaultVal(key){
-			if(this.form[key] == null || this.form[key] == ''){
-				this.form[key] = []
-			}
-		},
-		setDefaultRule(){
-			this.form.rule = this.default_rules
-		},
-		setFieldLength(){
-			this.propertyField.forEach(item =>{
-				if(this.form.datatype == item.name){
-				   this.form.length = item.decimal ? item.maxlen+','+item.decimal : item.maxlen
-				}
-			})
-		},
-		addItem(key){
-			this.form[key].push({})
-		},
-		deleteItem(key,index){
-		   this.form[key].splice(index,1)
-		},
-		clearItem(key){
-			this.form[key] = []
-		},
-		setDefaultItem(val){
-			this.form['item_config'] = val
-		},
-		closeForm(){
-			this.$emit('update:show', false)
-			this.loading = false
-			this.$nextTick(()=>{
-				this.$refs['form'].resetFields();//清空表单
-				this.default_rules = ''
-				this.list_item = false
-				this.form.other_config = {}
-				this.activeName = 'first'
-			})
-		}
-	},
+        open() {
+            this.form = this.info
+            if (this.form.other_config == '' || this.form.other_config == '[]' || this.form.other_config == null) {
+                this.form.other_config = {}
+            } else {
+                this.form.other_config = JSON.parse(this.info.other_config)
+            }
+            this.setDefaultVal('item_config')
+            this.field.forEach(item => {
+                if (this.form.type == item.type) {
+                    this.list_item = item.item
+                }
+            })
+            axios.post(base_url + '/Sys.Base/configList').then(res => {
+                this.ruleList = res.data.ruleList
+                this.propertyField = res.data.propertyField
+            })
+        },
+        checkCmsField() {
+            axios.post(base_url + '/Sys.Base/checkCmsField', {field: this.form.field}).then(res => {
+                if (res.data.status !== 200) {
+                    this.$message.error('字段已存在')
+                }
+            })
+        },
+        selectType() {
+            this.field.forEach(item => {
+                if (this.form.type == item.type) {
+                    this.propertyField.forEach(vo => {
+                        if (item.property == vo.type) {
+                            this.form.datatype = vo.name
+                            this.form.length = vo.decimal ? vo.maxlen + ',' + vo.decimal : vo.maxlen
+                        }
+                    })
+                    this.list_item = item.item
+                    if (!item.item) {
+                        this.form.item_config = []
+                    }
+                }
+            })
+        },
+        setDefaultVal(key) {
+            if (this.form[key] == null || this.form[key] == '') {
+                this.form[key] = []
+            }
+        },
+        setDefaultRule() {
+            this.form.rule = this.default_rules
+        },
+        setFieldLength() {
+            this.propertyField.forEach(item => {
+                if (this.form.datatype == item.name) {
+                    this.form.length = item.decimal ? item.maxlen + ',' + item.decimal : item.maxlen
+                }
+            })
+        },
+        addItem(key) {
+            this.form[key].push({})
+        },
+        deleteItem(key, index) {
+            this.form[key].splice(index, 1)
+        },
+        clearItem(key) {
+            this.form[key] = []
+        },
+        setDefaultItem(val) {
+            this.form['item_config'] = val
+        },
+        closeForm() {
+            this.$emit('update:show', false)
+            this.loading = false
+            this.$nextTick(() => {
+                this.$refs['form'].resetFields();//清空表单
+                this.default_rules = ''
+                this.list_item = false
+                this.form.other_config = {}
+                this.activeName = 'first'
+            })
+        }
+    },
 });
