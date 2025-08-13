@@ -295,7 +295,7 @@ document.head.appendChild(style);
 //后台方法添加
 //后台方法添加
 Vue.component('AdminAdd', {
-	template: `
+    template: `
 	<el-dialog title="创建操作方法" width="95%" class="icon-dialog" :visible.sync="show" @open="open" :before-close="closeForm">
         <el-form :size="size" ref="form" :model="form" :rules="rules" label-width="120px">
         	<div class="field-container">
@@ -343,7 +343,7 @@ Vue.component('AdminAdd', {
 									<el-button type="success" slot="append" icon="el-icon-thumb"  @click="iconDialogStatus = true">请选择</el-button>
 								</el-input>
 							</el-form-item>
-						</el-row>						
+						</el-row>
 						
 						
 						
@@ -355,9 +355,9 @@ Vue.component('AdminAdd', {
           <el-tabs v-model="codeTabActive" class="code-tabs">
             <el-tab-pane label="前端代码" name="frontend">
               <el-form-item style="margin-left: 0px;">
-                <el-input 
-                  v-model="form.q_template" 
-                  type="textarea" 
+                <el-input
+                  v-model="form.q_template"
+                  type="textarea"
                   :autosize="{minRows: 10}"
                   placeholder="输入HTML模板代码">
                 </el-input>
@@ -365,9 +365,9 @@ Vue.component('AdminAdd', {
             </el-tab-pane>
             <el-tab-pane label="后端代码" name="backend">
               <el-form-item style="margin-left: 0px;">
-                <el-input 
-                  v-model="form.h_php" 
-                  type="textarea" 
+                <el-input
+                  v-model="form.h_php"
+                  type="textarea"
                   :autosize="{minRows: 10}"
                   placeholder="输入后端处理代码">
                 </el-input>
@@ -376,7 +376,7 @@ Vue.component('AdminAdd', {
           </el-tabs>
         </el-col>
       </el-row>
-						<!-- 新增超级页面表单结束 -->						
+						<!-- 新增超级页面表单结束 -->
 						
 						
 						
@@ -410,7 +410,7 @@ Vue.component('AdminAdd', {
 								</el-form-item>
 							</el-col>
 						</el-row>
-						<el-row v-if="form.type == 15 || form.type == 16">
+						<el-row v-if="form.type == 15 || form.type == 16 || form.type == 55">
 							<el-form-item label="url参数字段" prop="fields">
 								<el-checkbox-group v-model="form.fields">
 									<el-checkbox v-for="item in jump_fields" :label="item.field" :key="item.field">{{item.title}}</el-checkbox>
@@ -536,10 +536,10 @@ Vue.component('AdminAdd', {
 										<el-form-item style="margin-bottom:3px !important">
 											<el-autocomplete :fetch-suggestions="querySearch" style="position:relative; left:20px" v-model="item.serachVal" placeholder="值"/>
 										</el-form-item>
-									</el-col> 
+									</el-col>
 									<el-col :span="4">
 										<el-button type="danger" size="mini" style="position:relative;left:35px"  icon="el-icon-close" @click="deleteItem('list_filter',i)"></el-button>
-									</el-col>  
+									</el-col>
 								</el-row>
 								<el-button type="success" icon="el-icon-plus" style="padding:5px 7px" :size="size" @click="addItem('list_filter')">追加</el-button>
 								<el-button v-if="form.list_filter.length > 0" type="warning" icon="el-icon-delete" style="padding:5px 7px" :size="size" @click="clearItem('list_filter')">清空</el-button>
@@ -562,7 +562,7 @@ Vue.component('AdminAdd', {
 									</el-col>
 									<el-col :span="2">
 										<el-button type="danger" size="mini" style="position:relative;left:15px"  icon="el-icon-close" @click="deleteItem('tab_config',i)"></el-button>
-									</el-col> 
+									</el-col>
 								</el-row>
 								<el-button type="success" icon="el-icon-plus" style="padding:5px 7px" :size="size" @click="addItem('tab_config')">追加</el-button>
 								<el-button v-if="form.tab_config.length > 0" type="warning" icon="el-icon-delete" style="padding:5px 7px" :size="size" @click="clearItem('tab_config')">清空</el-button>
@@ -638,7 +638,7 @@ Vue.component('AdminAdd', {
 								</el-col>
 								<el-col :span="1">
 									<el-button type="danger" size="mini" style="position:relative;left:5px"  icon="el-icon-close" @click="deleteItem('with_join',i)"></el-button>
-								</el-col> 
+								</el-col>
 							</el-row>
 							<el-button type="success" icon="el-icon-plus" style="padding:5px 7px" :size="size" @click="addItem('with_join')">追加</el-button>
 							<el-button v-if="form.with_join.length > 0" type="warning" icon="el-icon-delete" style="padding:5px 7px" :size="size" @click="clearItem('with_join')">清空</el-button>
@@ -662,263 +662,263 @@ Vue.component('AdminAdd', {
         <Icon :iconshow.sync="iconDialogStatus" :icon.sync="form.icon" size="small"></Icon>
     </el-dialog>
 	`
-	,
-	props: {
-		show: {
-			type: Boolean,
-			default: false
-		},
-		size: {
-			type: String,
-		},
-		menuid: {
-			type: String,
-		},
-		action: {
-			type: Array,
-		}
-	},
-	data() {
-		return {
-			form: {
-				server_create_status:1,
-				vue_create_status:1,
-				button_color:'primary',
-				select_type:1,
-				fields:[],
-				list_filter:[],
-				tab_config:[],
-				with_join:[],
-				type:'',
-				icon:'',
-				name:'',
-				action_name:'',
-				dialog_size:'600px',
-				pagesize:'20',
-				sql:'',
-				menu_id:this.menuid,
-				jump:'',
-				status_val:'',
-				orderby:'',
-				tree_config:'',
-				table_height:'',
-				// 新增超级页面数据结构开始
-				q_template: '<div class="super-page">\n  <h1>自定义页面</h1>\n</div>', // 前端代码
-                h_php: 'public function ygluntan() {\n   if (!$this->request->isPost()){\n     return view(\'ygluntan\');\n   }\n}\n', // 后端PHP代码
-				codeTabActive: 'frontend', // 新增选项卡激活状态
-
-
-				// 新增超级页面数据结构结束
-
-
-
-
-
-
-
-
-				other_config:{
-					export_type:'',
-					hook:[],
-					excel:'',
-					left_tree_show:'',
-					tree_show:1,
-					after_hook:'',
-					befor_hook:'',
-					printer_status:2,
-					list_button_style:1,
-				}
-			},
-			iconDialogStatus:false,
-			post_fields:[],
-			jump_fields:[],
-			activeName: 'first',
-			tableList:[],
-			dialog:true,
-			button:true,
-			loading:false,
-			ischeck_fields:[],
-			activeName:'基本信息',
-			table_fields:[],
-			tab_fields:[],
-			model_fields:[],
-			dbtype:'',
-			restaurants: [{'value':'null'},{'value':'not null'}],
-			rules: {
-				name: [{ required: true, message: '方法中文名不能为空', trigger: 'blur' }],
-				action_name: [{ required: true, message: '方法英文名不能为空', trigger: 'blur' },{pattern: /^[a-zA-Z0-9_]+$/, message: '仅允许输入字母、数字和下划线', trigger: 'blur'}],
-				type: [{ required: true, message: '方法类型不能为空', trigger: 'blur' }],
-			},
-		}
-	},
-	methods: {
-		submit(){
-			this.$refs['form'].validate(valid => {
-				if (valid) {
-					this.loading = true
-
-
-
-					// 新增超级页面安全验证开始
-					if(this.form.type == 55 && !this.validateSuperPage()){
-						this.loading = false
-						return
-					}
-					// 新增超级页面安全验证结束
-
-
-
-					axios.post(base_url+'/Sys.Base/createAction',this.form).then(res => {
-						if(res.data.status == 200){
-							this.$message({message: '操作成功', type: 'success'})
-							this.$emit('refesh_list')
-							this.closeForm()
-						}else{
-							this.loading = false
-							this.$message.error(res.data.msg)
-						}
-					}).catch(()=>{
-						this.loading = false
-					})
-				}
-			})
-		},
-
-
-
-
-		// 新增超级页面安全验证方法开始
-        validateSuperPage(){
-        const forbidden = ['eval', 'Function', 'exec', 'system', 'shell_exec']
-
-          // 检查前端代码
-          if(this.form.q_template){
-            for(let word of forbidden){
-              if(this.form.q_template.includes(word)){
-                this.$message.error(`前端代码中检测到危险代码: ${word}`)
-                return false
-              }
-            }
-          }
-
-          // 检查后端代码
-          if(this.form.h_php){
-            for(let word of forbidden){
-              if(this.form.h_php.includes(word)){
-                this.$message.error(`后端代码中检测到危险代码: ${word}`)
-                return false
-              }
-            }
-          }
-
-          return true
+    ,
+    props: {
+        show: {
+            type: Boolean,
+            default: false
         },
-		// 新增超级页面安全验证方法结束
-
-
-
-
-		open(){
-			axios.post(base_url+'/Sys.Base/getPostField',{menu_id:this.menuid}).then(res => {
-				this.post_fields = res.data.data
-				this.jump_fields = res.data.jump_field
-				this.tab_fields = res.data.tab_fields
-				this.model_fields = res.data.model_fields
-				this.tableList = res.data.tableList
-				this.dbtype = res.data.dbtype
-				this.codeTabActive = 'frontend'; // 设置默认激活的选项卡
-			})
-		},
-		selectType(val){
-			if(val !== 1){
-				this.form.list_filter = []
-				this.form.with_join = []
-			}
-			if(val !== 3 || val !== 4){
-				this.form.tab_config = []
-			}
-			if(val !== 7){
-				this.form.dialog_size = ''
-			}
-			this.action.forEach(item=>{
-				if(this.form.type == item.type){
-					this.dialog = item.dialog
-					this.button = item.button
-					this.form.icon = item.icon
-					this.form.button_color = item.button_color
-					this.form.name = item.name
-					this.form.action_name = item.action_name
-				}
-			})
-
-
-			// 新增超级页面初始化开始
-			if(val == 55 && !this.form.super_page){
-				this.$set(this.form, 'super_page', {
-					frontend: { template: '', script: '', style: '' },
-					backend: { language: 'php', code: '' }
-				})
-			}
-			// 新增超级页面初始化结束
-
-
-
-
-		},
-		getTableFields(i){
-			axios.post(base_url+'/Sys.Base/getTableFields',{controller_name:this.form.with_join[i].relative_table}).then(res => {
-				this.table_fields = res.data.filedList
-			})
-		},
-		closeForm(){
-			this.$emit('update:show', false)
-			this.loading = false
-			this.$nextTick(()=>{
-				this.$refs['form'].resetFields()
-				this.form.dialog_size = ''
-				this.form.icon = ''
-				this.form.sql = ''
-				this.form.other_config.after_hook = ''
-				this.form.other_config.befor_hook = ''
-			})
-		},
-		addItem(key){
-			this.form[key].push({})
-		},
-		deleteItem(key,index){
-		   this.form[key].splice(index,1)
-		},
-		clearItem(key){
-			this.form[key] = []
-		},
-		querySearch(queryString, cb) {
-			var restaurants = this.restaurants;
-			cb(restaurants);
-		},
-		setBeforHook(val){
-			if(val){
-				axios.post(base_url+'/Sys.Base/getHookPath',{'menu_id':this.menuid,'actionName':this.form.action_name,'type':1}).then(res => {
-					this.form.other_config.befor_hook = res.data.data
-				})
-			}else{
-				this.form.other_config.befor_hook = ''
-			}
-		},
-		setAfterHook(val){
-			if(val){
-				axios.post(base_url+'/Sys.Base/getHookPath',{'menu_id':this.menuid,'actionName':this.form.action_name,'type':2}).then(res => {
-					this.form.other_config.after_hook = res.data.data
-				})
-			}else{
-				this.form.other_config.after_hook = ''
-			}
-		},
-	},
+        size: {
+            type: String,
+        },
+        menuid: {
+            type: String,
+        },
+        action: {
+            type: Array,
+        }
+    },
+    data() {
+        return {
+            form: {
+                server_create_status:1,
+                vue_create_status:1,
+                button_color:'primary',
+                select_type:1,
+                fields:[],
+                list_filter:[],
+                tab_config:[],
+                with_join:[],
+                type:'',
+                icon:'',
+                name:'',
+                action_name:'',
+                dialog_size:'600px',
+                pagesize:'20',
+                sql:'',
+                menu_id:this.menuid,
+                jump:'',
+                status_val:'',
+                orderby:'',
+                tree_config:'',
+                table_height:'',
+                // 新增超级页面数据结构开始
+                q_template: '<div class="super-page">\n  <h1>自定义页面</h1>\n</div>', // 前端代码
+                h_php: 'public function ygluntan() {\n   if (!$this->request->isPost()){\n     return view(\'ygluntan\');\n   }\n}\n', // 后端PHP代码
+                codeTabActive: 'frontend', // 新增选项卡激活状态
+                
+                
+                // 新增超级页面数据结构结束
+                
+                
+                
+                
+                
+                
+                
+                
+                other_config:{
+                    export_type:'',
+                    hook:[],
+                    excel:'',
+                    left_tree_show:'',
+                    tree_show:1,
+                    after_hook:'',
+                    befor_hook:'',
+                    printer_status:2,
+                    list_button_style:1,
+                }
+            },
+            iconDialogStatus:false,
+            post_fields:[],
+            jump_fields:[],
+            activeName: 'first',
+            tableList:[],
+            dialog:true,
+            button:true,
+            loading:false,
+            ischeck_fields:[],
+            activeName:'基本信息',
+            table_fields:[],
+            tab_fields:[],
+            model_fields:[],
+            dbtype:'',
+            restaurants: [{'value':'null'},{'value':'not null'}],
+            rules: {
+                name: [{ required: true, message: '方法中文名不能为空', trigger: 'blur' }],
+                action_name: [{ required: true, message: '方法英文名不能为空', trigger: 'blur' },{pattern: /^[a-zA-Z0-9_]+$/, message: '仅允许输入字母、数字和下划线', trigger: 'blur'}],
+                type: [{ required: true, message: '方法类型不能为空', trigger: 'blur' }],
+            },
+        }
+    },
+    methods: {
+        submit(){
+            this.$refs['form'].validate(valid => {
+                if (valid) {
+                    this.loading = true
+                    
+                    
+                    
+                    // 新增超级页面安全验证开始
+                    if(this.form.type == 55 && !this.validateSuperPage()){
+                        this.loading = false
+                        return
+                    }
+                    // 新增超级页面安全验证结束
+                    
+                    
+                    
+                    axios.post(base_url+'/Sys.Base/createAction',this.form).then(res => {
+                        if(res.data.status == 200){
+                            this.$message({message: '操作成功', type: 'success'})
+                            this.$emit('refesh_list')
+                            this.closeForm()
+                        }else{
+                            this.loading = false
+                            this.$message.error(res.data.msg)
+                        }
+                    }).catch(()=>{
+                        this.loading = false
+                    })
+                }
+            })
+        },
+        
+        
+        
+        
+        // 新增超级页面安全验证方法开始
+        validateSuperPage(){
+            const forbidden = ['eval', 'Function', 'exec', 'system', 'shell_exec']
+            
+            // 检查前端代码
+            if(this.form.q_template){
+                for(let word of forbidden){
+                    if(this.form.q_template.includes(word)){
+                        this.$message.error(`前端代码中检测到危险代码: ${word}`)
+                        return false
+                    }
+                }
+            }
+            
+            // 检查后端代码
+            if(this.form.h_php){
+                for(let word of forbidden){
+                    if(this.form.h_php.includes(word)){
+                        this.$message.error(`后端代码中检测到危险代码: ${word}`)
+                        return false
+                    }
+                }
+            }
+            
+            return true
+        },
+        // 新增超级页面安全验证方法结束
+        
+        
+        
+        
+        open(){
+            axios.post(base_url+'/Sys.Base/getPostField',{menu_id:this.menuid}).then(res => {
+                this.post_fields = res.data.data
+                this.jump_fields = res.data.jump_field
+                this.tab_fields = res.data.tab_fields
+                this.model_fields = res.data.model_fields
+                this.tableList = res.data.tableList
+                this.dbtype = res.data.dbtype
+                this.codeTabActive = 'frontend'; // 设置默认激活的选项卡
+            })
+        },
+        selectType(val){
+            if(val !== 1){
+                this.form.list_filter = []
+                this.form.with_join = []
+            }
+            if(val !== 3 || val !== 4){
+                this.form.tab_config = []
+            }
+            if(val !== 7){
+                this.form.dialog_size = ''
+            }
+            this.action.forEach(item=>{
+                if(this.form.type == item.type){
+                    this.dialog = item.dialog
+                    this.button = item.button
+                    this.form.icon = item.icon
+                    this.form.button_color = item.button_color
+                    this.form.name = item.name
+                    this.form.action_name = item.action_name
+                }
+            })
+            
+            
+            // 新增超级页面初始化开始
+            if(val == 55 && !this.form.super_page){
+                this.$set(this.form, 'super_page', {
+                    frontend: { template: '', script: '', style: '' },
+                    backend: { language: 'php', code: '' }
+                })
+            }
+            // 新增超级页面初始化结束
+            
+            
+            
+            
+        },
+        getTableFields(i){
+            axios.post(base_url+'/Sys.Base/getTableFields',{controller_name:this.form.with_join[i].relative_table}).then(res => {
+                this.table_fields = res.data.filedList
+            })
+        },
+        closeForm(){
+            this.$emit('update:show', false)
+            this.loading = false
+            this.$nextTick(()=>{
+                this.$refs['form'].resetFields()
+                this.form.dialog_size = ''
+                this.form.icon = ''
+                this.form.sql = ''
+                this.form.other_config.after_hook = ''
+                this.form.other_config.befor_hook = ''
+            })
+        },
+        addItem(key){
+            this.form[key].push({})
+        },
+        deleteItem(key,index){
+            this.form[key].splice(index,1)
+        },
+        clearItem(key){
+            this.form[key] = []
+        },
+        querySearch(queryString, cb) {
+            var restaurants = this.restaurants;
+            cb(restaurants);
+        },
+        setBeforHook(val){
+            if(val){
+                axios.post(base_url+'/Sys.Base/getHookPath',{'menu_id':this.menuid,'actionName':this.form.action_name,'type':1}).then(res => {
+                    this.form.other_config.befor_hook = res.data.data
+                })
+            }else{
+                this.form.other_config.befor_hook = ''
+            }
+        },
+        setAfterHook(val){
+            if(val){
+                axios.post(base_url+'/Sys.Base/getHookPath',{'menu_id':this.menuid,'actionName':this.form.action_name,'type':2}).then(res => {
+                    this.form.other_config.after_hook = res.data.data
+                })
+            }else{
+                this.form.other_config.after_hook = ''
+            }
+        },
+    },
 });
 
 //后台方法修改
 Vue.component('AdminUpdate', {
-	template: `
+    template: `
 	<el-dialog title="更新操作方法" width="95%" class="icon-dialog" :visible.sync="show" @open="open" :before-close="closeForm" append-to-body>
         <el-form :size="size" ref="form" :model="form" :rules="rules" label-width="120px">
         	<div class="field-container">
@@ -981,7 +981,7 @@ Vue.component('AdminUpdate', {
 								</el-form-item>
 							</el-col>
 						</el-row>
-						<el-row v-if="form.type == 15 || form.type == 16">
+						<el-row v-if="form.type == 15 || form.type == 16 || form.type == 55">
 							<el-form-item label="url参数字段" prop="fields">
 								<el-checkbox-group v-model="form.fields">
 									<el-checkbox v-for="item in jump_fields" :label="item.field" :key="item.field">{{item.title}}</el-checkbox>
@@ -1015,9 +1015,9 @@ Vue.component('AdminUpdate', {
         <el-tabs v-model="codeTabActive" class="code-tabs">
             <el-tab-pane label="前端代码" name="frontend">
                 <el-form-item style="margin-left: 0px;">
-                    <el-input 
-                        v-model="form.q_template" 
-                        type="textarea" 
+                    <el-input
+                        v-model="form.q_template"
+                        type="textarea"
                         :autosize="{minRows: 10}"
                         placeholder="输入HTML模板代码">
                     </el-input>
@@ -1025,9 +1025,9 @@ Vue.component('AdminUpdate', {
             </el-tab-pane>
             <el-tab-pane label="后端代码" name="backend">
                 <el-form-item style="margin-left: 0px;">
-                    <el-input 
-                        v-model="form.h_php" 
-                        type="textarea" 
+                    <el-input
+                        v-model="form.h_php"
+                        type="textarea"
                         :autosize="{minRows: 10}"
                         placeholder="输入后端处理代码">
                     </el-input>
@@ -1142,10 +1142,10 @@ Vue.component('AdminUpdate', {
 										<el-form-item style="margin-bottom:3px !important">
 											<el-autocomplete :fetch-suggestions="querySearch" style="position:relative; left:20px" v-model="item.serachVal" placeholder="值"/>
 										</el-form-item>
-									</el-col> 
+									</el-col>
 									<el-col :span="4">
 										<el-button type="danger" size="mini" style="position:relative;left:35px"  icon="el-icon-close" @click="deleteItem('list_filter',i)"></el-button>
-									</el-col>  
+									</el-col>
 								</el-row>
 								<el-button type="success" icon="el-icon-plus" style="padding:5px 7px" :size="size" @click="addItem('list_filter')">追加</el-button>
 								<el-button v-if="form.list_filter.length > 0" type="warning" icon="el-icon-delete" style="padding:5px 7px" :size="size" @click="clearItem('list_filter')">清空</el-button>
@@ -1168,7 +1168,7 @@ Vue.component('AdminUpdate', {
 									</el-col>
 									<el-col :span="2">
 										<el-button type="danger" size="mini" style="position:relative;left:15px"  icon="el-icon-close" @click="deleteItem('tab_config',i)"></el-button>
-									</el-col> 
+									</el-col>
 								</el-row>
 								<el-button type="success" icon="el-icon-plus" style="padding:5px 7px" :size="size" @click="addItem('tab_config')">追加</el-button>
 								<el-button v-if="form.tab_config.length > 0" type="warning" icon="el-icon-delete" style="padding:5px 7px" :size="size" @click="clearItem('tab_config')">清空</el-button>
@@ -1187,12 +1187,13 @@ Vue.component('AdminUpdate', {
 								</el-select>
 							</el-form-item>
 						</el-row>
+						
 						<el-row v-if="form.group_button_status">
 							<el-form-item label="表头按钮显示条件" prop="show_list_button">
 								<el-input v-model="form.other_config.show_group_button" placeholder="status != 1 或 pay_type == 1 && scope.row.status == 1 或wl_date > Date.now()"  />
-
 							</el-form-item>
 						</el-row>
+						
 						<el-row v-if="form.list_button_status">
 							<el-form-item label="按钮显示条件" prop="show_list_button">
 								<el-input v-model="form.other_config.show_list_button" placeholder="status != 1 或 pay_type == 1 && scope.row.status == 1 或wl_date > Date.now()"  />
@@ -1264,7 +1265,7 @@ Vue.component('AdminUpdate', {
 								</el-col>
 								<el-col :span="1">
 									<el-button type="danger" size="mini" style="position:relative;left:5px"  icon="el-icon-close" @click="deleteItem('with_join',i)"></el-button>
-								</el-col> 
+								</el-col>
 							</el-row>
 							<el-button type="success" icon="el-icon-plus" style="padding:5px 7px" :size="size" @click="addItem('with_join')">追加</el-button>
 							<el-button v-if="form.with_join.length > 0" type="warning" icon="el-icon-delete" style="padding:5px 7px" :size="size" @click="clearItem('with_join')">清空</el-button>
@@ -1288,309 +1289,309 @@ Vue.component('AdminUpdate', {
         <Icon :iconshow.sync="iconDialogStatus" :icon.sync="form.icon" size="small"></Icon>
     </el-dialog>
 	`
-	,
-	props: {
-		show: {
-			type: Boolean,
-			default: false
-		},
-		size: {
-			type: String,
-		},
-		menu_id: {
-			type: String,
-		},
-		action: {
-			type: Array,
-		},
-		info: {
-			type: Object,
-		}
-	},
-	data() {
-		return {
-			form: {
-				server_create_status:1,
-				vue_create_status:1,
-				button_color:'primary',
-				select_type:1,
-				fields:[],
-				list_filter:[],
-				tab_config:[],
-				with_join:[],
-				type:'',
-				icon:'',
-				name:'',
-				action_name:'',
-				dialog_size:'600px',
-				pagesize:'20',
-				sql:'',
-				status_val:'',
-				orderby:'',
-				tree_config:'',
-				table_height:'',
-
-				codeTabActive: 'frontend', // 控制选项卡激活状态
+    ,
+    props: {
+        show: {
+            type: Boolean,
+            default: false
+        },
+        size: {
+            type: String,
+        },
+        menu_id: {
+            type: String,
+        },
+        action: {
+            type: Array,
+        },
+        info: {
+            type: Object,
+        }
+    },
+    data() {
+        return {
+            form: {
+                server_create_status:1,
+                vue_create_status:1,
+                button_color:'primary',
+                select_type:1,
+                fields:[],
+                list_filter:[],
+                tab_config:[],
+                with_join:[],
+                type:'',
+                icon:'',
+                name:'',
+                action_name:'',
+                dialog_size:'600px',
+                pagesize:'20',
+                sql:'',
+                status_val:'',
+                orderby:'',
+                tree_config:'',
+                table_height:'',
+                
+                codeTabActive: 'frontend', // 控制选项卡激活状态
                 q_template: '<div class="super-page">\n  <h1>自定义页面</h1>\n</div>', // 前端代码
                 h_php: 'public function handle($request) {\n    // 处理请求\n    return [];\n}', // 后端PHP代码
-
-				other_config:{
-					export_type:'',
-					show_list_button:'',
-					hook:[],
-					excel:'',
-					tree_show:2,
-					left_tree_show:2,
-					after_hook:'',
-					befor_hook:'',
-					printer_status:2,
-					list_button_style:1,
-				}
-			},
-			iconDialogStatus:false,
-			post_fields:[],
-			activeName: 'first',
-			tableList:[],
-			dialog:true,
-			button:true,
-			loading:false,
-			ischeck_fields:[],
-			activeName:'基本信息',
-			table_fields:[],
-			tab_fields:[],
-			model_fields:[],
-			jump_fields:[],
-			dbtype:'',
-			beforHookChecked:false,
-			afterHookChecked:false,
-			restaurants: [{'value':'null'},{'value':'not null'}],
-			rules: {
-				name: [{ required: true, message: '方法中文名不能为空', trigger: 'blur' }],
-				action_name: [{ required: true, message: '方法英文名不能为空', trigger: 'blur' },{pattern: /^[a-zA-Z0-9_]+$/, message: '仅允许输入字母、数字和下划线', trigger: 'blur'}],
-				type: [{ required: true, message: '方法类型不能为空', trigger: 'blur' }],
-			},
-		}
-	},
-	methods: {
-		submit(){
-			this.$refs['form'].validate(valid => {
-				if (valid) {
-
-			//超级页面开始
-            if(this.form.type == 55 && !this.validateSuperPage()) {
-                this.loading = false
-                return
-            }
-			//超级页面结束
-
-
-
-					this.loading = true
-					axios.post(base_url+'/Sys.Base/updateAction',this.form).then(res => {
-						if(res.data.status == 200){
-							this.$message({message: '操作成功', type: 'success'})
-							this.$emit('refesh_list')
-							this.closeForm()
-						}else{
-							this.loading = false
-							this.$message.error(res.data.msg)
-						}
-					}).catch(()=>{
-						this.loading = false
-					})
-				}
-			})
-		},
-
-    // 超级页面安全验证方法
-    validateSuperPage() {
-        const forbidden = ['eval', 'Function', 'exec', 'system', 'shell_exec']
-
-        // 检查前端代码
-        if(this.form.q_template) {
-            for(let word of forbidden) {
-                if(this.form.q_template.includes(word)) {
-                    this.$message.error(`前端代码中检测到危险代码: ${word}`)
-                    return false
+                
+                other_config:{
+                    export_type:'',
+                    show_list_button:'',
+                    hook:[],
+                    excel:'',
+                    tree_show:2,
+                    left_tree_show:2,
+                    after_hook:'',
+                    befor_hook:'',
+                    printer_status:2,
+                    list_button_style:1,
                 }
-            }
+            },
+            iconDialogStatus:false,
+            post_fields:[],
+            activeName: 'first',
+            tableList:[],
+            dialog:true,
+            button:true,
+            loading:false,
+            ischeck_fields:[],
+            activeName:'基本信息',
+            table_fields:[],
+            tab_fields:[],
+            model_fields:[],
+            jump_fields:[],
+            dbtype:'',
+            beforHookChecked:false,
+            afterHookChecked:false,
+            restaurants: [{'value':'null'},{'value':'not null'}],
+            rules: {
+                name: [{ required: true, message: '方法中文名不能为空', trigger: 'blur' }],
+                action_name: [{ required: true, message: '方法英文名不能为空', trigger: 'blur' },{pattern: /^[a-zA-Z0-9_]+$/, message: '仅允许输入字母、数字和下划线', trigger: 'blur'}],
+                type: [{ required: true, message: '方法类型不能为空', trigger: 'blur' }],
+            },
         }
-
-        // 检查后端代码
-        if(this.form.h_php) {
-            for(let word of forbidden) {
-                if(this.form.h_php.includes(word)) {
-                    this.$message.error(`后端代码中检测到危险代码: ${word}`)
-                    return false
-                }
-            }
-        }
-
-        return true
     },
-    // 超级页面安全验证方法结束
-
-
-
-
-
-		open(){
-			this.form = this.info
-			this.setDefaultVal('list_filter')
-			this.setDefaultVal('tab_config')
-			this.setDefaultVal('fields')
-			this.setDefaultVal('with_join')
-			this.codeTabActive = 'frontend'; // 设置默认激活的选项卡
-			if(this.form.other_config == null || this.form.other_config == ''){
-				this.form.other_config = {}
-			}else{
-				this.form.other_config = JSON.parse(this.form.other_config)
-			}
-			if(this.form.other_config.befor_hook !== ''){
-				this.beforHookChecked = true
-			}
-			if(this.form.other_config.after_hook !== ''){
-				this.afterHookChecked = true
-			}
-
-	//超级页面开始
-	if(!this.form.q_template) {
-        this.form.q_template = '<div class="super-page">\n  <h1>自定义页面</h1>\n</div>'
-    }
-    if(!this.form.h_php) {
-        this.form.h_php = 'public function handle($request) {\n    // 处理请求\n    return [];\n}'
-    }
-	//超级页面结束
-
-
-
-			this.initAction()
-			axios.post(base_url+'/Sys.Base/getPostField',{menu_id:this.menu_id}).then(res => {
-				this.post_fields = res.data.data
-				this.jump_fields = res.data.jump_field
-				this.tab_fields = res.data.tab_fields
-				this.model_fields = res.data.model_fields
-				this.tableList = res.data.tableList
-				this.dbtype = res.data.dbtype
-			})
-		},
-		selectType(val){
-			if(val !== 1){
-				this.form.list_filter = []
-				this.form.with_join = []
-			}
-			if(val !== 3 || val !== 4){
-				this.form.tab_config = []
-			}
-			if(val !== 7){
-				this.form.dialog_size = ''
-			}
-
-
-if(val == 55 && !this.form.super_page) {
-    this.$set(this.form, 'super_page', {
-        frontend: { q_template: '', script: '', style: '' },
-        backend: { language: 'php', code: '' }
-    })
-}
-
-
-
-
-			this.action.forEach(item=>{
-				if(this.form.type == item.type){
-					this.dialog = item.dialog
-					this.button = item.button
-					this.form.icon = item.icon
-					this.form.button_color = item.button_color
-					this.form.name = item.name
-					this.form.action_name = item.action_name
-				}
-			})
-		},
-		getTableFields(i){
-			axios.post(base_url+'/Sys.Base/getTableFields',{controller_name:this.form.with_join[i].relative_table}).then(res => {
-				this.table_fields = res.data.filedList
-			})
-		},
-		closeForm(){
-			this.$emit('update:show', false)
-			this.loading = false
-			this.$nextTick(()=>{
-				this.$refs['form'].resetFields()
-				this.form.dialog_size = ''
-				this.form.icon = ''
-				this.form.sql = ''
-				this.beforHookChecked = false
-				this.afterHookChecked = false
-			})
-		},
-		initAction(){
-			this.action.forEach(item=>{
-				if(this.form.type == item.type){
-					this.dialog = item.dialog
-					this.button = item.button
-				}
-			})
-		},
-		setDefaultVal(key){
-			if(this.form[key] == null || this.form[key] == ''){
-				this.form[key] = []
-			}
-		},
-		addItem(key){
-			this.form[key].push({})
-		},
-		deleteItem(key,index){
-		   this.form[key].splice(index,1)
-		},
-		clearItem(key){
-			this.form[key] = []
-		},
-		setTreeLoadType(val){
-			if(val){
-				this.form.other_config.tree_load_type = 1
-				this.form.other_config.tree_show = 1
-			}else{
-				this.form.other_config.tree_load_type = ""
-			}
-		},
-		selectTreeLoadType(){
-			this.form.list_filter = []
-		},
-		querySearch(queryString, cb) {
-			var restaurants = this.restaurants;
-			cb(restaurants);
-		},
-		setBeforHook(val){
-			if(val){
-				axios.post(base_url+'/Sys.Base/getHookPath',{'menu_id':this.form.menu_id,'actionName':this.form.action_name,'type':1}).then(res => {
-					this.form.other_config.befor_hook = res.data.data
-				})
-			}else{
-				this.form.other_config.befor_hook = ''
-			}
-		},
-		setAfterHook(val){
-			if(val){
-				axios.post(base_url+'/Sys.Base/getHookPath',{'menu_id':this.form.menu_id,'actionName':this.form.action_name,'type':2}).then(res => {
-					this.form.other_config.after_hook = res.data.data
-				})
-			}else{
-				this.form.other_config.after_hook = ''
-			}
-		},
-	},
+    methods: {
+        submit(){
+            this.$refs['form'].validate(valid => {
+                if (valid) {
+                    
+                    //超级页面开始
+                    if(this.form.type == 55 && !this.validateSuperPage()) {
+                        this.loading = false
+                        return
+                    }
+                    //超级页面结束
+                    
+                    
+                    
+                    this.loading = true
+                    axios.post(base_url+'/Sys.Base/updateAction',this.form).then(res => {
+                        if(res.data.status == 200){
+                            this.$message({message: '操作成功', type: 'success'})
+                            this.$emit('refesh_list')
+                            this.closeForm()
+                        }else{
+                            this.loading = false
+                            this.$message.error(res.data.msg)
+                        }
+                    }).catch(()=>{
+                        this.loading = false
+                    })
+                }
+            })
+        },
+        
+        // 超级页面安全验证方法
+        validateSuperPage() {
+            const forbidden = ['eval', 'Function', 'exec', 'system', 'shell_exec']
+            
+            // 检查前端代码
+            if(this.form.q_template) {
+                for(let word of forbidden) {
+                    if(this.form.q_template.includes(word)) {
+                        this.$message.error(`前端代码中检测到危险代码: ${word}`)
+                        return false
+                    }
+                }
+            }
+            
+            // 检查后端代码
+            if(this.form.h_php) {
+                for(let word of forbidden) {
+                    if(this.form.h_php.includes(word)) {
+                        this.$message.error(`后端代码中检测到危险代码: ${word}`)
+                        return false
+                    }
+                }
+            }
+            
+            return true
+        },
+        // 超级页面安全验证方法结束
+        
+        
+        
+        
+        
+        open(){
+            this.form = this.info
+            this.setDefaultVal('list_filter')
+            this.setDefaultVal('tab_config')
+            this.setDefaultVal('fields')
+            this.setDefaultVal('with_join')
+            this.codeTabActive = 'frontend'; // 设置默认激活的选项卡
+            if(this.form.other_config == null || this.form.other_config == ''){
+                this.form.other_config = {}
+            }else{
+                this.form.other_config = JSON.parse(this.form.other_config)
+            }
+            if(this.form.other_config.befor_hook !== ''){
+                this.beforHookChecked = true
+            }
+            if(this.form.other_config.after_hook !== ''){
+                this.afterHookChecked = true
+            }
+            
+            //超级页面开始
+            if(!this.form.q_template) {
+                this.form.q_template = '<div class="super-page">\n  <h1>自定义页面</h1>\n</div>'
+            }
+            if(!this.form.h_php) {
+                this.form.h_php = 'public function handle($request) {\n    // 处理请求\n    return [];\n}'
+            }
+            //超级页面结束
+            
+            
+            
+            this.initAction()
+            axios.post(base_url+'/Sys.Base/getPostField',{menu_id:this.menu_id}).then(res => {
+                this.post_fields = res.data.data
+                this.jump_fields = res.data.jump_field
+                this.tab_fields = res.data.tab_fields
+                this.model_fields = res.data.model_fields
+                this.tableList = res.data.tableList
+                this.dbtype = res.data.dbtype
+            })
+        },
+        selectType(val){
+            if(val !== 1){
+                this.form.list_filter = []
+                this.form.with_join = []
+            }
+            if(val !== 3 || val !== 4){
+                this.form.tab_config = []
+            }
+            if(val !== 7){
+                this.form.dialog_size = ''
+            }
+            
+            
+            if(val == 55 && !this.form.super_page) {
+                this.$set(this.form, 'super_page', {
+                    frontend: { q_template: '', script: '', style: '' },
+                    backend: { language: 'php', code: '' }
+                })
+            }
+            
+            
+            
+            
+            this.action.forEach(item=>{
+                if(this.form.type == item.type){
+                    this.dialog = item.dialog
+                    this.button = item.button
+                    this.form.icon = item.icon
+                    this.form.button_color = item.button_color
+                    this.form.name = item.name
+                    this.form.action_name = item.action_name
+                }
+            })
+        },
+        getTableFields(i){
+            axios.post(base_url+'/Sys.Base/getTableFields',{controller_name:this.form.with_join[i].relative_table}).then(res => {
+                this.table_fields = res.data.filedList
+            })
+        },
+        closeForm(){
+            this.$emit('update:show', false)
+            this.loading = false
+            this.$nextTick(()=>{
+                this.$refs['form'].resetFields()
+                this.form.dialog_size = ''
+                this.form.icon = ''
+                this.form.sql = ''
+                this.beforHookChecked = false
+                this.afterHookChecked = false
+            })
+        },
+        initAction(){
+            this.action.forEach(item=>{
+                if(this.form.type == item.type){
+                    this.dialog = item.dialog
+                    this.button = item.button
+                }
+            })
+        },
+        setDefaultVal(key){
+            if(this.form[key] == null || this.form[key] == ''){
+                this.form[key] = []
+            }
+        },
+        addItem(key){
+            this.form[key].push({})
+        },
+        deleteItem(key,index){
+            this.form[key].splice(index,1)
+        },
+        clearItem(key){
+            this.form[key] = []
+        },
+        setTreeLoadType(val){
+            if(val){
+                this.form.other_config.tree_load_type = 1
+                this.form.other_config.tree_show = 1
+            }else{
+                this.form.other_config.tree_load_type = ""
+            }
+        },
+        selectTreeLoadType(){
+            this.form.list_filter = []
+        },
+        querySearch(queryString, cb) {
+            var restaurants = this.restaurants;
+            cb(restaurants);
+        },
+        setBeforHook(val){
+            if(val){
+                axios.post(base_url+'/Sys.Base/getHookPath',{'menu_id':this.form.menu_id,'actionName':this.form.action_name,'type':1}).then(res => {
+                    this.form.other_config.befor_hook = res.data.data
+                })
+            }else{
+                this.form.other_config.befor_hook = ''
+            }
+        },
+        setAfterHook(val){
+            if(val){
+                axios.post(base_url+'/Sys.Base/getHookPath',{'menu_id':this.form.menu_id,'actionName':this.form.action_name,'type':2}).then(res => {
+                    this.form.other_config.after_hook = res.data.data
+                })
+            }else{
+                this.form.other_config.after_hook = ''
+            }
+        },
+    },
 });
 
 
 //api方法添加
 Vue.component('ApiAdd', {
-	template: `
+    template: `
 	<el-dialog title="创建操作方法" width="700px" class="icon-dialog" :visible.sync="show" @open="open" :before-close="closeForm">
         <el-form :size="size" ref="form" :model="form" :rules="rules" label-width="100px">
             <el-tabs v-model="activeName">
-                <el-tab-pane style="padding-top:10px"  label="基本信息" name="基本信息">    
+                <el-tab-pane style="padding-top:10px"  label="基本信息" name="基本信息">
                     <el-row>
                         <el-form-item label="方法类型" prop="type">
                             <el-select style="width:100%" v-model="form.type" @change="selectType" filterable placeholder="请选择">
@@ -1710,10 +1711,10 @@ Vue.component('ApiAdd', {
                                     <el-form-item style="margin-bottom:3px !important">
                                         <el-autocomplete :fetch-suggestions="querySearch" style="position:relative; left:20px" v-model="item.serachVal" placeholder="值"/>
                                     </el-form-item>
-                                </el-col> 
+                                </el-col>
                                 <el-col :span="4">
                                     <el-button type="danger" size="mini" style="position:relative;left:35px"  icon="el-icon-close" @click="deleteItem('list_filter',i)"></el-button>
-                                </el-col>  
+                                </el-col>
                             </el-row>
                             <el-button type="success" icon="el-icon-plus" style="padding:5px 7px" :size="size" @click="addItem('list_filter')">追加</el-button>
                             <el-button v-if="form.list_filter.length > 0" type="warning" icon="el-icon-delete" style="padding:5px 7px" :size="size" @click="clearItem('list_filter')">清空</el-button>
@@ -1765,7 +1766,7 @@ Vue.component('ApiAdd', {
                             </el-col>
                             <el-col :span="1">
                                 <el-button type="danger" size="mini" style="position:relative;left:5px"  icon="el-icon-close" @click="deleteItem('with_join',i)"></el-button>
-                            </el-col> 
+                            </el-col>
                         </el-row>
                         <el-button type="success" icon="el-icon-plus" style="padding:5px 7px" :size="size" @click="addItem('with_join')">追加</el-button>
                         <el-button v-if="form.with_join.length > 0" type="warning" icon="el-icon-delete" style="padding:5px 7px" :size="size" @click="clearItem('with_join')">清空</el-button>
@@ -1788,193 +1789,193 @@ Vue.component('ApiAdd', {
         </div>
     </el-dialog>
 	`
-	,
-	props: {
-		show: {
-			type: Boolean,
-			default: false
-		},
-		size: {
-			type: String,
-		},
-		action: {
-			type: Array,
-		},
-		menuid: {
-			type: String,
-		},
-		info: {
-			type: Object,
-		}
-	},
-	computed: {
+    ,
+    props: {
+        show: {
+            type: Boolean,
+            default: false
+        },
+        size: {
+            type: String,
+        },
+        action: {
+            type: Array,
+        },
+        menuid: {
+            type: String,
+        },
+        info: {
+            type: Object,
+        }
+    },
+    computed: {
         actionList(){
             return this.action.filter(item=>item.show_api)
         }
     },
-	data() {
-		return {
-			form: {
-				server_create_status:1,
-				vue_create_status:1,
-				button_color:'primary',
-				select_type:1,
-				fields:[],
-				list_filter:[],
-				tab_config:[],
-				with_join:[],
-				type:'',
-				icon:'',
-				name:'',
-				action_name:'',
-				dialog_size:'600px',
-				pagesize:'20',
-				sql:'',
-				menu_id:this.menuid,
-				other_config:{
-					login_type:'',
-					hook:[],
-					after_hook:'',
-					befor_hook:'',
-					detail_search_field:[],
-				}
-			},
-			iconDialogStatus:false,
-			post_fields:[],
-			activeName: 'first',
-			tableList:[],
-			dialog:true,
-			button:true,
-			loading:false,
-			ischeck_fields:[],
-			activeName:'基本信息',
-			table_fields:[],
-			search_field:[],
-			tab_fields:[],
-			model_fields:[],
-			sms_list:[],
-			dbtype:'',
-			restaurants: [{'value':'null'},{'value':'not null'}],
-			beforHookChecked:false,
-			afterHookChecked:false,
-			rules: {
-				name: [{ required: true, message: '方法中文名不能为空', trigger: 'blur' }],
-				action_name: [{ required: true, message: '方法英文名不能为空', trigger: 'blur' },{pattern: /^[a-zA-Z0-9_]+$/, message: '仅允许输入字母、数字和下划线', trigger: 'blur'}],
-				type: [{ required: true, message: '方法类型不能为空', trigger: 'blur' }],
-			},
-		}
-	},
-	methods: {
-		submit(){
-			this.$refs['form'].validate(valid => {
-				if (valid) {
-					this.loading = true
-					axios.post(base_url+'/Sys.Base/createAction',this.form).then(res => {
-						if(res.data.status == 200){
-							this.$message({message: '操作成功', type: 'success'})
-							this.$emit('refesh_list')
-							this.closeForm()
-						}else{
-							this.loading = false
-							this.$message.error(res.data.msg)
-						}
-					}).catch(()=>{
-						this.loading = false
-					})
-				}
-			})
-		},
-		open(){
-			axios.post(base_url+'/Sys.Base/getPostField',{menu_id:this.menuid}).then(res => {
-				this.post_fields = res.data.data
-				this.tab_fields = res.data.data
-				this.model_fields = res.data.model_fields
-				this.tableList = res.data.tableList
-				this.sms_list = res.data.sms_list
-				this.dbtype  = res.data.dbtype
-				this.search_field = res.data.search_field
-			})
-		},
-		selectType(val){
-			if(val !== 1){
-				this.form.list_filter = []
-				this.form.with_join = []
-			}
-			if(val !== 3 || val !== 4){
-				this.form.tab_config = []
-			}
-			if(val !== 7){
-				this.form.dialog_size = ''
-			}
-			this.action.forEach(item=>{
-				if(this.form.type == item.type){
-					this.dialog = item.dialog
-					this.button = item.button
-					this.form.icon = item.icon
-					this.form.button_color = item.button_color
-					this.form.name = item.name
-					this.form.action_name = item.action_name
-				}
-			})
-		},
-		getTableFields(i){
-			axios.post(base_url+'/Sys.Base/getTableFields',{controller_name:this.form.with_join[i].relative_table}).then(res => {
-				this.table_fields = res.data.filedList
-			})
-		},
-		closeForm(){
-			this.$emit('update:show', false)
-			this.loading = false
-			this.$nextTick(()=>{
-				this.$refs['form'].resetFields()
-				this.form.dialog_size = ''
-				this.form.icon = ''
-				this.form.sql = ''
-				this.form.other_config.after_hook = ''
-				this.form.other_config.befor_hook = ''
-			})
-		},
-		addItem(key){
-			this.form[key].push({})
-		},
-		deleteItem(key,index){
-		   this.form[key].splice(index,1)
-		},
-		clearItem(key){
-			this.form[key] = []
-		},
-		querySearch(queryString, cb) {
-			var restaurants = this.restaurants;
-			cb(restaurants);
-		},
-		setBeforHook(val){
-			if(val){
-				axios.post(base_url+'/Sys.Base/getHookPath',{'menu_id':this.form.menu_id,'actionName':this.form.action_name,'type':1}).then(res => {
-					this.form.other_config.befor_hook = res.data.data
-				})
-			}else{
-				this.form.other_config.befor_hook = ''
-			}
-		},
-		setAfterHook(val){
-			if(val){
-				axios.post(base_url+'/Sys.Base/getHookPath',{'menu_id':this.form.menu_id,'actionName':this.form.action_name,'type':2}).then(res => {
-					this.form.other_config.after_hook = res.data.data
-				})
-			}else{
-				this.form.other_config.after_hook = ''
-			}
-		},
-	},
+    data() {
+        return {
+            form: {
+                server_create_status:1,
+                vue_create_status:1,
+                button_color:'primary',
+                select_type:1,
+                fields:[],
+                list_filter:[],
+                tab_config:[],
+                with_join:[],
+                type:'',
+                icon:'',
+                name:'',
+                action_name:'',
+                dialog_size:'600px',
+                pagesize:'20',
+                sql:'',
+                menu_id:this.menuid,
+                other_config:{
+                    login_type:'',
+                    hook:[],
+                    after_hook:'',
+                    befor_hook:'',
+                    detail_search_field:[],
+                }
+            },
+            iconDialogStatus:false,
+            post_fields:[],
+            activeName: 'first',
+            tableList:[],
+            dialog:true,
+            button:true,
+            loading:false,
+            ischeck_fields:[],
+            activeName:'基本信息',
+            table_fields:[],
+            search_field:[],
+            tab_fields:[],
+            model_fields:[],
+            sms_list:[],
+            dbtype:'',
+            restaurants: [{'value':'null'},{'value':'not null'}],
+            beforHookChecked:false,
+            afterHookChecked:false,
+            rules: {
+                name: [{ required: true, message: '方法中文名不能为空', trigger: 'blur' }],
+                action_name: [{ required: true, message: '方法英文名不能为空', trigger: 'blur' },{pattern: /^[a-zA-Z0-9_]+$/, message: '仅允许输入字母、数字和下划线', trigger: 'blur'}],
+                type: [{ required: true, message: '方法类型不能为空', trigger: 'blur' }],
+            },
+        }
+    },
+    methods: {
+        submit(){
+            this.$refs['form'].validate(valid => {
+                if (valid) {
+                    this.loading = true
+                    axios.post(base_url+'/Sys.Base/createAction',this.form).then(res => {
+                        if(res.data.status == 200){
+                            this.$message({message: '操作成功', type: 'success'})
+                            this.$emit('refesh_list')
+                            this.closeForm()
+                        }else{
+                            this.loading = false
+                            this.$message.error(res.data.msg)
+                        }
+                    }).catch(()=>{
+                        this.loading = false
+                    })
+                }
+            })
+        },
+        open(){
+            axios.post(base_url+'/Sys.Base/getPostField',{menu_id:this.menuid}).then(res => {
+                this.post_fields = res.data.data
+                this.tab_fields = res.data.data
+                this.model_fields = res.data.model_fields
+                this.tableList = res.data.tableList
+                this.sms_list = res.data.sms_list
+                this.dbtype  = res.data.dbtype
+                this.search_field = res.data.search_field
+            })
+        },
+        selectType(val){
+            if(val !== 1){
+                this.form.list_filter = []
+                this.form.with_join = []
+            }
+            if(val !== 3 || val !== 4){
+                this.form.tab_config = []
+            }
+            if(val !== 7){
+                this.form.dialog_size = ''
+            }
+            this.action.forEach(item=>{
+                if(this.form.type == item.type){
+                    this.dialog = item.dialog
+                    this.button = item.button
+                    this.form.icon = item.icon
+                    this.form.button_color = item.button_color
+                    this.form.name = item.name
+                    this.form.action_name = item.action_name
+                }
+            })
+        },
+        getTableFields(i){
+            axios.post(base_url+'/Sys.Base/getTableFields',{controller_name:this.form.with_join[i].relative_table}).then(res => {
+                this.table_fields = res.data.filedList
+            })
+        },
+        closeForm(){
+            this.$emit('update:show', false)
+            this.loading = false
+            this.$nextTick(()=>{
+                this.$refs['form'].resetFields()
+                this.form.dialog_size = ''
+                this.form.icon = ''
+                this.form.sql = ''
+                this.form.other_config.after_hook = ''
+                this.form.other_config.befor_hook = ''
+            })
+        },
+        addItem(key){
+            this.form[key].push({})
+        },
+        deleteItem(key,index){
+            this.form[key].splice(index,1)
+        },
+        clearItem(key){
+            this.form[key] = []
+        },
+        querySearch(queryString, cb) {
+            var restaurants = this.restaurants;
+            cb(restaurants);
+        },
+        setBeforHook(val){
+            if(val){
+                axios.post(base_url+'/Sys.Base/getHookPath',{'menu_id':this.form.menu_id,'actionName':this.form.action_name,'type':1}).then(res => {
+                    this.form.other_config.befor_hook = res.data.data
+                })
+            }else{
+                this.form.other_config.befor_hook = ''
+            }
+        },
+        setAfterHook(val){
+            if(val){
+                axios.post(base_url+'/Sys.Base/getHookPath',{'menu_id':this.form.menu_id,'actionName':this.form.action_name,'type':2}).then(res => {
+                    this.form.other_config.after_hook = res.data.data
+                })
+            }else{
+                this.form.other_config.after_hook = ''
+            }
+        },
+    },
 });
 
 //api方法修改
 Vue.component('ApiUpdate', {
-	template: `
+    template: `
 	<el-dialog title="更新操作方法" width="700px" class="icon-dialog" :visible.sync="show" @open="open" :before-close="closeForm" append-to-body>
         <el-form :size="size" ref="form" :model="form" :rules="rules" label-width="100px">
              <el-tabs v-model="activeName">
-                <el-tab-pane style="padding-top:10px"  label="基本信息" name="基本信息">    
+                <el-tab-pane style="padding-top:10px"  label="基本信息" name="基本信息">
                     <el-row>
                         <el-form-item label="方法类型" prop="type">
                             <el-select style="width:100%" v-model="form.type" @change="selectType" filterable placeholder="请选择">
@@ -2094,10 +2095,10 @@ Vue.component('ApiUpdate', {
                                     <el-form-item style="margin-bottom:3px !important">
                                         <el-autocomplete :fetch-suggestions="querySearch" style="position:relative; left:20px" v-model="item.serachVal" placeholder="值"/>
                                     </el-form-item>
-                                </el-col> 
+                                </el-col>
                                 <el-col :span="4">
                                     <el-button type="danger" size="mini" style="position:relative;left:35px"  icon="el-icon-close" @click="deleteItem('list_filter',i)"></el-button>
-                                </el-col>  
+                                </el-col>
                             </el-row>
                             <el-button type="success" icon="el-icon-plus" style="padding:5px 7px" :size="size" @click="addItem('list_filter')">追加</el-button>
                             <el-button v-if="form.list_filter && form.list_filter.length > 0" type="warning" icon="el-icon-delete" style="padding:5px 7px" :size="size" @click="clearItem('list_filter')">清空</el-button>
@@ -2149,7 +2150,7 @@ Vue.component('ApiUpdate', {
                             </el-col>
                             <el-col :span="1">
                                 <el-button type="danger" size="mini" style="position:relative;left:5px"  icon="el-icon-close" @click="deleteItem('with_join',i)"></el-button>
-                            </el-col> 
+                            </el-col>
                         </el-row>
                         <el-button type="success" icon="el-icon-plus" style="padding:5px 7px" :size="size" @click="addItem('with_join')">追加</el-button>
                         <el-button v-if="form.with_join && form.with_join.length > 0" type="warning" icon="el-icon-delete" style="padding:5px 7px" :size="size" @click="clearItem('with_join')">清空</el-button>
@@ -2172,211 +2173,211 @@ Vue.component('ApiUpdate', {
         <Icon :iconshow.sync="iconDialogStatus" :icon.sync="form.icon" size="small"></Icon>
     </el-dialog>
 	`
-	,
-	props: {
-		show: {
-			type: Boolean,
-			default: false
-		},
-		size: {
-			type: String,
-		},
-		menu_id: {
-			type: String,
-		},
-		action: {
-			type: Array,
-		},
-		info: {
-			type: Object,
-		}
-	},
-	computed: {
+    ,
+    props: {
+        show: {
+            type: Boolean,
+            default: false
+        },
+        size: {
+            type: String,
+        },
+        menu_id: {
+            type: String,
+        },
+        action: {
+            type: Array,
+        },
+        info: {
+            type: Object,
+        }
+    },
+    computed: {
         actionList(){
             return this.action.filter(item=>item.show_api)
         }
     },
-	data() {
-		return {
-			form: {
-				server_create_status:1,
-				vue_create_status:1,
-				button_color:'primary',
-				select_type:1,
-				fields:[],
-				list_filter:[],
-				tab_config:[],
-				with_join:[],
-				type:'',
-				icon:'',
-				name:'',
-				action_name:'',
-				dialog_size:'600px',
-				pagesize:'20',
-				sql:'',
-				other_config:{
-					login_type:'',
-					hook:[],
-					after_hook:'',
-					befor_hook:'',
-				}
-			},
-			iconDialogStatus:false,
-			post_fields:[],
-			activeName: 'first',
-			tableList:[],
-			dialog:true,
-			button:true,
-			loading:false,
-			ischeck_fields:[],
-			activeName:'基本信息',
-			table_fields:[],
-			tab_fields:[],
-			search_field:[],
-			model_fields:[],
-			sms_list:[],
-			dbtype:'',
-			beforHookChecked:false,
-			afterHookChecked:false,
-			restaurants: [{'value':'null'},{'value':'not null'}],
-			rules: {
-				name: [{ required: true, message: '方法中文名不能为空', trigger: 'blur' }],
-				action_name: [{ required: true, message: '方法英文名不能为空', trigger: 'blur' },{pattern: /^[a-zA-Z0-9_]+$/, message: '仅允许输入字母、数字和下划线', trigger: 'blur'}],
-				type: [{ required: true, message: '方法类型不能为空', trigger: 'blur' }],
-			},
-		}
-	},
-	methods: {
-		submit(){
-			this.$refs['form'].validate(valid => {
-				if (valid) {
-					this.loading = true
-					axios.post(base_url+'/Sys.Base/updateAction',this.form).then(res => {
-						if(res.data.status == 200){
-							this.$message({message: '操作成功', type: 'success'})
-							this.$emit('refesh_list')
-							this.closeForm()
-						}else{
-							this.loading = false
-							this.$message.error(res.data.msg)
-						}
-					}).catch(()=>{
-						this.loading = false
-					})
-				}
-			})
-		},
-		open(){
-			this.form = this.info
-			this.setDefaultVal('list_filter')
-			this.setDefaultVal('tab_config')
-			this.setDefaultVal('fields')
-			this.setDefaultVal('with_join')
-			this.initAction()
-			if(this.form.other_config == '' || this.form.other_config == null){
+    data() {
+        return {
+            form: {
+                server_create_status:1,
+                vue_create_status:1,
+                button_color:'primary',
+                select_type:1,
+                fields:[],
+                list_filter:[],
+                tab_config:[],
+                with_join:[],
+                type:'',
+                icon:'',
+                name:'',
+                action_name:'',
+                dialog_size:'600px',
+                pagesize:'20',
+                sql:'',
+                other_config:{
+                    login_type:'',
+                    hook:[],
+                    after_hook:'',
+                    befor_hook:'',
+                }
+            },
+            iconDialogStatus:false,
+            post_fields:[],
+            activeName: 'first',
+            tableList:[],
+            dialog:true,
+            button:true,
+            loading:false,
+            ischeck_fields:[],
+            activeName:'基本信息',
+            table_fields:[],
+            tab_fields:[],
+            search_field:[],
+            model_fields:[],
+            sms_list:[],
+            dbtype:'',
+            beforHookChecked:false,
+            afterHookChecked:false,
+            restaurants: [{'value':'null'},{'value':'not null'}],
+            rules: {
+                name: [{ required: true, message: '方法中文名不能为空', trigger: 'blur' }],
+                action_name: [{ required: true, message: '方法英文名不能为空', trigger: 'blur' },{pattern: /^[a-zA-Z0-9_]+$/, message: '仅允许输入字母、数字和下划线', trigger: 'blur'}],
+                type: [{ required: true, message: '方法类型不能为空', trigger: 'blur' }],
+            },
+        }
+    },
+    methods: {
+        submit(){
+            this.$refs['form'].validate(valid => {
+                if (valid) {
+                    this.loading = true
+                    axios.post(base_url+'/Sys.Base/updateAction',this.form).then(res => {
+                        if(res.data.status == 200){
+                            this.$message({message: '操作成功', type: 'success'})
+                            this.$emit('refesh_list')
+                            this.closeForm()
+                        }else{
+                            this.loading = false
+                            this.$message.error(res.data.msg)
+                        }
+                    }).catch(()=>{
+                        this.loading = false
+                    })
+                }
+            })
+        },
+        open(){
+            this.form = this.info
+            this.setDefaultVal('list_filter')
+            this.setDefaultVal('tab_config')
+            this.setDefaultVal('fields')
+            this.setDefaultVal('with_join')
+            this.initAction()
+            if(this.form.other_config == '' || this.form.other_config == null){
                 this.form.other_config = {}
             }else{
                 this.form.other_config = JSON.parse(this.info.other_config)
             }
-			if(this.form.other_config.befor_hook !== ''){
-				this.beforHookChecked = true
-			}
-			if(this.form.other_config.after_hook !== ''){
-				this.afterHookChecked = true
-			}
+            if(this.form.other_config.befor_hook !== ''){
+                this.beforHookChecked = true
+            }
+            if(this.form.other_config.after_hook !== ''){
+                this.afterHookChecked = true
+            }
             this.initAction()
-			axios.post(base_url+'/Sys.Base/getPostField',{menu_id:this.menu_id}).then(res => {
-				this.post_fields = res.data.data
-				this.tab_fields = res.data.data
-				this.model_fields = res.data.model_fields
-				this.tableList = res.data.tableList
-				this.sms_list = res.data.sms_list
-				this.dbtype = res.data.dbtype
-				this.search_field = res.data.search_field
-			})
-		},
-		selectType(val){
-			if(val !== 1){
-				this.form.list_filter = []
-				this.form.with_join = []
-			}
-			if(val !== 3 || val !== 4){
-				this.form.tab_config = []
-			}
-			if(val !== 7){
-				this.form.dialog_size = ''
-			}
-			this.action.forEach(item=>{
-				if(this.form.type == item.type){
-					this.dialog = item.dialog
-					this.button = item.button
-					this.form.icon = item.icon
-					this.form.button_color = item.button_color
-					this.form.name = item.name
-					this.form.action_name = item.action_name
-				}
-			})
-		},
-		getTableFields(i){
-			axios.post(base_url+'/Sys.Base/getTableFields',{controller_name:this.form.with_join[i].relative_table}).then(res => {
-				this.table_fields = res.data.filedList
-			})
-		},
-		closeForm(){
-			this.$emit('update:show', false)
-			this.loading = false
-			this.$nextTick(()=>{
-				this.$refs['form'].resetFields()
-				this.form.dialog_size = ''
-				this.form.icon = ''
-				this.form.sql = ''
-				this.beforHookChecked = false
-				this.afterHookChecked = false
-			})
-		},
-		initAction(){
-			this.action.forEach(item=>{
-				if(this.form.type == item.type){
-					this.dialog = item.dialog
-					this.button = item.button
-				}
-			})
-		},
-		setDefaultVal(key){
-			if(this.form[key] == null || this.form[key] == ''){
-				this.form[key] = []
-			}
-		},
-		addItem(key){
-			this.form[key].push({})
-		},
-		deleteItem(key,index){
-		   this.form[key].splice(index,1)
-		},
-		clearItem(key){
-			this.form[key] = []
-		},
-		querySearch(queryString, cb) {
-			var restaurants = this.restaurants;
-			cb(restaurants);
-		},
-		setBeforHook(val){
-			if(val){
-				axios.post(base_url+'/Sys.Base/getHookPath',{'menu_id':this.form.menu_id,'actionName':this.form.action_name,'type':1}).then(res => {
-					this.form.other_config.befor_hook = res.data.data
-				})
-			}else{
-				this.form.other_config.befor_hook = ''
-			}
-		},
-		setAfterHook(val){
-			if(val){
-				axios.post(base_url+'/Sys.Base/getHookPath',{'menu_id':this.form.menu_id,'actionName':this.form.action_name,'type':2}).then(res => {
-					this.form.other_config.after_hook = res.data.data
-				})
-			}else{
-				this.form.other_config.after_hook = ''
-			}
-		},
-	},
+            axios.post(base_url+'/Sys.Base/getPostField',{menu_id:this.menu_id}).then(res => {
+                this.post_fields = res.data.data
+                this.tab_fields = res.data.data
+                this.model_fields = res.data.model_fields
+                this.tableList = res.data.tableList
+                this.sms_list = res.data.sms_list
+                this.dbtype = res.data.dbtype
+                this.search_field = res.data.search_field
+            })
+        },
+        selectType(val){
+            if(val !== 1){
+                this.form.list_filter = []
+                this.form.with_join = []
+            }
+            if(val !== 3 || val !== 4){
+                this.form.tab_config = []
+            }
+            if(val !== 7){
+                this.form.dialog_size = ''
+            }
+            this.action.forEach(item=>{
+                if(this.form.type == item.type){
+                    this.dialog = item.dialog
+                    this.button = item.button
+                    this.form.icon = item.icon
+                    this.form.button_color = item.button_color
+                    this.form.name = item.name
+                    this.form.action_name = item.action_name
+                }
+            })
+        },
+        getTableFields(i){
+            axios.post(base_url+'/Sys.Base/getTableFields',{controller_name:this.form.with_join[i].relative_table}).then(res => {
+                this.table_fields = res.data.filedList
+            })
+        },
+        closeForm(){
+            this.$emit('update:show', false)
+            this.loading = false
+            this.$nextTick(()=>{
+                this.$refs['form'].resetFields()
+                this.form.dialog_size = ''
+                this.form.icon = ''
+                this.form.sql = ''
+                this.beforHookChecked = false
+                this.afterHookChecked = false
+            })
+        },
+        initAction(){
+            this.action.forEach(item=>{
+                if(this.form.type == item.type){
+                    this.dialog = item.dialog
+                    this.button = item.button
+                }
+            })
+        },
+        setDefaultVal(key){
+            if(this.form[key] == null || this.form[key] == ''){
+                this.form[key] = []
+            }
+        },
+        addItem(key){
+            this.form[key].push({})
+        },
+        deleteItem(key,index){
+            this.form[key].splice(index,1)
+        },
+        clearItem(key){
+            this.form[key] = []
+        },
+        querySearch(queryString, cb) {
+            var restaurants = this.restaurants;
+            cb(restaurants);
+        },
+        setBeforHook(val){
+            if(val){
+                axios.post(base_url+'/Sys.Base/getHookPath',{'menu_id':this.form.menu_id,'actionName':this.form.action_name,'type':1}).then(res => {
+                    this.form.other_config.befor_hook = res.data.data
+                })
+            }else{
+                this.form.other_config.befor_hook = ''
+            }
+        },
+        setAfterHook(val){
+            if(val){
+                axios.post(base_url+'/Sys.Base/getHookPath',{'menu_id':this.form.menu_id,'actionName':this.form.action_name,'type':2}).then(res => {
+                    this.form.other_config.after_hook = res.data.data
+                })
+            }else{
+                this.form.other_config.after_hook = ''
+            }
+        },
+    },
 });
