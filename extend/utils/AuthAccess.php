@@ -13,20 +13,22 @@ class AuthAccess
 		$list = Db::name('menu')->field($field)->where(['app_id'=>$app_id,'pid'=>$pid])->order('sortid asc')->select()->toArray();
 		if($list){
 			foreach($list as $key=>$val){
-				$menus[$key]['sortid'] = $val['sortid'];
-				$menus[$key]['access'] = $val['url'] ? $val['url'] : $appname.'/'.$val['controller_name'];
-				$menus[$key]['title'] = $val['url'] ? $val['title'].'('.$val['url'].')' : $val['title'].' '.'(/'.$appname.'/'.$val['controller_name'].')';
-				$sublist = Db::name('menu')->field($field)->where(['app_id'=>$app_id,'pid'=>$val['menu_id']])->order('sortid asc')->select()->toArray();
-				if($sublist){
-					if($this->getFuns($val,$appname)){
-						$menus[$key]['children'] = array_merge($this->getFuns($val,$appname),$this->getNodeMenus($app_id,$val['menu_id'],$appname));
-					}else{
-						$menus[$key]['children'] = $this->getNodeMenus($app_id,$val['menu_id'],$appname);
-					}
-				}else{
-					$funs = $this->getFuns($val,$appname);
-					$funs && $menus[$key]['children'] = $funs;
-				}
+			    if (app('http')->getName() =='admin' || in_array($val['url'] ? $val['url'] : $appname.'/'.$val['controller_name'],session($appname.'.access'))) {
+    				$menus[$key]['sortid'] = $val['sortid'];
+    				$menus[$key]['access'] = $val['url'] ? $val['url'] : $appname.'/'.$val['controller_name'];
+    				$menus[$key]['title'] = $val['url'] ? $val['title'].'('.$val['url'].')' : $val['title'].' '.'(/'.$appname.'/'.$val['controller_name'].')';
+    				$sublist = Db::name('menu')->field($field)->where(['app_id'=>$app_id,'pid'=>$val['menu_id']])->order('sortid asc')->select()->toArray();
+    				if($sublist){
+    					if($this->getFuns($val,$appname)){
+    						$menus[$key]['children'] = array_merge($this->getFuns($val,$appname),$this->getNodeMenus($app_id,$val['menu_id'],$appname));
+    					}else{
+    						$menus[$key]['children'] = $this->getNodeMenus($app_id,$val['menu_id'],$appname);
+    					}
+    				}else{
+    					$funs = $this->getFuns($val,$appname);
+    					$funs && $menus[$key]['children'] = $funs;
+    				}
+			    }
 			}
 			return array_values($menus);
 		}

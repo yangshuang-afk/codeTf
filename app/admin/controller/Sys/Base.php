@@ -45,7 +45,7 @@ class Base extends Admin
         try {
             $res = Application::create($data);
             if ($data['app_type'] == 1) {
-                Menu::create(['app_id' => $res->app_id, 'title' => '控制台', 'sortid' => 1, 'create_code' => 0, 'icon' => 'el-icon-platform-eleme', 'url' => '/' . $data['app_dir'] . '/Index/main']);
+                Menu::create(['app_id' => $res->app_id, 'title' => '控制台', 'sortid' => 1, 'create_code' => 0, 'icon' => 'el-icon-platform-eleme', 'url' => '/' . $data['app_dir'] . '/Index/main.html']);
             }
         } catch (\Exception $e) {
             abort(501, $e->getMessage());
@@ -149,6 +149,22 @@ class Base extends Admin
         $info['version'] = '2.0';
         $info["access_field"] = Db::name("field")->where("menu_id", $menu_id)->where("type", 38)->value("field");
         
+        $role_access = Db::name("field")->where("menu_id", $menu_id)->where("field", 'access')->find();
+
+        if ($role_access) {
+            $roleTableName = '';
+            if (preg_match('/from\s+([^\s,)(;]+)/i', $role_access['sql'], $matches)) {
+                $roleTableName = $matches[1];
+            }
+            $roleTableName = str_replace(config('database.connections.mysql.prefix'), '', $roleTableName);
+            $role_menu_id = Db::name("menu")->where("table_name", $roleTableName)->value("menu_id");
+            if ($menu_id != $role_menu_id) {
+                $info["access_field"] = Db::name("field")->where("menu_id", $role_menu_id)->where("type", 38)->value("field");
+                $info["access_pk"] = Db::name("menu")->where("menu_id", $role_menu_id)->value("pk");
+                $info["access_table"] = $roleTableName;
+            }
+        }
+
         $info['sign'] = md5(md5(json_encode($info, JSON_UNESCAPED_UNICODE) . $secrect['secrect']));
         
         $info['domain'] = $_SERVER['HTTP_HOST'];
