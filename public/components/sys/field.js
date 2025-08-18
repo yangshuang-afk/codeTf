@@ -759,12 +759,13 @@ Vue.component('AdminAdd', {
 								<el-input v-model="form.show_condition" clearable placeholder="输入框显示条件 如 form.status == 1"/>
 							</el-form-item>
 						</el-row>
+					
+					 <!-- 新增的字段提醒设置 -->
 						<el-row>
-							<!-- 新增的字段提醒设置 -->
 							<el-form-item label="字段提醒" prop="tx_tiaojian">
-								<el-col :span="6">
+								<el-col :span="5">
 									<el-form-item prop="tx_tiaojian">
-										<el-select v-model="form.other_config.tx_tiaojian" placeholder="选择条件类型" style="width: 100%;">
+										<el-select v-model="form.tx_tiaojian" placeholder="选择条件类型" style="width: 100%;">
 											<el-option label="大于" value="1"></el-option>
 											<el-option label="小于" value="2"></el-option>
 											<el-option label="等于" value="3"></el-option>
@@ -778,13 +779,47 @@ Vue.component('AdminAdd', {
 										</el-select>
 									</el-form-item>
 								</el-col>
-								<el-col :span="18">
+								<el-col :span="14">
 									<el-form-item prop="tx_zhi">
-										<el-input v-model="form.other_config.tx_zhi" clearable placeholder="输入条件值，如 >1 或 session(admin.yuangong_id)"/>
+										<el-input v-model="form.tx_zhi" clearable placeholder="输入条件值，如 >1 或 session(admin.yuangong_id)"/>
+									</el-form-item>
+								</el-col>
+								<el-col :span="4">
+                                    <el-form-item prop="tx_color" >
+                                        <el-input  v-model="form.tx_color" autoComplete="off" clearable placeholder="提醒颜色"/>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="1">
+                                    <el-form-item >
+                                        <el-color-picker  size="small" v-model="form.tx_color"></el-color-picker>
+                                    </el-form-item>
+                                </el-col>
+							</el-form-item>
+						</el-row>
+						
+                        <!-- 新增的字段完善提醒设置 -->
+						<el-row>
+							<el-form-item label="完善提醒">
+								<el-col :span="6">
+									<el-form-item prop="improve_tiaojian">
+										<el-select v-model="form.improve_tiaojian" placeholder="选择条件类型" style="width: 100%;">
+                                             <el-option
+                                                v-for="opt in improveOptions"
+                                                :key="opt.value"
+                                                :label="opt.label"
+                                                :value="opt.value">
+                                            </el-option>
+										</el-select>
+									</el-form-item>
+								</el-col>
+								<el-col :span="18">
+									<el-form-item prop="improve_zhi">
+										<el-input v-model="form.improve_zhi" clearable placeholder="输入条件值，如 >1 或 session(admin.yuangong_id)"/>
 									</el-form-item>
 								</el-col>
 							</el-form-item>
 						</el-row>
+
 						<el-row>
 							<el-form-item label="其他属性" prop="shuxing">
 								<el-checkbox-group v-model="form.other_config.shuxing">
@@ -797,6 +832,20 @@ Vue.component('AdminAdd', {
 								</el-checkbox-group>
 							</el-form-item>
 						</el-row>
+						
+						<el-row>
+							<el-form-item label="列表方法" prop="list_action">
+							    <el-select v-model="form.other_config.list_action" placeholder="选择在列表触发的方法" style="width: 100%;">
+                                    <el-option
+                                    v-for="(item,index) in my_actions"
+                                    :key="index"
+                                    :label="item.name"
+                                    :value="item.action_name"
+                                    ></el-option>
+                                </el-select>
+							</el-form-item>
+						</el-row>
+						
 						<el-row v-if="form.other_config.shuxing.includes('tabs')">
 							<el-form-item label="默认值" prop="default_tabs_value">
 								<el-input v-model="form.other_config.default_tabs_value" clearable placeholder="选项卡选中默认值"/>
@@ -866,11 +915,8 @@ Vue.component('AdminAdd', {
                     maxrows: 4,
                     inputRemark: '',
                     rangetime_type: 'date',
-                    
                     key_placeholder: '',   // 新增key-placeholder字段
                     value_placeholder: '', // 新增value-placeholder字段
-                    tx_tiaojian: '', // 新增字段提醒条件类型
-                    tx_zhi: '',      // 新增字段提醒条件值
                     previewImage: 0,   // 图片预览
                 },
                 sql: '',
@@ -879,6 +925,12 @@ Vue.component('AdminAdd', {
                 belong_table: '',
                 default_value: '',
                 menu_id: this.menuid,
+                
+                tx_tiaojian: '', // 新增字段提醒条件类型
+                tx_zhi: '',      // 新增字段提醒条件值
+                tx_color: '',      // 新增字段提醒条件值
+                improve_tiaojian: '',      // 完善条件
+                improve_zhi: '',      // 完善条件校验值
             },
             iconDialogStatus: false,
             activeName: 'first',
@@ -891,6 +943,29 @@ Vue.component('AdminAdd', {
             tableList: [],
             application_list: [],
             dbtype: '',
+            my_actions: [],
+            txOptions: [
+                {label: "大于", value: 1},
+                {label: "小于", value: 2},
+                {label: "等于", value: 3},
+                {label: "大于等于", value: 4},
+                {label: "小于等于", value: 5},
+                {label: "包含", value: 6},
+                {label: "不包含", value: 7},
+                {label: "不等于", value: 8},
+                {label: "为空", value: 9},
+                {label: "不为空", value: 10},
+            ],
+            improveOptions: [
+                {label: "大于", value: 1},
+                {label: "小于", value: 2},
+                {label: "等于", value: 3},
+                {label: "大于等于", value: 4},
+                {label: "小于等于", value: 5},
+                {label: "不等于", value: 8},
+                {label: "为空", value: 9},
+                {label: "不为空", value: 10},
+            ],
             rules: {
                 title: [{required: true, message: '字段中文名不能为空', trigger: 'blur'}],
                 field: [
@@ -900,15 +975,17 @@ Vue.component('AdminAdd', {
                 type: [{required: true, message: '字段类型不能为空', trigger: 'blur'}],
                 login_fields: [{required: true, message: '请配置登录账号密码字段', trigger: 'blur'}],
                 
-                'other_config.key_placeholder': [{ max: 50, message: '长度不能超过50个字符', trigger: 'blur' }],
-                'other_config.value_placeholder': [{ max: 50, message: '长度不能超过50个字符', trigger: 'blur' }]},
-            'other_config.tx_tiaojian': [{ required: false, message: '请选择条件类型', trigger: 'change' }],
-            'other_config.tx_zhi': [{ required: false, message: '请输入条件值', trigger: 'blur' }]
+                'other_config.key_placeholder': [{max: 50, message: '长度不能超过50个字符', trigger: 'blur'}],
+                'other_config.value_placeholder': [{max: 50, message: '长度不能超过50个字符', trigger: 'blur'}]
+            },
+            tx_tiaojian: [{required: false, message: '请选择条件类型', trigger: 'change'}],
+            // 'other_config.tx_zhi': [{ required: false, message: '请输入条件值', trigger: 'blur' }]
         }
     },
     methods: {
         submit() {
-            if (this.form.create_table_field == 0) {
+            // 多表反显规则
+            if (this.form.create_table_field == 0 && this.form.belong_table) {
                 const str = this.form.field;
                 const regex = /^[a-z][a-zA-Z0-9]*(?:[A-Z][a-z0-9]*)*__.+$/;
                 if (!regex.test(str)) {
@@ -941,6 +1018,7 @@ Vue.component('AdminAdd', {
                 this.propertyField = res.data.propertyField
                 this.dbtype = res.data.dbtype
                 this.application_list = res.data.applist
+                this.my_actions = res.data.my_actions
             })
         },
         selectType() {
@@ -1421,23 +1499,20 @@ Vue.component('AdminUpdate', {
 								</el-form-item>
 							</el-col>
 						</el-row>
-      
-<el-row v-if="form.type == 21">
-  <el-col :span="12">
-    <el-form-item label="键占位文本" prop="key_placeholder">
-      <el-input v-model="form.other_config.key_placeholder" clearable placeholder="键输入框的占位文本"/>
-    </el-form-item>
-  </el-col>
-  <el-col :span="12">
-    <el-form-item label="值占位文本" prop="value_placeholder">
-      <el-input v-model="form.other_config.value_placeholder" clearable placeholder="值输入框的占位文本"/>
-    </el-form-item>
-  </el-col>
-</el-row>
-      
-      
-      
-      
+						
+                        <el-row v-if="form.type == 21">
+                          <el-col :span="12">
+                            <el-form-item label="键占位文本" prop="key_placeholder">
+                              <el-input v-model="form.other_config.key_placeholder" clearable placeholder="键输入框的占位文本"/>
+                            </el-form-item>
+                          </el-col>
+                          <el-col :span="12">
+                            <el-form-item label="值占位文本" prop="value_placeholder">
+                              <el-input v-model="form.other_config.value_placeholder" clearable placeholder="值输入框的占位文本"/>
+                            </el-form-item>
+                          </el-col>
+                        </el-row>
+                        
 						<el-row v-if="form.type != 40">
 							<el-col :span="20">
 								<el-form-item label="验证规则" prop="rule">
@@ -1555,12 +1630,12 @@ Vue.component('AdminUpdate', {
 							</el-form-item>
 						</el-row>
 						
+					 <!-- 新增的字段提醒设置 -->
 						<el-row>
-							<!-- 新增的字段提醒设置 -->
 							<el-form-item label="字段提醒" prop="tx_tiaojian">
-								<el-col :span="6">
+								<el-col :span="5">
 									<el-form-item prop="tx_tiaojian">
-										<el-select v-model="form.other_config.tx_tiaojian" placeholder="选择条件类型" style="width: 100%;">
+										<el-select v-model="form.tx_tiaojian" placeholder="选择条件类型" style="width: 100%;">
 											<el-option label="大于" value="1"></el-option>
 											<el-option label="小于" value="2"></el-option>
 											<el-option label="等于" value="3"></el-option>
@@ -1574,15 +1649,46 @@ Vue.component('AdminUpdate', {
 										</el-select>
 									</el-form-item>
 								</el-col>
-								<el-col :span="18">
+								<el-col :span="14">
 									<el-form-item prop="tx_zhi">
-										<el-input v-model="form.other_config.tx_zhi" clearable placeholder="输入条件值，如 >1 或 session(admin.yuangong_id)"/>
+										<el-input v-model="form.tx_zhi" clearable placeholder="输入条件值，如 >1 或 session(admin.yuangong_id)"/>
+									</el-form-item>
+								</el-col>
+								<el-col :span="4">
+                                    <el-form-item prop="tx_color" >
+                                        <el-input  v-model="form.tx_color" autoComplete="off" clearable placeholder="提醒颜色"/>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="1">
+                                    <el-form-item >
+                                        <el-color-picker  size="small" v-model="form.tx_color"></el-color-picker>
+                                    </el-form-item>
+                                </el-col>
+							</el-form-item>
+						</el-row>
+						
+                        <!-- 新增的字段完善提醒设置 -->
+						<el-row>
+							<el-form-item label="完善提醒">
+								<el-col :span="6">
+									<el-form-item prop="improve_tiaojian">
+										<el-select v-model="form.improve_tiaojian" placeholder="选择条件类型" style="width: 100%;">
+                                             <el-option
+                                                v-for="opt in improveOptions"
+                                                :key="opt.value"
+                                                :label="opt.label"
+                                                :value="opt.value">
+                                            </el-option>
+										</el-select>
+									</el-form-item>
+								</el-col>
+								<el-col :span="18">
+									<el-form-item prop="improve_zhi">
+										<el-input v-model="form.improve_zhi" clearable placeholder="输入条件值，如 >1 或 session(admin.yuangong_id)"/>
 									</el-form-item>
 								</el-col>
 							</el-form-item>
 						</el-row>
-						
-						
 						
 						<el-row>
 							<el-form-item label="其他属性" prop="shuxing">
@@ -1596,6 +1702,22 @@ Vue.component('AdminUpdate', {
 								</el-checkbox-group>
 							</el-form-item>
 						</el-row>
+						
+						
+						<el-row>
+							<el-form-item label="列表方法" prop="list_action">
+							    <el-select v-model="form.other_config.list_action" placeholder="选择在列表触发的方法" style="width: 100%;">
+                                    <el-option
+                                    v-for="(item,index) in my_actions"
+                                    :key="index"
+                                    :label="item.name"
+                                    :value="item.action_name"
+                                    ></el-option>
+                                </el-select>
+							</el-form-item>
+						</el-row>
+						
+						
 						<el-row v-if="form.other_config.shuxing.includes('tabs')">
 							<el-form-item label="默认值" prop="default_tabs_value">
 								<el-input v-model="form.other_config.default_tabs_value" clearable placeholder="选项卡选中默认值"/>
@@ -1667,16 +1789,19 @@ Vue.component('AdminUpdate', {
                     inputRemark: '',
                     key_placeholder: '',   // 新增key-placeholder字段
                     value_placeholder: '', // 新增value-placeholder字段
-                    tx_tiaojian: '', // 新增字段提醒条件类型
-                    tx_zhi: '',      // 新增字段提醒条件值
-                    
                     previewImage: 0,   // 图片预览
                 },
                 sql: '',
                 datatype: '',
                 length: '',
                 belong_table: '',
-                default_value: ''
+                default_value: '',
+                
+                tx_tiaojian: '', // 新增字段提醒条件类型
+                tx_zhi: '',      // 新增字段提醒条件值
+                tx_color: '',      // 新增字段提醒条件值
+                improve_tiaojian: '',      // 完善条件
+                improve_zhi: '',      // 完善条件校验值
             },
             iconDialogStatus: false,
             activeName: 'first',
@@ -1688,6 +1813,29 @@ Vue.component('AdminUpdate', {
             ruleList: [],
             tableList: [],
             application_list: [],
+            my_actions: [],
+            txOptions: [
+                {label: "大于", value: 1},
+                {label: "小于", value: 2},
+                {label: "等于", value: 3},
+                {label: "大于等于", value: 4},
+                {label: "小于等于", value: 5},
+                {label: "包含", value: 6},
+                {label: "不包含", value: 7},
+                {label: "不等于", value: 8},
+                {label: "为空", value: 9},
+                {label: "不为空", value: 10},
+            ],
+            improveOptions: [
+                {label: "大于", value: 1},
+                {label: "小于", value: 2},
+                {label: "等于", value: 3},
+                {label: "大于等于", value: 4},
+                {label: "小于等于", value: 5},
+                {label: "不等于", value: 8},
+                {label: "为空", value: 9},
+                {label: "不为空", value: 10},
+            ],
             dbtype: '',
             rules: {
                 title: [{required: true, message: '字段中文名不能为空', trigger: 'blur'}],
@@ -1699,14 +1847,14 @@ Vue.component('AdminUpdate', {
                 login_fields: [{required: true, message: '请配置登录账号密码字段', trigger: 'blur'}],
                 'other_config.key_placeholder': [{max: 50, message: '长度不能超过50个字符', trigger: 'blur'}],
                 'other_config.value_placeholder': [{max: 50, message: '长度不能超过50个字符', trigger: 'blur'}],
-                'other_config.tx_tiaojian': [{required: false, message: '请选择条件类型', trigger: 'change'}],
-                'other_config.tx_zhi': [{required: false, message: '请输入条件值', trigger: 'blur'}]
+                tx_tiaojian: [{required: false, message: '请选择条件类型', trigger: 'change'}],
+                // 'other_config.tx_zhi': [{required: false, message: '请输入条件值', trigger: 'blur'}],
             },
         }
     },
     methods: {
         submit() {
-            if (this.form.create_table_field == 0) {
+            if (this.form.create_table_field == 0 && this.form.belong_table) {
                 const str = this.form.field;
                 const regex = /^[a-z][a-zA-Z0-9]*(?:[A-Z][a-z0-9]*)*__.+$/;
                 if (!regex.test(str)) {
@@ -1714,29 +1862,12 @@ Vue.component('AdminUpdate', {
                     return;
                 }
             }
+            
             this.$refs['form'].validate(valid => {
                 if (valid) {
                     // 将键值对占位符保存到主表字段
                     this.form.key_placeholder = this.form.other_config.key_placeholder
                     this.form.value_placeholder = this.form.other_config.value_placeholder
-                    const conditionOptions = [
-                        {label: "大于", value: "1"},
-                        {label: "小于", value: "2"},
-                        {label: "等于", value: "3"},
-                        {label: "大于等于", value: "4"},
-                        {label: "小于等于", value: "5"},
-                        {label: "包含", value: "6"},
-                        {label: "不包含", value: "7"},
-                        {label: "不等于", value: "8"},
-                        {label: "为空", value: "9"},
-                        {label: "不为空", value: "10"}
-                    ]
-                    
-                    const selectedvalue = conditionOptions.find(
-                        opt => opt.label == this.form.other_config.tx_tiaojian
-                    )
-                    this.form.tx_tiaojian = this.form.other_config.tx_tiaojian = selectedvalue ? selectedvalue.value : this.form.other_config.tx_tiaojian,
-                        this.form.tx_zhi = this.form.other_config.tx_zhi
                     this.loading = true
                     axios.post(base_url + '/Sys.Base/updateField', this.form).then(res => {
                         if (res.data.status == 200) {
@@ -1756,33 +1887,14 @@ Vue.component('AdminUpdate', {
         open() {
             // 深拷贝info数据避免引用问题
             this.form = JSON.parse(JSON.stringify(this.info))
-            // 获取选中的条件类型的label而不是value
-            const conditionOptions = [
-                {label: "大于", value: "1"},
-                {label: "小于", value: "2"},
-                {label: "等于", value: "3"},
-                {label: "大于等于", value: "4"},
-                {label: "小于等于", value: "5"},
-                {label: "包含", value: "6"},
-                {label: "不包含", value: "7"},
-                {label: "不等于", value: "8"},
-                {label: "为空", value: "9"},
-                {label: "不为空", value: "10"}
-            ]
             
-            const selectedCondition = conditionOptions.find(
-                opt => opt.value == this.info.tx_tiaojian
-            )
             // 处理other_config初始化
             if (!this.form.other_config || this.form.other_config === '[]' || this.form.other_config === '{}') {
-                
                 this.form.other_config = {
                     shuxing: ['tooltip'],
                     guige: [{}],
                     key_placeholder: this.info.key_placeholder || '',
                     value_placeholder: this.info.value_placeholder || '',
-                    tx_tiaojian: selectedCondition ? selectedCondition.label : '',
-                    tx_zhi: this.info.tx_zhi || ''
                 }
             } else if (typeof this.form.other_config === 'string') {
                 try {
@@ -1793,8 +1905,6 @@ Vue.component('AdminUpdate', {
                         guige: [{}],
                         key_placeholder: '',
                         value_placeholder: '',
-                        tx_tiaojian: '',
-                        tx_zhi: ''
                     }
                 }
             }
@@ -1806,8 +1916,6 @@ Vue.component('AdminUpdate', {
                 guige: this.form.other_config.guige || [{}],
                 key_placeholder: this.form.other_config.key_placeholder || this.info.key_placeholder || '',
                 value_placeholder: this.form.other_config.value_placeholder || this.info.value_placeholder || '',
-                tx_tiaojian: selectedCondition ? selectedCondition.label : '',
-                tx_zhi: this.form.other_config.tx_zhi || this.info.tx_zhi || ''
             }
             
             // 初始化其他数据
@@ -1824,6 +1932,7 @@ Vue.component('AdminUpdate', {
                 this.propertyField = res.data.propertyField
                 this.dbtype = res.data.dbtype
                 this.application_list = res.data.applist
+                this.my_actions = res.data.my_actions
             })
         },
         selectType() {
@@ -1978,8 +2087,6 @@ Vue.component('AdminUpdate', {
                         guige: [{}],
                         key_placeholder: '',
                         value_placeholder: '',
-                        tx_tiaojian: '',
-                        tx_zhi: ''
                     },
                     sql: '',
                     datatype: '',
@@ -2254,7 +2361,7 @@ Vue.component('ApiAdd', {
     },
     methods: {
         submit() {
-            if (this.form.create_table_field == 0) {
+            if (this.form.create_table_field == 0 && this.form.belong_table) {
                 const str = this.form.field;
                 const regex = /^[a-z][a-zA-Z0-9]*(?:[A-Z][a-z0-9]*)*__.+$/;
                 if (!regex.test(str)) {
@@ -2643,7 +2750,7 @@ Vue.component('ApiUpdate', {
     },
     methods: {
         submit() {
-            if (this.form.create_table_field == 0) {
+            if (this.form.create_table_field == 0 && this.form.belong_table) {
                 const str = this.form.field;
                 const regex = /^[a-z][a-zA-Z0-9]*(?:[A-Z][a-z0-9]*)*__.+$/;
                 if (!regex.test(str)) {

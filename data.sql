@@ -1,7 +1,7 @@
 /*
  Navicat Premium Dump SQL
 
- Source Server         : 开源脚手架
+ Source Server         : tfadmin
  Source Server Type    : MySQL
  Source Server Version : 80036 (8.0.36)
  Source Host           : 127.0.0.1:3306
@@ -11,7 +11,7 @@
  Target Server Version : 80036 (8.0.36)
  File Encoding         : 65001
 
- Date: 08/08/2025 15:37:16
+ Date: 18/08/2025 15:12:03
 */
 
 SET NAMES utf8mb4;
@@ -149,7 +149,7 @@ CREATE TABLE `cd_admin_user`  (
 -- ----------------------------
 -- Records of cd_admin_user
 -- ----------------------------
-INSERT INTO `cd_admin_user` VALUES (1, '铁粉', 'admin', '35bfa44f104ddfe466d1889daeff6e35', 1, '超级管理员', 1, 1548558919, 'b8f84bb1b6fa7e0500a967ad50d9da61');
+INSERT INTO `cd_admin_user` VALUES (1, '铁粉', 'admin', '35bfa44f104ddfe466d1889daeff6e35', 1, '超级管理员', 1, 1548558919, '429cf9aa6659a789410b4e71bdc48eb1');
 
 -- ----------------------------
 -- Table structure for cd_application
@@ -247,6 +247,10 @@ CREATE TABLE `cd_field`  (
   `value_placeholder` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT '值占位文本',
   `tx_tiaojian` smallint NULL DEFAULT NULL COMMENT '鎻愰啋鏉′欢',
   `tx_zhi` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '体型值',
+  `tx_color` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '提醒颜色',
+  `improve_tiaojian` smallint NULL DEFAULT NULL COMMENT '完善条件',
+  `improve_zhi` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '完善条件校验值',
+  `improve_color` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '完善条件提醒颜色',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `menu_id`(`menu_id` ASC) USING BTREE,
   INDEX `tx_tiaojian`(`tx_tiaojian` ASC) USING BTREE
@@ -255,62 +259,62 @@ CREATE TABLE `cd_field`  (
 -- ----------------------------
 -- Records of cd_field
 -- ----------------------------
-INSERT INTO `cd_field` VALUES (3579, 6, '编号', 'user_id', 1, 2, 0, 0, 0, NULL, NULL, 1, NULL, NULL, 'int', '11', NULL, NULL, '', '70', NULL, 'null', NULL, NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (3580, 6, '用户姓名', 'name', 1, 2, 0, 1, 1, ',notempty', NULL, 3, NULL, NULL, 'varchar', '250', NULL, NULL, '', '90', NULL, '{\"shuxing\":[]}', NULL, NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (3581, 6, '登录账号', 'user', 1, 2, 1, 1, 0, ',notempty', NULL, 4, NULL, NULL, 'varchar', '250', NULL, NULL, '', '90', NULL, '{\"shuxing\":[]}', NULL, NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (3582, 6, '用户密码', 'pwd', 7, 0, 0, 1, 0, ',notempty', NULL, 6, NULL, NULL, 'varchar', '250', NULL, NULL, '', '90', NULL, '{\"shuxing\":[]}', NULL, NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (3583, 6, '所属角色', 'role_id', 2, 0, 1, 1, 0, ',notempty', NULL, 8, 'select role_id,name from pre_role', NULL, 'int', '11', NULL, NULL, '', '90', NULL, '{\"shuxing\":[],\"guige\":[[]],\"tx_tiaojian\":\"\",\"tx_zhi\":\"\"}', NULL, NULL, '', '值占位文本', 0, '');
-INSERT INTO `cd_field` VALUES (3584, 6, '用户备注', 'note', 1, 3, 0, 1, 0, NULL, NULL, 10, NULL, NULL, 'varchar', '250', NULL, NULL, NULL, '', NULL, NULL, NULL, NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (3585, 6, '账号状态', 'status', 4, 2, 1, 1, 0, ',notempty', NULL, 9, NULL, NULL, 'smallint', '6', NULL, NULL, '[{\"key\":\"正常\",\"val\":\"1\",\"label_color\":\"primary\"},{\"key\":\"禁用\",\"val\":\"0\",\"label_color\":\"danger\"}]', '90', NULL, '{\"shuxing\":[]}', NULL, NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (3586, 6, '创建时间', 'create_time', 11, 0, 0, 1, 0, '', NULL, 11, NULL, NULL, 'int', '11', NULL, NULL, '', '90', 'date', '[]', NULL, NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (3588, 7, '角色名称', 'name', 1, 2, 1, 1, 0, ',notempty', NULL, 2, NULL, NULL, 'varchar', '36', NULL, NULL, '', '110', NULL, '[]', NULL, NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (3589, 7, '状态', 'status', 6, 2, 1, 1, 0, '', NULL, 3, NULL, NULL, 'tinyint', '4', NULL, NULL, '[{\"key\":\"正常\",\"val\":\"1\",\"label_color\":\"primary\"},{\"key\":\"禁用\",\"val\":\"0\",\"label_color\":\"danger\"}]', '110', NULL, '[]', NULL, NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (3591, 7, '描述', 'description', 1, 3, 0, 1, 0, NULL, NULL, 5, NULL, NULL, 'text', NULL, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (3592, 8, '编号', 'id', 1, 2, 0, 0, 0, NULL, NULL, 1, NULL, NULL, 'int', '11', NULL, NULL, NULL, '70', NULL, NULL, NULL, NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (3593, 8, '应用名', 'application_name', 1, 2, 0, 1, 0, NULL, NULL, 2, NULL, NULL, 'varchar', '50', NULL, NULL, NULL, '100', NULL, NULL, NULL, NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (3594, 8, '用户名', 'username', 1, 2, 1, 1, 0, NULL, NULL, 3, NULL, NULL, 'varchar', '250', NULL, NULL, NULL, '100', NULL, NULL, NULL, NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (3595, 8, '请求url', 'url', 1, 3, 0, 1, 0, NULL, NULL, 4, NULL, NULL, 'varchar', '250', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (3596, 8, '客户端ip', 'ip', 1, 2, 0, 1, 0, NULL, NULL, 5, NULL, NULL, 'varchar', '250', NULL, NULL, NULL, '200', NULL, NULL, NULL, NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (3597, 8, '浏览器信息', 'useragent', 8, 0, 0, 1, 0, NULL, NULL, 6, NULL, NULL, 'varchar', '250', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (3598, 8, '请求内容', 'content', 8, 0, 0, 1, 0, NULL, NULL, 7, NULL, NULL, 'text', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (3599, 8, '异常信息', 'errmsg', 8, 0, 0, 1, 0, NULL, NULL, 8, NULL, NULL, 'varchar', '250', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (3600, 8, '创建时间', 'create_time', 11, 2, 1, 1, 0, '', NULL, 9, NULL, NULL, 'int', '11', NULL, NULL, '', '200', 'datetime', '[]', NULL, NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (3601, 8, '类型', 'type', 2, 2, 1, 1, 0, '', NULL, 10, NULL, NULL, 'smallint', '6', NULL, NULL, '[{\"key\":\"登录日志\",\"val\":\"1\",\"label_color\":\"info\"},{\"key\":\"操作日志\",\"val\":\"2\",\"label_color\":\"warning\"},{\"key\":\"异常日志\",\"val\":\"3\",\"label_color\":\"danger\"}]', '200', NULL, '[]', NULL, NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (3603, 4, '编号', 'id', 1, 2, 0, 0, 0, NULL, NULL, 1, NULL, NULL, 'int', '11', NULL, NULL, NULL, '70', NULL, NULL, NULL, NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (3604, 4, '配置名称', 'title', 1, 2, 0, 1, 0, ',notempty', NULL, 2, NULL, NULL, 'varchar', '250', NULL, NULL, '', NULL, NULL, '{\"shuxing\":[]}', NULL, NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (3605, 4, '覆盖原图', 'upload_replace', 6, 2, 1, 1, 0, '', NULL, 3, NULL, NULL, 'tinyint', '4', NULL, NULL, '[{\"key\":\"开启\",\"val\":\"1\"},{\"key\":\"关闭\",\"val\":\"0\"}]', NULL, NULL, '[]', NULL, NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (3606, 4, '生成缩略图', 'thumb_status', 6, 2, 1, 1, 0, '', NULL, 4, NULL, NULL, 'tinyint', '4', NULL, NULL, '[{\"key\":\"开启\",\"val\":\"1\"},{\"key\":\"关闭\",\"val\":\"0\"}]', NULL, NULL, '[]', NULL, NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (3607, 4, '缩略图宽', 'thumb_width', 1, 2, 0, 1, 0, NULL, NULL, 5, NULL, NULL, 'varchar', '250', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (3608, 4, '缩略图高', 'thumb_height', 1, 2, 0, 1, 0, NULL, NULL, 6, NULL, NULL, 'varchar', '250', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (3609, 4, '缩放类型', 'thumb_type', 2, 2, 1, 1, 0, '', NULL, 7, NULL, NULL, 'smallint', '6', NULL, NULL, '[{\"key\":\"等比例缩放\",\"val\":\"1\"},{\"key\":\"缩放后填充\",\"val\":\"2\"},{\"key\":\"居中裁剪\",\"val\":\"3\"},{\"key\":\"左上角裁剪\",\"val\":\"4\"},{\"key\":\"右下角裁剪\",\"val\":\"5\"},{\"key\":\"固定尺寸缩放\",\"val\":\"6\"}]', NULL, NULL, '[]', NULL, NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (3611, 3, '编号', 'id', 1, 2, NULL, NULL, 1, NULL, NULL, 1, NULL, NULL, 'int', '11', NULL, NULL, NULL, '70', NULL, NULL, NULL, NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (3612, 3, '站点名称', 'site_title', 1, 2, 1, 1, 1, ',notempty', NULL, 3612, NULL, NULL, 'varchar', '250', NULL, NULL, '', NULL, NULL, '{\"address_type\":\"1\",\"shuxing\":[]}', NULL, NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (3613, 3, '站点logo', 'logo', 13, 2, 0, 1, 1, '', NULL, 3613, NULL, NULL, 'varchar', '250', NULL, NULL, '', NULL, NULL, '{\"shuxing\":[],\"crop\":\"\"}', NULL, NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (3614, 3, '站点关键词', 'keyword', 18, 2, 1, 1, 1, '', NULL, 3614, NULL, NULL, 'varchar', '250', NULL, NULL, '', NULL, NULL, '[]', NULL, NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (3615, 3, '站点描述', 'descrip', 8, 2, 1, 1, 1, '', '', 3615, '', '', 'text', '0', '', '', '', '', '', '[]', '', NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (3616, 3, '站点版权', 'copyright', 1, 2, 1, 1, 1, '', NULL, 3616, NULL, NULL, 'varchar', '250', NULL, NULL, '', NULL, NULL, '[]', NULL, NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (3617, 3, '上传配置', 'filesize', 1, 2, 1, 1, 1, '', NULL, 3617, NULL, '0', 'varchar', '250', NULL, NULL, '', NULL, NULL, '[]', NULL, NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (3618, 3, '文件类型', 'filetype', 1, 2, 1, 1, 1, '', NULL, 3618, NULL, NULL, 'varchar', '250', NULL, NULL, '', NULL, NULL, '[]', NULL, NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (3619, 3, '水印状态', 'water_status', 4, 2, 1, 1, 1, '', NULL, 3619, NULL, NULL, 'smallint', '6', NULL, NULL, '[{\"key\":\"正常\",\"val\":\"1\",\"label_color\":\"primary\"},{\"key\":\"禁用\",\"val\":\"0\",\"label_color\":\"danger\"}]', NULL, NULL, '[]', NULL, NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (3620, 3, '水印位置', 'water_position', 2, 2, 1, 1, 1, '', NULL, 3620, NULL, NULL, 'smallint', '6', NULL, NULL, '[{\"key\":\"左上角水印\",\"val\":\"1\"},{\"key\":\"上居中水印\",\"val\":\"2\"},{\"key\":\"右上角水印\",\"val\":\"3\"},{\"key\":\"左居中水印\",\"val\":\"4\"},{\"key\":\"居中水印\",\"val\":\"5\"},{\"key\":\"右居中水印\",\"val\":\"6\"},{\"key\":\"左下角水印\",\"val\":\"7\"},{\"key\":\"下居中水印\",\"val\":\"8\"},{\"key\":\"右下角水印\",\"val\":\"9\"}]', NULL, NULL, '[]', NULL, NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (3622, 3, '绑定域名', 'domain', 1, 2, 1, 1, 1, '', NULL, 3623, NULL, NULL, 'varchar', '250', NULL, NULL, '', NULL, NULL, '[]', NULL, NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (3759, 6, '所属分组', 'name', 1, 2, NULL, 0, 0, '', NULL, 7, NULL, NULL, 'varchar', '250', NULL, NULL, '', '90', NULL, '{\"address_type\":\"1\"}', 'role', NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (3801, 3, '水印透明度', 'water_alpha', 19, 2, 0, 1, 1, '', NULL, 3622, NULL, NULL, 'smallint', '6', NULL, NULL, '', NULL, NULL, '{\"address_type\":\"1\"}', '', NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (4375, 7, '编号', 'role_id', 1, 2, NULL, NULL, 1, NULL, NULL, 1, NULL, NULL, 'int', '11', NULL, NULL, NULL, '70', NULL, NULL, NULL, NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (4902, 104, '编号', 'id', 1, 2, NULL, NULL, 1, NULL, NULL, 1, NULL, NULL, 'int', '11', NULL, NULL, NULL, '70', NULL, NULL, NULL, NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (4903, 104, 'action_id', 'action_id', 1, 2, 0, 1, 1, '', '/^[0-9]*$/', 4903, '', '', 'varchar', '250', NULL, NULL, '', NULL, NULL, '{\"address_type\":\"1\",\"now_time\":false,\"placeholder\":\"\",\"rand_config\":\"\",\"filetype\":\"\",\"liandong_field\":\"\",\"shuxing\":[\"tooltip\"],\"jdt\":\"changtiao\",\"remote_research_field\":\"\",\"rename_status\":\"\",\"default_tabs_value\":\"\",\"application_id\":\"\",\"crop\":\"\",\"time_search_tempate\":true,\"guige\":[[]],\"maxrows\":4,\"inputRemark\":\"\",\"rangetime_type\":\"date\"}', '', NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (4904, 104, '代码内容', 'content', 8, 2, 0, 1, 1, 'notempty', NULL, 4904, '', '', 'longtext', '0', NULL, NULL, '', NULL, NULL, '{\"shuxing\":[\"tooltip\"],\"guige\":[[]]}', '', NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (4905, 104, '功能描述', 'description', 8, 2, 0, 1, 1, 'notempty', NULL, 4905, '', '', 'text', '0', NULL, NULL, '', NULL, NULL, '{\"shuxing\":[\"tooltip\"],\"guige\":[[]]}', '', NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (4906, 104, '创建时间', 'create_time', 11, 2, 0, 1, 1, '', NULL, 4906, '', '', 'int', '10', NULL, NULL, '', NULL, 'datetime', '{\"shuxing\":[\"tooltip\"],\"guige\":[[]]}', '', NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (4907, 104, '所属菜单', 'menu_id', 1, 2, 1, 1, 1, '', '/^[0-9]*$/', 4907, '', '', 'varchar', '250', NULL, NULL, '', NULL, NULL, '{\"shuxing\":[\"tooltip\"],\"guige\":[[]]}', '', NULL, NULL, '值占位文本', NULL, NULL);
-INSERT INTO `cd_field` VALUES (5206, 3, '弹窗关闭', 'pop_status', 4, 2, 1, 1, 1, '', NULL, 5206, '', '1', 'smallint', '6', NULL, NULL, '[{\"key\":\"点空白\",\"val\":\"1\",\"label_color\":\"success\"},{\"key\":\"点关闭\",\"val\":\"0\",\"label_color\":\"warning\"}]', NULL, NULL, '{\"shuxing\":[\"tooltip\"],\"guige\":[[]],\"tx_tiaojian\":\"\",\"tx_zhi\":\"\"}', '', NULL, '', '', 0, '');
-INSERT INTO `cd_field` VALUES (5207, 3, '搜索开关', 'search_status', 4, 2, 1, 1, 1, '', NULL, 5207, '', '1', 'smallint', '6', NULL, NULL, '[{\"key\":\"默认展开\",\"val\":\"1\",\"label_color\":\"success\"},{\"key\":\"默认收起\",\"val\":\"0\",\"label_color\":\"warning\"}]', NULL, NULL, '{\"shuxing\":[\"tooltip\"],\"guige\":[[]],\"tx_tiaojian\":\"\",\"tx_zhi\":\"\"}', '', NULL, '', '', 0, '');
-INSERT INTO `cd_field` VALUES (5208, 3, '水印开关', 'watermark_status', 4, 2, 1, 1, 1, '', NULL, 5208, '', '1', 'smallint', '6', NULL, NULL, '[{\"key\":\"默认打开\",\"val\":\"1\"},{\"key\":\"默认关闭\",\"val\":\"0\"}]', NULL, NULL, '{\"shuxing\":[\"tooltip\"],\"guige\":[[]],\"tx_tiaojian\":\"\",\"tx_zhi\":\"\"}', '', NULL, '', '', 0, '');
-INSERT INTO `cd_field` VALUES (5243, 6, '唯一登录', 'session_token', 1, 0, 1, 1, 1, '', NULL, 5243, '', '', 'varchar', '250', NULL, NULL, '', NULL, NULL, '{\"address_type\":\"1\",\"now_time\":false,\"placeholder\":\"\",\"rand_config\":\"\",\"filetype\":\"\",\"liandong_field\":\"\",\"shuxing\":[\"tooltip\"],\"jdt\":\"changtiao\",\"remote_research_field\":\"\",\"rename_status\":\"\",\"default_tabs_value\":\"\",\"application_id\":\"\",\"crop\":\"\",\"time_search_tempate\":true,\"guige\":[[]],\"maxrows\":4,\"inputRemark\":\"\",\"rangetime_type\":\"date\",\"tx_tiaojian\":\"\",\"tx_zhi\":\"\"}', '', NULL, '', '', 0, '');
-INSERT INTO `cd_field` VALUES (5257, 3, 'DSkey', 'deepseekkey', 1, 2, 1, 1, 1, '', NULL, 5257, '', '', 'varchar', '250', NULL, NULL, '', NULL, NULL, '{\"address_type\":\"1\",\"now_time\":false,\"placeholder\":\"\\u8bf7\\u8f93\\u5165deepseek-key\",\"rand_config\":\"\",\"filetype\":\"\",\"liandong_field\":\"\",\"shuxing\":[\"tooltip\"],\"jdt\":\"changtiao\",\"remote_research_field\":\"\",\"rename_status\":\"\",\"default_tabs_value\":\"\",\"application_id\":\"\",\"crop\":\"\",\"time_search_tempate\":true,\"guige\":[[]],\"maxrows\":4,\"inputRemark\":\"\",\"rangetime_type\":\"date\",\"tx_tiaojian\":\"\",\"tx_zhi\":\"\"}', '', NULL, '', '', 0, '');
-INSERT INTO `cd_field` VALUES (5308, 3, '百度地图KEY', 'bdKey', 1, 2, 1, 1, 1, '', NULL, 5308, '', '', 'varchar', '250', NULL, NULL, '', NULL, NULL, '{\"address_type\":\"1\",\"now_time\":false,\"placeholder\":\"\",\"rand_config\":\"\",\"filetype\":\"\",\"liandong_field\":\"\",\"shuxing\":[\"tooltip\"],\"jdt\":\"changtiao\",\"remote_research_field\":\"\",\"rename_status\":\"\",\"default_tabs_value\":\"\",\"application_id\":\"\",\"crop\":\"\",\"time_search_tempate\":true,\"guige\":[[]],\"maxrows\":4,\"inputRemark\":\"\",\"rangetime_type\":\"date\",\"tx_tiaojian\":\"\",\"tx_zhi\":\"\"}', '', NULL, '', '', 0, '');
-INSERT INTO `cd_field` VALUES (5309, 3, '高德地图KEY', 'gdKey', 1, 2, 1, 1, 1, '', NULL, 5309, '', '', 'varchar', '250', NULL, NULL, '', NULL, NULL, '{\"shuxing\":[\"tooltip\"],\"guige\":[[]],\"tx_tiaojian\":\"\",\"tx_zhi\":\"\"}', '', NULL, '', '', 0, '');
-INSERT INTO `cd_field` VALUES (5310, 3, '腾讯地图KEY', 'txKey', 1, 2, 1, 1, 1, '', NULL, 5310, '', '', 'varchar', '250', NULL, NULL, '', NULL, NULL, '{\"shuxing\":[\"tooltip\"],\"guige\":[[]]}', '', NULL, '', '', NULL, NULL);
+INSERT INTO `cd_field` VALUES (3579, 6, '编号', 'user_id', 1, 2, 0, 0, 0, NULL, NULL, 1, NULL, NULL, 'int', '11', NULL, NULL, '', '70', NULL, 'null', NULL, NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (3580, 6, '用户姓名', 'name', 1, 2, 0, 1, 1, ',notempty', NULL, 3, NULL, NULL, 'varchar', '250', NULL, NULL, '', '90', NULL, '{\"shuxing\":[]}', NULL, NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (3581, 6, '登录账号', 'user', 1, 2, 1, 1, 0, ',notempty', NULL, 4, NULL, NULL, 'varchar', '250', NULL, NULL, '', '90', NULL, '{\"shuxing\":[]}', NULL, NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (3582, 6, '用户密码', 'pwd', 7, 0, 0, 1, 0, ',notempty', NULL, 6, NULL, NULL, 'varchar', '250', NULL, NULL, '', '90', NULL, '{\"shuxing\":[]}', NULL, NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (3583, 6, '所属角色', 'role_id', 2, 0, 1, 1, 0, ',notempty', NULL, 8, 'select role_id,name from pre_role', NULL, 'int', '11', NULL, NULL, '', '90', NULL, '{\"shuxing\":[],\"guige\":[[]],\"tx_tiaojian\":\"\",\"tx_zhi\":\"\"}', NULL, NULL, '', '值占位文本', 0, '', NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (3584, 6, '用户备注', 'note', 1, 3, 0, 1, 0, NULL, NULL, 10, NULL, NULL, 'varchar', '250', NULL, NULL, NULL, '', NULL, NULL, NULL, NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (3585, 6, '账号状态', 'status', 4, 2, 1, 1, 0, ',notempty', NULL, 9, NULL, NULL, 'smallint', '6', NULL, NULL, '[{\"key\":\"正常\",\"val\":\"1\",\"label_color\":\"primary\"},{\"key\":\"禁用\",\"val\":\"0\",\"label_color\":\"danger\"}]', '90', NULL, '{\"shuxing\":[]}', NULL, NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (3586, 6, '创建时间', 'create_time', 11, 0, 0, 1, 0, '', NULL, 11, NULL, NULL, 'int', '11', NULL, NULL, '', '90', 'date', '[]', NULL, NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (3588, 7, '角色名称', 'name', 1, 2, 1, 1, 0, ',notempty', NULL, 2, NULL, NULL, 'varchar', '36', NULL, NULL, '', '110', NULL, '[]', NULL, NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (3589, 7, '状态', 'status', 6, 2, 1, 1, 0, '', NULL, 3, NULL, NULL, 'tinyint', '4', NULL, NULL, '[{\"key\":\"正常\",\"val\":\"1\",\"label_color\":\"primary\"},{\"key\":\"禁用\",\"val\":\"0\",\"label_color\":\"danger\"}]', '110', NULL, '[]', NULL, NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (3591, 7, '描述', 'description', 1, 3, 0, 1, 0, NULL, NULL, 5, NULL, NULL, 'text', NULL, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (3592, 8, '编号', 'id', 1, 2, 0, 0, 0, NULL, NULL, 1, NULL, NULL, 'int', '11', NULL, NULL, NULL, '70', NULL, NULL, NULL, NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (3593, 8, '应用名', 'application_name', 1, 2, 0, 1, 0, NULL, NULL, 2, NULL, NULL, 'varchar', '50', NULL, NULL, NULL, '100', NULL, NULL, NULL, NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (3594, 8, '用户名', 'username', 1, 2, 1, 1, 0, NULL, NULL, 3, NULL, NULL, 'varchar', '250', NULL, NULL, NULL, '100', NULL, NULL, NULL, NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (3595, 8, '请求url', 'url', 1, 3, 0, 1, 0, NULL, NULL, 4, NULL, NULL, 'varchar', '250', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (3596, 8, '客户端ip', 'ip', 1, 2, 0, 1, 0, NULL, NULL, 5, NULL, NULL, 'varchar', '250', NULL, NULL, NULL, '200', NULL, NULL, NULL, NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (3597, 8, '浏览器信息', 'useragent', 8, 0, 0, 1, 0, NULL, NULL, 6, NULL, NULL, 'varchar', '250', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (3598, 8, '请求内容', 'content', 8, 0, 0, 1, 0, NULL, NULL, 7, NULL, NULL, 'text', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (3599, 8, '异常信息', 'errmsg', 8, 0, 0, 1, 0, NULL, NULL, 8, NULL, NULL, 'varchar', '250', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (3600, 8, '创建时间', 'create_time', 11, 2, 1, 1, 0, '', NULL, 9, NULL, NULL, 'int', '11', NULL, NULL, '', '200', 'datetime', '[]', NULL, NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (3601, 8, '类型', 'type', 2, 2, 1, 1, 0, '', NULL, 10, NULL, NULL, 'smallint', '6', NULL, NULL, '[{\"key\":\"登录日志\",\"val\":\"1\",\"label_color\":\"info\"},{\"key\":\"操作日志\",\"val\":\"2\",\"label_color\":\"warning\"},{\"key\":\"异常日志\",\"val\":\"3\",\"label_color\":\"danger\"}]', '200', NULL, '[]', NULL, NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (3603, 4, '编号', 'id', 1, 2, 0, 0, 0, NULL, NULL, 1, NULL, NULL, 'int', '11', NULL, NULL, NULL, '70', NULL, NULL, NULL, NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (3604, 4, '配置名称', 'title', 1, 2, 0, 1, 0, ',notempty', NULL, 2, NULL, NULL, 'varchar', '250', NULL, NULL, '', NULL, NULL, '{\"shuxing\":[]}', NULL, NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (3605, 4, '覆盖原图', 'upload_replace', 6, 2, 1, 1, 0, '', NULL, 3, NULL, NULL, 'tinyint', '4', NULL, NULL, '[{\"key\":\"开启\",\"val\":\"1\"},{\"key\":\"关闭\",\"val\":\"0\"}]', NULL, NULL, '[]', NULL, NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (3606, 4, '生成缩略图', 'thumb_status', 6, 2, 1, 1, 0, '', NULL, 4, NULL, NULL, 'tinyint', '4', NULL, NULL, '[{\"key\":\"开启\",\"val\":\"1\"},{\"key\":\"关闭\",\"val\":\"0\"}]', NULL, NULL, '[]', NULL, NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (3607, 4, '缩略图宽', 'thumb_width', 1, 2, 0, 1, 0, NULL, NULL, 5, NULL, NULL, 'varchar', '250', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (3608, 4, '缩略图高', 'thumb_height', 1, 2, 0, 1, 0, NULL, NULL, 6, NULL, NULL, 'varchar', '250', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (3609, 4, '缩放类型', 'thumb_type', 2, 2, 1, 1, 0, '', NULL, 7, NULL, NULL, 'smallint', '6', NULL, NULL, '[{\"key\":\"等比例缩放\",\"val\":\"1\"},{\"key\":\"缩放后填充\",\"val\":\"2\"},{\"key\":\"居中裁剪\",\"val\":\"3\"},{\"key\":\"左上角裁剪\",\"val\":\"4\"},{\"key\":\"右下角裁剪\",\"val\":\"5\"},{\"key\":\"固定尺寸缩放\",\"val\":\"6\"}]', NULL, NULL, '[]', NULL, NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (3611, 3, '编号', 'id', 1, 2, NULL, NULL, 1, NULL, NULL, 1, NULL, NULL, 'int', '11', NULL, NULL, NULL, '70', NULL, NULL, NULL, NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (3612, 3, '站点名称', 'site_title', 1, 2, 1, 1, 1, ',notempty', NULL, 3612, NULL, NULL, 'varchar', '250', NULL, NULL, '', NULL, NULL, '{\"address_type\":\"1\",\"shuxing\":[]}', NULL, NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (3613, 3, '站点logo', 'logo', 13, 2, 0, 1, 1, '', NULL, 3613, NULL, NULL, 'varchar', '250', NULL, NULL, '', NULL, NULL, '{\"shuxing\":[],\"crop\":\"\"}', NULL, NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (3614, 3, '站点关键词', 'keyword', 18, 2, 1, 1, 1, '', NULL, 3614, NULL, NULL, 'varchar', '250', NULL, NULL, '', NULL, NULL, '[]', NULL, NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (3615, 3, '站点描述', 'descrip', 8, 2, 1, 1, 1, '', '', 3615, '', '', 'text', '0', '', '', '', '', '', '[]', '', NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (3616, 3, '站点版权', 'copyright', 1, 2, 1, 1, 1, '', NULL, 3616, NULL, NULL, 'varchar', '250', NULL, NULL, '', NULL, NULL, '[]', NULL, NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (3617, 3, '上传配置', 'filesize', 1, 2, 1, 1, 1, '', NULL, 3617, NULL, '0', 'varchar', '250', NULL, NULL, '', NULL, NULL, '[]', NULL, NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (3618, 3, '文件类型', 'filetype', 1, 2, 1, 1, 1, '', NULL, 3618, NULL, NULL, 'varchar', '250', NULL, NULL, '', NULL, NULL, '[]', NULL, NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (3619, 3, '水印状态', 'water_status', 4, 2, 1, 1, 1, '', NULL, 3619, NULL, NULL, 'smallint', '6', NULL, NULL, '[{\"key\":\"正常\",\"val\":\"1\",\"label_color\":\"primary\"},{\"key\":\"禁用\",\"val\":\"0\",\"label_color\":\"danger\"}]', NULL, NULL, '[]', NULL, NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (3620, 3, '水印位置', 'water_position', 2, 2, 1, 1, 1, '', NULL, 3620, NULL, NULL, 'smallint', '6', NULL, NULL, '[{\"key\":\"左上角水印\",\"val\":\"1\"},{\"key\":\"上居中水印\",\"val\":\"2\"},{\"key\":\"右上角水印\",\"val\":\"3\"},{\"key\":\"左居中水印\",\"val\":\"4\"},{\"key\":\"居中水印\",\"val\":\"5\"},{\"key\":\"右居中水印\",\"val\":\"6\"},{\"key\":\"左下角水印\",\"val\":\"7\"},{\"key\":\"下居中水印\",\"val\":\"8\"},{\"key\":\"右下角水印\",\"val\":\"9\"}]', NULL, NULL, '[]', NULL, NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (3622, 3, '绑定域名', 'domain', 1, 2, 1, 1, 1, '', NULL, 3623, NULL, NULL, 'varchar', '250', NULL, NULL, '', NULL, NULL, '[]', NULL, NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (3759, 6, '所属分组', 'name', 1, 2, NULL, 0, 0, '', NULL, 7, NULL, NULL, 'varchar', '250', NULL, NULL, '', '90', NULL, '{\"address_type\":\"1\"}', 'role', NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (3801, 3, '水印透明度', 'water_alpha', 19, 2, 0, 1, 1, '', NULL, 3622, NULL, NULL, 'smallint', '6', NULL, NULL, '', NULL, NULL, '{\"address_type\":\"1\"}', '', NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (4375, 7, '编号', 'role_id', 1, 2, NULL, NULL, 1, NULL, NULL, 1, NULL, NULL, 'int', '11', NULL, NULL, NULL, '70', NULL, NULL, NULL, NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (4902, 104, '编号', 'id', 1, 2, NULL, NULL, 1, NULL, NULL, 1, NULL, NULL, 'int', '11', NULL, NULL, NULL, '70', NULL, NULL, NULL, NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (4903, 104, 'action_id', 'action_id', 1, 2, 0, 1, 1, '', '/^[0-9]*$/', 4903, '', '', 'varchar', '250', NULL, NULL, '', NULL, NULL, '{\"address_type\":\"1\",\"now_time\":false,\"placeholder\":\"\",\"rand_config\":\"\",\"filetype\":\"\",\"liandong_field\":\"\",\"shuxing\":[\"tooltip\"],\"jdt\":\"changtiao\",\"remote_research_field\":\"\",\"rename_status\":\"\",\"default_tabs_value\":\"\",\"application_id\":\"\",\"crop\":\"\",\"time_search_tempate\":true,\"guige\":[[]],\"maxrows\":4,\"inputRemark\":\"\",\"rangetime_type\":\"date\"}', '', NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (4904, 104, '代码内容', 'content', 8, 2, 0, 1, 1, 'notempty', NULL, 4904, '', '', 'longtext', '0', NULL, NULL, '', NULL, NULL, '{\"shuxing\":[\"tooltip\"],\"guige\":[[]]}', '', NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (4905, 104, '功能描述', 'description', 8, 2, 0, 1, 1, 'notempty', NULL, 4905, '', '', 'text', '0', NULL, NULL, '', NULL, NULL, '{\"shuxing\":[\"tooltip\"],\"guige\":[[]]}', '', NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (4906, 104, '创建时间', 'create_time', 11, 2, 0, 1, 1, '', NULL, 4906, '', '', 'int', '10', NULL, NULL, '', NULL, 'datetime', '{\"shuxing\":[\"tooltip\"],\"guige\":[[]]}', '', NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (4907, 104, '所属菜单', 'menu_id', 1, 2, 1, 1, 1, '', '/^[0-9]*$/', 4907, '', '', 'varchar', '250', NULL, NULL, '', NULL, NULL, '{\"shuxing\":[\"tooltip\"],\"guige\":[[]]}', '', NULL, NULL, '值占位文本', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (5206, 3, '弹窗关闭', 'pop_status', 4, 2, 1, 1, 1, '', NULL, 5206, '', '1', 'smallint', '6', NULL, NULL, '[{\"key\":\"点空白\",\"val\":\"1\",\"label_color\":\"success\"},{\"key\":\"点关闭\",\"val\":\"0\",\"label_color\":\"warning\"}]', NULL, NULL, '{\"shuxing\":[\"tooltip\"],\"guige\":[[]],\"tx_tiaojian\":\"\",\"tx_zhi\":\"\"}', '', NULL, '', '', 0, '', NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (5207, 3, '搜索开关', 'search_status', 4, 2, 1, 1, 1, '', NULL, 5207, '', '1', 'smallint', '6', NULL, NULL, '[{\"key\":\"默认展开\",\"val\":\"1\",\"label_color\":\"success\"},{\"key\":\"默认收起\",\"val\":\"0\",\"label_color\":\"warning\"}]', NULL, NULL, '{\"shuxing\":[\"tooltip\"],\"guige\":[[]],\"tx_tiaojian\":\"\",\"tx_zhi\":\"\"}', '', NULL, '', '', 0, '', NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (5208, 3, '水印开关', 'watermark_status', 4, 2, 1, 1, 1, '', NULL, 5208, '', '1', 'smallint', '6', NULL, NULL, '[{\"key\":\"默认打开\",\"val\":\"1\"},{\"key\":\"默认关闭\",\"val\":\"0\"}]', NULL, NULL, '{\"shuxing\":[\"tooltip\"],\"guige\":[[]],\"tx_tiaojian\":\"\",\"tx_zhi\":\"\"}', '', NULL, '', '', 0, '', NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (5243, 6, '唯一登录', 'session_token', 1, 0, 1, 1, 1, '', NULL, 5243, '', '', 'varchar', '250', NULL, NULL, '', NULL, NULL, '{\"address_type\":\"1\",\"now_time\":false,\"placeholder\":\"\",\"rand_config\":\"\",\"filetype\":\"\",\"liandong_field\":\"\",\"shuxing\":[\"tooltip\"],\"jdt\":\"changtiao\",\"remote_research_field\":\"\",\"rename_status\":\"\",\"default_tabs_value\":\"\",\"application_id\":\"\",\"crop\":\"\",\"time_search_tempate\":true,\"guige\":[[]],\"maxrows\":4,\"inputRemark\":\"\",\"rangetime_type\":\"date\",\"tx_tiaojian\":\"\",\"tx_zhi\":\"\"}', '', NULL, '', '', 0, '', NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (5257, 3, 'DSkey', 'deepseekkey', 1, 2, 1, 1, 1, '', NULL, 5257, '', '', 'varchar', '250', NULL, NULL, '', NULL, NULL, '{\"address_type\":\"1\",\"now_time\":false,\"placeholder\":\"\\u8bf7\\u8f93\\u5165deepseek-key\",\"rand_config\":\"\",\"filetype\":\"\",\"liandong_field\":\"\",\"shuxing\":[\"tooltip\"],\"jdt\":\"changtiao\",\"remote_research_field\":\"\",\"rename_status\":\"\",\"default_tabs_value\":\"\",\"application_id\":\"\",\"crop\":\"\",\"time_search_tempate\":true,\"guige\":[[]],\"maxrows\":4,\"inputRemark\":\"\",\"rangetime_type\":\"date\",\"tx_tiaojian\":\"\",\"tx_zhi\":\"\"}', '', NULL, '', '', 0, '', NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (5308, 3, '百度地图KEY', 'bdKey', 1, 2, 1, 1, 1, '', NULL, 5308, '', '', 'varchar', '250', NULL, NULL, '', NULL, NULL, '{\"address_type\":\"1\",\"now_time\":false,\"placeholder\":\"\",\"rand_config\":\"\",\"filetype\":\"\",\"liandong_field\":\"\",\"shuxing\":[\"tooltip\"],\"jdt\":\"changtiao\",\"remote_research_field\":\"\",\"rename_status\":\"\",\"default_tabs_value\":\"\",\"application_id\":\"\",\"crop\":\"\",\"time_search_tempate\":true,\"guige\":[[]],\"maxrows\":4,\"inputRemark\":\"\",\"rangetime_type\":\"date\",\"tx_tiaojian\":\"\",\"tx_zhi\":\"\"}', '', NULL, '', '', 0, '', NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (5309, 3, '高德地图KEY', 'gdKey', 1, 2, 1, 1, 1, '', NULL, 5309, '', '', 'varchar', '250', NULL, NULL, '', NULL, NULL, '{\"shuxing\":[\"tooltip\"],\"guige\":[[]],\"tx_tiaojian\":\"\",\"tx_zhi\":\"\"}', '', NULL, '', '', 0, '', NULL, NULL, NULL, NULL);
+INSERT INTO `cd_field` VALUES (5310, 3, '腾讯地图KEY', 'txKey', 1, 2, 1, 1, 1, '', NULL, 5310, '', '', 'varchar', '250', NULL, NULL, '', NULL, NULL, '{\"shuxing\":[\"tooltip\"],\"guige\":[[]]}', '', NULL, '', '', NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for cd_file
@@ -348,12 +352,15 @@ CREATE TABLE `cd_log`  (
   `type` smallint NULL DEFAULT NULL COMMENT '类型',
   `times` int NULL DEFAULT NULL COMMENT '日期',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of cd_log
 -- ----------------------------
 INSERT INTO `cd_log` VALUES (1, 'admin', 'admin', 'http://git.tiefen.net/admin/Login/index.html', '112.98.93.24', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36', NULL, NULL, 1754637533, 1, NULL);
+INSERT INTO `cd_log` VALUES (2, 'admin', 'admin', 'http://ultra.hl.jf.ivimoo.com/admin/Login/index.html', '112.98.93.24', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.84 Safari/537.36 HBPC/12.1.4.300', NULL, NULL, 1754873160, 1, NULL);
+INSERT INTO `cd_log` VALUES (3, 'admin', 'admin', 'http://git.tiefen.net/admin/Login/index.html', '112.98.93.24', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36', NULL, NULL, 1754880945, 1, NULL);
+INSERT INTO `cd_log` VALUES (4, 'admin', 'admin', 'http://git.tiefen.net/admin/Login/index.html', '112.98.73.27', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.84 Safari/537.36 HBPC/12.1.4.300', NULL, NULL, 1755311170, 1, NULL);
 
 -- ----------------------------
 -- Table structure for cd_menu

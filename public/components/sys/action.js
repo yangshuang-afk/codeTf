@@ -349,6 +349,14 @@ Vue.component('AdminAdd', {
 						
 						
 						<!-- 新增超级页面表单开始 -->
+<!-- <el-row v-if="form.type == 55"> -->
+<!--     <el-col :span="24"> -->
+<!--         <el-form-item label="表单按钮" prop="showFormSubmit"> -->
+<!--             <el-radio v-model="form.other_config.showFormSubmit" :label="1">显示</el-radio> -->
+<!--             <el-radio v-model="form.other_config.showFormSubmit" :label="0">隐藏</el-radio> -->
+<!--         </el-form-item> -->
+<!--     </el-col> -->
+<!-- </el-row> -->
 
       <el-row v-if="form.type == 55">
         <el-col :span="24">
@@ -789,7 +797,8 @@ Vue.component('AdminAdd', {
         
         // 新增超级页面安全验证方法开始
         validateSuperPage(){
-            const forbidden = ['eval', 'Function', 'exec', 'system', 'shell_exec']
+            // const forbidden = ['eval', 'Function', 'exec', 'system', 'shell_exec']
+            const forbidden = ['eval', 'Function', 'system']
             
             // 检查前端代码
             if(this.form.q_template){
@@ -1009,7 +1018,15 @@ Vue.component('AdminUpdate', {
 						</el-row>
 						
 						
-						
+<!-- <el-row v-if="form.type == 55"> -->
+<!--     <el-col :span="24"> -->
+<!--         <el-form-item label="表单按钮" prop="showFormSubmit"> -->
+<!--             <el-radio v-model="form.other_config.showFormSubmit" :label="1">显示</el-radio> -->
+<!--             <el-radio v-model="form.other_config.showFormSubmit" :label="0">隐藏</el-radio> -->
+<!--         </el-form-item> -->
+<!--     </el-col> -->
+<!-- </el-row> -->
+
 <el-row v-if="form.type == 55">
     <el-col :span="24">
         <el-tabs v-model="codeTabActive" class="code-tabs">
@@ -1405,7 +1422,8 @@ Vue.component('AdminUpdate', {
         
         // 超级页面安全验证方法
         validateSuperPage() {
-            const forbidden = ['eval', 'Function', 'exec', 'system', 'shell_exec']
+            // const forbidden = ['eval', 'Function', 'exec', 'system', 'shell_exec']
+            const forbidden = ['eval', 'Function', 'system']
             
             // 检查前端代码
             if(this.form.q_template) {

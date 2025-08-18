@@ -150,7 +150,7 @@ class Base extends Admin
         $info["access_field"] = Db::name("field")->where("menu_id", $menu_id)->where("type", 38)->value("field");
         
         $role_access = Db::name("field")->where("menu_id", $menu_id)->where("field", 'access')->find();
-
+        
         if ($role_access) {
             $roleTableName = '';
             if (preg_match('/from\s+([^\s,)(;]+)/i', $role_access['sql'], $matches)) {
@@ -164,7 +164,7 @@ class Base extends Admin
                 $info["access_table"] = $roleTableName;
             }
         }
-
+        
         $info['sign'] = md5(md5(json_encode($info, JSON_UNESCAPED_UNICODE) . $secrect['secrect']));
         
         $info['domain'] = $_SERVER['HTTP_HOST'];
@@ -717,7 +717,7 @@ class Base extends Admin
                 $info = Field::find($v)->toArray();
                 $info['create_table_field'] = 0;
                 $info['menu_id'] = $target_menu_id;
-            
+                
                 unset($info['id']);
                 
                 $res = Field::insertGetId($info);
@@ -1278,7 +1278,9 @@ class Base extends Admin
         
         $applist = Application::where("app_type", 1)->where("app_id", ">", 1)->select();
         
-        return json(['status' => 200, 'ruleList' => $ruleList, 'propertyField' => $propertyField, 'dbtype' => $dbtype, 'applist' => $applist]);
+        
+        $my_actions = Action::where(['menu_id' => $menu_id])->order('sortid asc')->select()->toArray();
+        return json(['status' => 200, 'ruleList' => $ruleList, 'propertyField' => $propertyField, 'dbtype' => $dbtype, 'applist' => $applist,'my_actions'=>$my_actions]);
     }
     
     
