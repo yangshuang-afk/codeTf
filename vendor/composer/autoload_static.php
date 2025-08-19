@@ -8,13 +8,14 @@ class ComposerStaticInitcec300be880099a46963987e9af3fdf2
 {
     public static $files = array (
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
-        '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
+        '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
         '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
         '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
         '9b552a3cc426e3287cc811caefa3cf53' => __DIR__ . '/..' . '/topthink/think-helper/src/helper.php',
-        '35fab96057f1bf5e7aba31a8a6d5fdde' => __DIR__ . '/..' . '/topthink/think-orm/stubs/load_stubs.php',
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
+        '35fab96057f1bf5e7aba31a8a6d5fdde' => __DIR__ . '/..' . '/topthink/think-orm/stubs/load_stubs.php',
+        'a1105708a18b76903365ca1c4aa61b02' => __DIR__ . '/..' . '/symfony/translation/Resources/functions.php',
         '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
         'c5521cebe610a9bf42c44b3a5163adfd' => __DIR__ . '/..' . '/overtrue/socialite/src/Contracts/FactoryInterface.php',
         'ccd11c8e7dd9b33638b248681bdfba27' => __DIR__ . '/..' . '/overtrue/socialite/src/Contracts/UserInterface.php',
@@ -25,6 +26,7 @@ class ComposerStaticInitcec300be880099a46963987e9af3fdf2
         '841780ea2e1d6545ea3a253239d59c05' => __DIR__ . '/..' . '/qiniu/php-sdk/src/Qiniu/functions.php',
         '5dd19d8a547b7318af0c3a93c8bd6565' => __DIR__ . '/..' . '/qiniu/php-sdk/src/Qiniu/Http/Middleware/Middleware.php',
         '1cfd2761b63b0a29ed23657ea394cb2d' => __DIR__ . '/..' . '/topthink/think-captcha/src/helper.php',
+        'cc56288302d9df745d97c934d6a6e5f0' => __DIR__ . '/..' . '/topthink/think-queue/src/common.php',
         'c8e8d17e7ab157f630af324c6fb87d41' => __DIR__ . '/..' . '/zoujingli/wechat-developer/helper.php',
     );
 
@@ -35,6 +37,10 @@ class ComposerStaticInitcec300be880099a46963987e9af3fdf2
             'think\\captcha\\' => 14,
             'think\\app\\' => 10,
             'think\\' => 6,
+        ),
+        's' => 
+        array (
+            'setasign\\Fpdi\\' => 14,
         ),
         'a' => 
         array (
@@ -55,11 +61,15 @@ class ComposerStaticInitcec300be880099a46963987e9af3fdf2
         array (
             'Symfony\\Polyfill\\Php80\\' => 23,
             'Symfony\\Polyfill\\Mbstring\\' => 26,
+            'Symfony\\Contracts\\Translation\\' => 30,
             'Symfony\\Contracts\\Service\\' => 26,
             'Symfony\\Contracts\\EventDispatcher\\' => 34,
             'Symfony\\Contracts\\Cache\\' => 24,
             'Symfony\\Component\\VarExporter\\' => 30,
             'Symfony\\Component\\VarDumper\\' => 28,
+            'Symfony\\Component\\Translation\\' => 30,
+            'Symfony\\Component\\Process\\' => 26,
+            'Symfony\\Component\\OptionsResolver\\' => 34,
             'Symfony\\Component\\HttpFoundation\\' => 33,
             'Symfony\\Component\\EventDispatcher\\' => 34,
             'Symfony\\Component\\Cache\\' => 24,
@@ -114,12 +124,15 @@ class ComposerStaticInitcec300be880099a46963987e9af3fdf2
         ),
         'E' => 
         array (
+            'Endroid\\QrCode\\' => 15,
             'EasyWeChat\\' => 11,
             'EasyWeChatComposer\\' => 19,
         ),
         'C' => 
         array (
             'Complex\\' => 8,
+            'Carbon\\Doctrine\\' => 16,
+            'Carbon\\' => 7,
         ),
         'A' => 
         array (
@@ -147,7 +160,12 @@ class ComposerStaticInitcec300be880099a46963987e9af3fdf2
             2 => __DIR__ . '/..' . '/topthink/think-helper/src',
             3 => __DIR__ . '/..' . '/topthink/think-image/src',
             4 => __DIR__ . '/..' . '/topthink/think-orm/src',
-            5 => __DIR__ . '/..' . '/topthink/think-template/src',
+            5 => __DIR__ . '/..' . '/topthink/think-queue/src',
+            6 => __DIR__ . '/..' . '/topthink/think-template/src',
+        ),
+        'setasign\\Fpdi\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/setasign/fpdi/src',
         ),
         'app\\' => 
         array (
@@ -181,6 +199,10 @@ class ComposerStaticInitcec300be880099a46963987e9af3fdf2
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
         ),
+        'Symfony\\Contracts\\Translation\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/translation-contracts',
+        ),
         'Symfony\\Contracts\\Service\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/service-contracts',
@@ -200,6 +222,18 @@ class ComposerStaticInitcec300be880099a46963987e9af3fdf2
         'Symfony\\Component\\VarDumper\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/var-dumper',
+        ),
+        'Symfony\\Component\\Translation\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/translation',
+        ),
+        'Symfony\\Component\\Process\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/process',
+        ),
+        'Symfony\\Component\\OptionsResolver\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/options-resolver',
         ),
         'Symfony\\Component\\HttpFoundation\\' => 
         array (
@@ -334,6 +368,10 @@ class ComposerStaticInitcec300be880099a46963987e9af3fdf2
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/guzzle/src',
         ),
+        'Endroid\\QrCode\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/endroid/qr-code/src',
+        ),
         'EasyWeChat\\' => 
         array (
             0 => __DIR__ . '/..' . '/overtrue/wechat/src',
@@ -345,6 +383,14 @@ class ComposerStaticInitcec300be880099a46963987e9af3fdf2
         'Complex\\' => 
         array (
             0 => __DIR__ . '/..' . '/markbaker/complex/classes/src',
+        ),
+        'Carbon\\Doctrine\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/carbonphp/carbon-doctrine-types/src/Carbon/Doctrine',
+        ),
+        'Carbon\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon',
         ),
         'AliPay\\' => 
         array (
@@ -377,7 +423,7 @@ class ComposerStaticInitcec300be880099a46963987e9af3fdf2
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'PhpToken' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/PhpToken.php',
-        'Stringable' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
+        'Stringable' => __DIR__ . '/..' . '/myclabs/php-enum/stubs/Stringable.php',
         'UnhandledMatchError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
         'ValueError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
         'We' => __DIR__ . '/..' . '/zoujingli/wechat-developer/We.php',

@@ -44,6 +44,15 @@ private static $installed = array (
       ),
       'reference' => 'ce5d34dae9868237a32248788ea175c7e9da14b1',
     ),
+    'carbonphp/carbon-doctrine-types' => 
+    array (
+      'pretty_version' => '2.1.0',
+      'version' => '2.1.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '99f76ffa36cce3b70a4a6abce41dba15ca2e84cb',
+    ),
     'easywechat-composer/easywechat-composer' => 
     array (
       'pretty_version' => '1.4.1',
@@ -52,6 +61,15 @@ private static $installed = array (
       array (
       ),
       'reference' => '3fc6a7ab6d3853c0f4e2922539b56cc37ef361cd',
+    ),
+    'endroid/qr-code' => 
+    array (
+      'pretty_version' => '1.9.3',
+      'version' => '1.9.3.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'c9644bec2a9cc9318e98d1437de3c628dcd1ef93',
     ),
     'ezyang/htmlpurifier' => 
     array (
@@ -197,6 +215,15 @@ private static $installed = array (
       ),
       'reference' => 'a867478eae49c9f59ece437ae7f9506bfaa27483',
     ),
+    'nesbot/carbon' => 
+    array (
+      'pretty_version' => '2.73.0',
+      'version' => '2.73.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '9228ce90e1035ff2f0db84b40ec2e023ed802075',
+    ),
     'nikic/php-parser' => 
     array (
       'pretty_version' => 'v4.19.1',
@@ -284,6 +311,13 @@ private static $installed = array (
       array (
       ),
       'reference' => 'e41a24703d4560fd0acb709162f73b8adfc3aa0d',
+    ),
+    'psr/clock-implementation' => 
+    array (
+      'provided' => 
+      array (
+        0 => '1.0',
+      ),
     ),
     'psr/container' => 
     array (
@@ -417,6 +451,15 @@ private static $installed = array (
       ),
       'reference' => '120b605dfeb996808c31b6477290a714d356e822',
     ),
+    'setasign/fpdi' => 
+    array (
+      'pretty_version' => 'v2.6.0',
+      'version' => '2.6.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'a6db878129ec6c7e141316ee71872923e7f1b7ad',
+    ),
     'stella-maris/clock' => 
     array (
       'pretty_version' => '0.1.7',
@@ -494,6 +537,15 @@ private static $installed = array (
       ),
       'reference' => 'e16b2676a4b3b1fa12378a20b29c364feda2a8d6',
     ),
+    'symfony/options-resolver' => 
+    array (
+      'pretty_version' => 'v3.4.47',
+      'version' => '3.4.47.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'c7efc97a47b2ebaabc19d5b6c6b50f5c37c92744',
+    ),
     'symfony/polyfill-mbstring' => 
     array (
       'pretty_version' => 'v1.30.0',
@@ -512,6 +564,15 @@ private static $installed = array (
       ),
       'reference' => '77fa7995ac1b21ab60769b7323d600a991a90433',
     ),
+    'symfony/process' => 
+    array (
+      'pretty_version' => 'v6.0.19',
+      'version' => '6.0.19.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '2114fd60f26a296cc403a7939ab91478475a33d4',
+    ),
     'symfony/service-contracts' => 
     array (
       'pretty_version' => 'v3.0.2',
@@ -520,6 +581,31 @@ private static $installed = array (
       array (
       ),
       'reference' => 'd78d39c1599bd1188b8e26bb341da52c3c6d8a66',
+    ),
+    'symfony/translation' => 
+    array (
+      'pretty_version' => 'v6.0.19',
+      'version' => '6.0.19.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '9c24b3fdbbe9fb2ef3a6afd8bbaadfd72dad681f',
+    ),
+    'symfony/translation-contracts' => 
+    array (
+      'pretty_version' => 'v3.0.2',
+      'version' => '3.0.2.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'acbfbb274e730e5a0236f619b6168d9dedb3e282',
+    ),
+    'symfony/translation-implementation' => 
+    array (
+      'provided' => 
+      array (
+        0 => '2.3|3.0',
+      ),
     ),
     'symfony/var-dumper' => 
     array (
@@ -610,6 +696,15 @@ private static $installed = array (
       array (
       ),
       'reference' => 'f5339858ee4c7d4267e1492ea5c145da1a6fb136',
+    ),
+    'topthink/think-queue' => 
+    array (
+      'pretty_version' => 'v3.0.9',
+      'version' => '3.0.9.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '654812b47dd7c708c4443deed27f212f8382e8da',
     ),
     'topthink/think-template' => 
     array (
