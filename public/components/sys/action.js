@@ -346,63 +346,6 @@ Vue.component('AdminAdd', {
 						</el-row>
 						
 						
-						
-						
-						<!-- 新增超级页面表单开始 -->
-<!-- <el-row v-if="form.type == 55"> -->
-<!--     <el-col :span="24"> -->
-<!--         <el-form-item label="表单按钮" prop="showFormSubmit"> -->
-<!--             <el-radio v-model="form.other_config.showFormSubmit" :label="1">显示</el-radio> -->
-<!--             <el-radio v-model="form.other_config.showFormSubmit" :label="0">隐藏</el-radio> -->
-<!--         </el-form-item> -->
-<!--     </el-col> -->
-<!-- </el-row> -->
-
-      <el-row v-if="form.type == 55">
-        <el-col :span="24">
-          <el-tabs v-model="codeTabActive" class="code-tabs">
-            <el-tab-pane label="前端代码" name="frontend">
-              <el-form-item style="margin-left: 0px;">
-                <el-input
-                  v-model="form.q_template"
-                  type="textarea"
-                  :autosize="{minRows: 10}"
-                  placeholder="输入HTML模板代码">
-                </el-input>
-              </el-form-item>
-            </el-tab-pane>
-            <el-tab-pane label="后端代码" name="backend">
-              <el-form-item style="margin-left: 0px;">
-                <el-input
-                  v-model="form.h_php"
-                  type="textarea"
-                  :autosize="{minRows: 10}"
-                  placeholder="输入后端处理代码">
-                </el-input>
-              </el-form-item>
-            </el-tab-pane>
-          </el-tabs>
-        </el-col>
-      </el-row>
-						<!-- 新增超级页面表单结束 -->
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
 						<el-row v-if="form.type == 11">
 							<el-form-item label="导出方式" prop="form.other_config.export_type">
 								<el-select style="width:100%" :size="size" v-model="form.other_config.export_type" clearable  filterable placeholder="请选择导出方式">
@@ -444,7 +387,50 @@ Vue.component('AdminAdd', {
 								<el-input v-model="form.status_val" placeholder="状态值"/>
 							</el-form-item>
 						</el-row>
+						
+						
+						<!-- 新增超级页面表单开始 -->
+        <el-row v-if="form.type == 55">
+            <el-col :span="24">
+                <el-form-item label="">
+                    <div style="font-size: 12px; color: #999; margin-top: 5px;">
+                        <p><strong>URL参数选择逻辑：</strong></p>
+                        <p>1. <strong>未选择任何字段</strong>：按钮始终可点击（如"添加"操作）</p>
+                        <p>2. <strong>仅选择主键字段</strong>：允许多选操作（如"删除"）</p>
+                        <p>3. <strong>选择多个字段</strong>：仅允许单选操作（如"修改"）</p>
+                    </div>
+                </el-form-item>
+            </el-col>
+        </el-row>
 
+      <el-row v-if="form.type == 55">
+        <el-col :span="24">
+          <el-tabs v-model="codeTabActive" class="code-tabs">
+            <el-tab-pane label="前端代码" name="frontend">
+              <el-form-item style="margin-left: 0px;">
+                <el-input
+                  v-model="form.q_template"
+                  type="textarea"
+                  :autosize="{minRows: 10}"
+                  placeholder="输入HTML模板代码">
+                </el-input>
+              </el-form-item>
+            </el-tab-pane>
+            <el-tab-pane label="后端代码" name="backend">
+              <el-form-item style="margin-left: 0px;">
+                <el-input
+                  v-model="form.h_php"
+                  type="textarea"
+                  :autosize="{minRows: 10}"
+                  placeholder="输入后端处理代码">
+                </el-input>
+              </el-form-item>
+            </el-tab-pane>
+          </el-tabs>
+        </el-col>
+      </el-row>
+						<!-- 新增超级页面表单结束 -->
+						
 						<el-row v-if="form.type == 5">
 							<el-form-item label="是否打印" prop="printer_status">
 								<el-select @change="selectTreeLoadType" style="width:100%" v-model="form.other_config.printer_status" :size="size" clearable filterable placeholder="是否打印详情页数据">
@@ -1018,14 +1004,18 @@ Vue.component('AdminUpdate', {
 						</el-row>
 						
 						
-<!-- <el-row v-if="form.type == 55"> -->
-<!--     <el-col :span="24"> -->
-<!--         <el-form-item label="表单按钮" prop="showFormSubmit"> -->
-<!--             <el-radio v-model="form.other_config.showFormSubmit" :label="1">显示</el-radio> -->
-<!--             <el-radio v-model="form.other_config.showFormSubmit" :label="0">隐藏</el-radio> -->
-<!--         </el-form-item> -->
-<!--     </el-col> -->
-<!-- </el-row> -->
+<el-row v-if="form.type == 55">
+    <el-col :span="24">
+        <el-form-item label="">
+            <div style="font-size: 12px; color: #999; margin-top: 5px;">
+                <p><strong>URL参数选择逻辑：</strong></p>
+                <p>1. <strong>未选择任何字段</strong>：按钮始终可点击（如"添加"操作）</p>
+                <p>2. <strong>仅选择主键字段</strong>：允许多选操作（如"删除"）</p>
+                <p>3. <strong>选择多个字段</strong>：仅允许单选操作（如"修改"）</p>
+            </div>
+        </el-form-item>
+    </el-col>
+</el-row>
 
 <el-row v-if="form.type == 55">
     <el-col :span="24">
@@ -1208,6 +1198,12 @@ Vue.component('AdminUpdate', {
 						<el-row v-if="form.group_button_status">
 							<el-form-item label="表头按钮显示条件" prop="show_list_button">
 								<el-input v-model="form.other_config.show_group_button" placeholder="status != 1 或 pay_type == 1 && scope.row.status == 1 或wl_date > Date.now()"  />
+                                <div style="font-size: 12px; color: #999; margin-top: 5px;">
+                                    <p><strong>表头按钮 多依赖于页面地址urlobj传参</strong></p>
+                                    <p><strong>填写示例：</strong></p>
+                                    <p><code>urlobj?.member_id</code> → 当存在member_id时显示</p>
+                                    <p><strong>注意：</strong>表达式需返回布尔值（true/false），支持JS语法。</p>
+                                </div>
 							</el-form-item>
 						</el-row>
 						

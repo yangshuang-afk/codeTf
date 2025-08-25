@@ -760,46 +760,129 @@ Vue.component('AdminAdd', {
 							</el-form-item>
 						</el-row>
 					
-					 <!-- 新增的字段提醒设置 -->
-						<el-row>
-							<el-form-item label="字段提醒" prop="tx_tiaojian">
-								<el-col :span="5">
-									<el-form-item prop="tx_tiaojian">
-										<el-select v-model="form.tx_tiaojian" placeholder="选择条件类型" style="width: 100%;">
-											<el-option label="大于" value="1"></el-option>
-											<el-option label="小于" value="2"></el-option>
-											<el-option label="等于" value="3"></el-option>
-											<el-option label="大于等于" value="4"></el-option>
-											<el-option label="小于等于" value="5"></el-option>
-											<el-option label="包含" value="6"></el-option>
-											<el-option label="不包含" value="7"></el-option>
-											<el-option label="不等于" value="8"></el-option>
-											<el-option label="为空" value="9"></el-option>
-											<el-option label="不为空" value="10"></el-option>
-										</el-select>
-									</el-form-item>
-								</el-col>
-								<el-col :span="14">
-									<el-form-item prop="tx_zhi">
-										<el-input v-model="form.tx_zhi" clearable placeholder="输入条件值，如 >1 或 session(admin.yuangong_id)"/>
-									</el-form-item>
-								</el-col>
-								<el-col :span="4">
-                                    <el-form-item prop="tx_color" >
-                                        <el-input  v-model="form.tx_color" autoComplete="off" clearable placeholder="提醒颜色"/>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="1">
-                                    <el-form-item >
-                                        <el-color-picker  size="small" v-model="form.tx_color"></el-color-picker>
-                                    </el-form-item>
-                                </el-col>
+					 
+						
+										 <!-- 新增的列表文字变色设置 -->
+					    <el-row>
+							<el-form-item label="列表文字变色" prop="tx_config" v-if="Array.isArray(form.tx_config)">
+                                    <el-row v-for="(item,i) in form.tx_config" :key="i">
+                                    <el-col :span="5">
+                                            <el-form-item prop="tx_tiaojian">
+                                                <el-select v-model="item.tx_tiaojian" clearable filterable placeholder="条件类型" style="width: 100%;">
+                                                    <el-option
+                                                        v-for="opt in txOptions"
+                                                        :key="opt.value"
+                                                        :label="opt.label"
+                                                        :value="opt.value">
+                                                    </el-option>
+                                                </el-select>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="10">
+                                            <el-form-item prop="tx_zhi">
+                                                <el-input v-model="item.tx_zhi" clearable placeholder="输入条件值，如 >1 或 session(admin.yuangong_id)"/>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="5">
+                                            <el-form-item prop="tx_color" >
+                                                <el-select style="width:100%" v-model="item.tx_color" :size="size" clearable filterable placeholder="颜色">
+                                                    <el-option key="1" style="background:#409eff" label="primary" value="#409eff"></el-option>
+                                                    <el-option key="2" style="background:#67c23a" label="success" value="#67c23a"></el-option>
+                                                    <el-option key="3" style="background:#909399" label="info" value="#909399"></el-option>
+                                                    <el-option key="4" style="background:#e6a23c" label="warning" value="#e6a23c"></el-option>
+                                                    <el-option key="5" style="background:#f56c6c" label="danger" value="#f56c6c"></el-option>
+                                                    <el-option key="6" style="background:#5ed84f" label="fresh-green" value="#5ed84f"></el-option>
+                                                    <el-option key="7" style="background:#353640" label="deep-space" value="#353640"></el-option>
+                                                    <el-option key="8" style="background:#6b6f80" label="cool-gray" value="#6b6f80"></el-option>
+                                                    <el-option key="9" style="background:#6967ce" label="violet" value="#6967ce"></el-option>
+                                                    <el-option key="10" style="background:#28afd0" label="aqua" value="#28afd0"></el-option>
+                                                    <el-option key="11" style="background:#fdb901" label="golden" value="#fdb901"></el-option>
+                                                    <el-option key="12" style="background:#fa626b" label="coral" value="#fa626b"></el-option>
+                                                    <el-option key="13" style="background:#babfc7" label="silver" value="#babfc7"></el-option>
+                                                    <el-option key="14" style="background:#53a8ff" label="sky-blue" value="#53a8ff"></el-option>
+                                                    <el-option key="15" style="background:#85ce61" label="leaf-green" value="#85ce61"></el-option>
+                                                    <el-option key="16" style="background:#a6a9ad" label="mist-gray" value="#a6a9ad"></el-option>
+                                                    <el-option key="17" style="background:#eebe77" label="honey" value="#eebe77"></el-option>
+                                                    <el-option key="18" style="background:#f78989" label="blossom" value="#f78989"></el-option>
+                                                    <el-option key="19" style="background:#3d4b5c" label="steel" value="#3d4b5c"></el-option>
+                                                    <el-option key="20" style="background:#7e57c2" label="amethyst" value="#7e57c2"></el-option>
+                                                </el-select>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="2">
+                                            <el-button type="danger" size="mini" style="position:relative;left:10px"  icon="el-icon-close" @click="deleteItem('tx_config',i)"></el-button>
+                                        </el-col>
+                                    </el-row>
+								<div>
+									<el-button type="success" icon="el-icon-plus" style="padding:5px 7px" :size="size" @click="addItem('tx_config')">追加</el-button>
+									<el-button v-if="form.tx_config.length > 0" type="warning" icon="el-icon-delete" style="padding:5px 7px" :size="size" @click="clearItem('tx_config')">清空</el-button>
+								</div>
 							</el-form-item>
 						</el-row>
+					
+				
+						    <el-row>
+							<el-form-item label="列表背景变色" prop="list_background_config" v-if="Array.isArray(form.list_background_config)">
+                                    <el-row v-for="(background_config_item,i) in form.list_background_config" :key="i + 10086">
+                                    <el-col :span="5">
+                                            <el-form-item prop="tiaojian">
+                                                <el-select v-model="background_config_item.tiaojian" clearable filterable placeholder="条件类型" style="width: 100%;">
+                                                    <el-option
+                                                        v-for="opt in txOptions"
+                                                        :key="opt.value"
+                                                        :label="opt.label"
+                                                        :value="opt.value">
+                                                    </el-option>
+                                                </el-select>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="10">
+                                            <el-form-item prop="zhi">
+                                                <el-input v-model="background_config_item.zhi" clearable placeholder="输入条件值，如 >1 或 session(admin.yuangong_id)"/>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="5">
+                                            <el-form-item prop="color" >
+                                                <el-select style="width:100%" v-model="background_config_item.color" :size="size" clearable filterable placeholder="颜色">
+                                                    <el-option key="1" style="background:#409eff" label="primary" value="#409eff"></el-option>
+                                                    <el-option key="2" style="background:#67c23a" label="success" value="#67c23a"></el-option>
+                                                    <el-option key="3" style="background:#909399" label="info" value="#909399"></el-option>
+                                                    <el-option key="4" style="background:#e6a23c" label="warning" value="#e6a23c"></el-option>
+                                                    <el-option key="5" style="background:#f56c6c" label="danger" value="#f56c6c"></el-option>
+                                                    <el-option key="6" style="background:#5ed84f" label="fresh-green" value="#5ed84f"></el-option>
+                                                    <el-option key="7" style="background:#353640" label="deep-space" value="#353640"></el-option>
+                                                    <el-option key="8" style="background:#6b6f80" label="cool-gray" value="#6b6f80"></el-option>
+                                                    <el-option key="9" style="background:#6967ce" label="violet" value="#6967ce"></el-option>
+                                                    <el-option key="10" style="background:#28afd0" label="aqua" value="#28afd0"></el-option>
+                                                    <el-option key="11" style="background:#fdb901" label="golden" value="#fdb901"></el-option>
+                                                    <el-option key="12" style="background:#fa626b" label="coral" value="#fa626b"></el-option>
+                                                    <el-option key="13" style="background:#babfc7" label="silver" value="#babfc7"></el-option>
+                                                    <el-option key="14" style="background:#53a8ff" label="sky-blue" value="#53a8ff"></el-option>
+                                                    <el-option key="15" style="background:#85ce61" label="leaf-green" value="#85ce61"></el-option>
+                                                    <el-option key="16" style="background:#a6a9ad" label="mist-gray" value="#a6a9ad"></el-option>
+                                                    <el-option key="17" style="background:#eebe77" label="honey" value="#eebe77"></el-option>
+                                                    <el-option key="18" style="background:#f78989" label="blossom" value="#f78989"></el-option>
+                                                    <el-option key="19" style="background:#3d4b5c" label="steel" value="#3d4b5c"></el-option>
+                                                    <el-option key="20" style="background:#7e57c2" label="amethyst" value="#7e57c2"></el-option>
+                                                </el-select>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="2">
+                                            <el-button type="danger" size="mini" style="position:relative;left:10px"  icon="el-icon-close" @click="deleteItem('list_background_config',i)"></el-button>
+                                        </el-col>
+                                    </el-row>
+								<div>
+									<el-button type="success" icon="el-icon-plus" style="padding:5px 7px" :size="size" @click="addItem('list_background_config')">追加</el-button>
+									<el-button v-if="form.list_background_config.length > 0" type="warning" icon="el-icon-delete" style="padding:5px 7px" :size="size" @click="clearItem('list_background_config')">清空</el-button>
+								</div>
+							</el-form-item>
+						</el-row>
+					
+						
 						
                         <!-- 新增的字段完善提醒设置 -->
 						<el-row>
-							<el-form-item label="完善提醒">
+							<el-form-item label="字段完善提醒">
 								<el-col :span="6">
 									<el-form-item prop="improve_tiaojian">
 										<el-select v-model="form.improve_tiaojian" placeholder="选择条件类型" style="width: 100%;">
@@ -814,9 +897,15 @@ Vue.component('AdminAdd', {
 								</el-col>
 								<el-col :span="18">
 									<el-form-item prop="improve_zhi">
-										<el-input v-model="form.improve_zhi" clearable placeholder="输入条件值，如 >1 或 session(admin.yuangong_id)"/>
+										<el-input v-model="form.improve_zhi" clearable placeholder="输入条件值，如 1 或 session(admin.yuangong_id)"/>
 									</el-form-item>
 								</el-col>
+							</el-form-item>
+						</el-row>
+						
+						<el-row>
+							<el-form-item label="列表字段" prop="list_feild">
+								<el-input v-model="form.other_config.list_feild" clearable placeholder="请输入列表显示在哪个字段中"/>
 							</el-form-item>
 						</el-row>
 
@@ -914,6 +1003,7 @@ Vue.component('AdminAdd', {
                     guige: [{}],
                     maxrows: 4,
                     inputRemark: '',
+                    list_feild: '',
                     rangetime_type: 'date',
                     key_placeholder: '',   // 新增key-placeholder字段
                     value_placeholder: '', // 新增value-placeholder字段
@@ -931,6 +1021,11 @@ Vue.component('AdminAdd', {
                 tx_color: '',      // 新增字段提醒条件值
                 improve_tiaojian: '',      // 完善条件
                 improve_zhi: '',      // 完善条件校验值
+                
+                // 文字变色配置数组，每项包含条件类型、条件值和颜色
+                tx_config: [],
+                // 背景变色配置数组，每项包含条件类型、条件值和颜色
+                list_background_config: [],
             },
             iconDialogStatus: false,
             activeName: 'first',
@@ -992,6 +1087,13 @@ Vue.component('AdminAdd', {
                     this.$message.error(this.form.title + "的格式有误，请重新修改");
                     return;
                 }
+            }
+            
+            if (!this.form.tx_config) {
+                this.form.tx_config = [];
+            }
+            if (!this.form.list_background_config) {
+                this.form.list_background_config = [];
             }
             
             this.$refs['form'].validate(valid => {
@@ -1089,14 +1191,49 @@ Vue.component('AdminAdd', {
                 })
             }
         },
+        
         addItem(key) {
-            this.form[key].push({})
+            if (!Array.isArray(this.form[key])) {
+                this.$set(this.form, key, []);
+            }
+            // 根据不同的key初始化不同的默认配置
+            const defaultConfig = {
+                'tx_config': {  // 文字变色配置
+                    tx_tiaojian: '',
+                    tx_zhi: '',
+                    tx_color: ''
+                },
+                'list_background_config': {  // 背景变色配置
+                    tiaojian: '',
+                    zhi: '',
+                    color: ''
+                },
+                'item_config': {}  // 其他配置
+            };
+            
+            const newItem = defaultConfig[key] || {};
+            this.form[key].push({...newItem});
+            // 使用$set添加新元素
+            // this.$set(this.form[key], this.form[key].length, {});
+            
+            this.$nextTick(() => {
+                this.$forceUpdate();
+            });
         },
         deleteItem(key, index) {
-            this.form[key].splice(index, 1)
+            if (Array.isArray(this.form[key])) {
+                // 使用splice删除元素会触发响应式更新
+                this.form[key].splice(index, 1);
+                this.$nextTick(() => {
+                    this.$forceUpdate();
+                });
+            }
         },
         clearItem(key) {
-            this.form[key] = []
+            this.form[key] = [];
+            this.$nextTick(() => {
+                this.$forceUpdate();
+            });
         },
         setDefaultItem(val) {
             this.form['item_config'] = val
@@ -1143,22 +1280,56 @@ Vue.component('AdminAdd', {
             }
         },
         closeForm() {
-            this.$emit('update:show', false)
-            this.loading = false
+            this.$emit('update:show', false);
+            this.loading = false;
+            
             this.$nextTick(() => {
-                this.$refs['form'].resetFields();//清空表单
-                this.default_rules = ''
-                this.list_item = false
-                this.form.other_config = {
-                    shuxing: ['tooltip'],
-                    guige: [{}],
-                    
-                    key_placeholder: '',   // 保留字段
-                    value_placeholder: ''  // 保留字段
+                // 先判断表单实例是否存在再重置
+                if (this.$refs['form']) {
+                    this.$refs['form'].resetFields();
                 }
-                this.activeName = 'first'
-            })
+                
+                this.default_rules = '';
+                this.list_item = false;
+                this.activeName = 'first';
+                
+                // 重置表单数据，确保所有数组字段正确初始化
+                this.form = {
+                    title: '',
+                    field: '',
+                    type: '',
+                    post_status: 1,
+                    create_table_field: 1,
+                    list_show: 2,
+                    validate: [],  // 确保是数组
+                    item_config: [],  // 确保是数组
+                    tx_config: [],  // 确保是数组
+                    list_background_config: [],  // 确保是数组
+                    other_config: {
+                        shuxing: ['tooltip'],  // 确保是数组
+                        guige: [],  // 修改为[]而非[{}]
+                        key_placeholder: '',
+                        value_placeholder: '',
+                        // 补充其他必要的默认属性
+                        address_type: 1,
+                        placeholder: '',
+                        liandong_field: ''
+                    },
+                    sql: '',
+                    datatype: '',
+                    length: '',
+                    belong_table: '',
+                    default_value: '',
+                    tx_tiaojian: '',
+                    tx_zhi: '',
+                    tx_color: '',
+                    improve_tiaojian: '',
+                    improve_zhi: '',
+                    menu_id: this.menuid || this.menu_id
+                };
+            });
         }
+        
     },
 });
 
@@ -1630,46 +1801,127 @@ Vue.component('AdminUpdate', {
 							</el-form-item>
 						</el-row>
 						
-					 <!-- 新增的字段提醒设置 -->
-						<el-row>
-							<el-form-item label="字段提醒" prop="tx_tiaojian">
-								<el-col :span="5">
-									<el-form-item prop="tx_tiaojian">
-										<el-select v-model="form.tx_tiaojian" placeholder="选择条件类型" style="width: 100%;">
-											<el-option label="大于" value="1"></el-option>
-											<el-option label="小于" value="2"></el-option>
-											<el-option label="等于" value="3"></el-option>
-											<el-option label="大于等于" value="4"></el-option>
-											<el-option label="小于等于" value="5"></el-option>
-											<el-option label="包含" value="6"></el-option>
-											<el-option label="不包含" value="7"></el-option>
-											<el-option label="不等于" value="8"></el-option>
-											<el-option label="为空" value="9"></el-option>
-											<el-option label="不为空" value="10"></el-option>
-										</el-select>
-									</el-form-item>
-								</el-col>
-								<el-col :span="14">
-									<el-form-item prop="tx_zhi">
-										<el-input v-model="form.tx_zhi" clearable placeholder="输入条件值，如 >1 或 session(admin.yuangong_id)"/>
-									</el-form-item>
-								</el-col>
-								<el-col :span="4">
-                                    <el-form-item prop="tx_color" >
-                                        <el-input  v-model="form.tx_color" autoComplete="off" clearable placeholder="提醒颜色"/>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="1">
-                                    <el-form-item >
-                                        <el-color-picker  size="small" v-model="form.tx_color"></el-color-picker>
-                                    </el-form-item>
-                                </el-col>
+					 <!-- 新增的列表文字变色设置 -->
+					    <el-row>
+							<el-form-item label="列表文字变色" prop="tx_config" v-if="Array.isArray(form.tx_config)">
+                                    <el-row v-for="(item,i) in form.tx_config" :key="i">
+                                    <el-col :span="5">
+                                            <el-form-item prop="tx_tiaojian">
+                                                <el-select v-model="item.tx_tiaojian" clearable filterable placeholder="条件类型" style="width: 100%;">
+                                                    <el-option
+                                                        v-for="opt in txOptions"
+                                                        :key="opt.value"
+                                                        :label="opt.label"
+                                                        :value="opt.value">
+                                                    </el-option>
+                                                </el-select>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="10">
+                                            <el-form-item prop="tx_zhi">
+                                                <el-input v-model="item.tx_zhi" clearable placeholder="输入条件值，如 >1 或 session(admin.yuangong_id)"/>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="5">
+                                            <el-form-item prop="tx_color" >
+                                                <el-select style="width:100%" v-model="item.tx_color" :size="size" clearable filterable placeholder="颜色">
+                                                    <el-option key="1" style="background:#409eff" label="primary" value="#409eff"></el-option>
+                                                    <el-option key="2" style="background:#67c23a" label="success" value="#67c23a"></el-option>
+                                                    <el-option key="3" style="background:#909399" label="info" value="#909399"></el-option>
+                                                    <el-option key="4" style="background:#e6a23c" label="warning" value="#e6a23c"></el-option>
+                                                    <el-option key="5" style="background:#f56c6c" label="danger" value="#f56c6c"></el-option>
+                                                    <el-option key="6" style="background:#5ed84f" label="fresh-green" value="#5ed84f"></el-option>
+                                                    <el-option key="7" style="background:#353640" label="deep-space" value="#353640"></el-option>
+                                                    <el-option key="8" style="background:#6b6f80" label="cool-gray" value="#6b6f80"></el-option>
+                                                    <el-option key="9" style="background:#6967ce" label="violet" value="#6967ce"></el-option>
+                                                    <el-option key="10" style="background:#28afd0" label="aqua" value="#28afd0"></el-option>
+                                                    <el-option key="11" style="background:#fdb901" label="golden" value="#fdb901"></el-option>
+                                                    <el-option key="12" style="background:#fa626b" label="coral" value="#fa626b"></el-option>
+                                                    <el-option key="13" style="background:#babfc7" label="silver" value="#babfc7"></el-option>
+                                                    <el-option key="14" style="background:#53a8ff" label="sky-blue" value="#53a8ff"></el-option>
+                                                    <el-option key="15" style="background:#85ce61" label="leaf-green" value="#85ce61"></el-option>
+                                                    <el-option key="16" style="background:#a6a9ad" label="mist-gray" value="#a6a9ad"></el-option>
+                                                    <el-option key="17" style="background:#eebe77" label="honey" value="#eebe77"></el-option>
+                                                    <el-option key="18" style="background:#f78989" label="blossom" value="#f78989"></el-option>
+                                                    <el-option key="19" style="background:#3d4b5c" label="steel" value="#3d4b5c"></el-option>
+                                                    <el-option key="20" style="background:#7e57c2" label="amethyst" value="#7e57c2"></el-option>
+                                                </el-select>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="2">
+                                            <el-button type="danger" size="mini" style="position:relative;left:10px"  icon="el-icon-close" @click="deleteItem('tx_config',i)"></el-button>
+                                        </el-col>
+                                    </el-row>
+								<div>
+									<el-button type="success" icon="el-icon-plus" style="padding:5px 7px" :size="size" @click="addItem('tx_config')">追加</el-button>
+									<el-button v-if="form.tx_config.length > 0" type="warning" icon="el-icon-delete" style="padding:5px 7px" :size="size" @click="clearItem('tx_config')">清空</el-button>
+								</div>
 							</el-form-item>
 						</el-row>
+					
+				
+						    <el-row>
+							<el-form-item label="列表背景变色" prop="list_background_config" v-if="Array.isArray(form.list_background_config)">
+                                    <el-row v-for="(background_config_item,i) in form.list_background_config" :key="i + 10086">
+                                    <el-col :span="5">
+                                            <el-form-item prop="tiaojian">
+                                                <el-select v-model="background_config_item.tiaojian" clearable filterable placeholder="条件类型" style="width: 100%;">
+                                                    <el-option
+                                                        v-for="opt in txOptions"
+                                                        :key="opt.value"
+                                                        :label="opt.label"
+                                                        :value="opt.value">
+                                                    </el-option>
+                                                </el-select>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="10">
+                                            <el-form-item prop="zhi">
+                                                <el-input v-model="background_config_item.zhi" clearable placeholder="输入条件值，如 >1 或 session(admin.yuangong_id)"/>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="5">
+                                            <el-form-item prop="color" >
+                                                <el-select style="width:100%" v-model="background_config_item.color" :size="size" clearable filterable placeholder="颜色">
+                                                    <el-option key="1" style="background:#409eff" label="primary" value="#409eff"></el-option>
+                                                    <el-option key="2" style="background:#67c23a" label="success" value="#67c23a"></el-option>
+                                                    <el-option key="3" style="background:#909399" label="info" value="#909399"></el-option>
+                                                    <el-option key="4" style="background:#e6a23c" label="warning" value="#e6a23c"></el-option>
+                                                    <el-option key="5" style="background:#f56c6c" label="danger" value="#f56c6c"></el-option>
+                                                    <el-option key="6" style="background:#5ed84f" label="fresh-green" value="#5ed84f"></el-option>
+                                                    <el-option key="7" style="background:#353640" label="deep-space" value="#353640"></el-option>
+                                                    <el-option key="8" style="background:#6b6f80" label="cool-gray" value="#6b6f80"></el-option>
+                                                    <el-option key="9" style="background:#6967ce" label="violet" value="#6967ce"></el-option>
+                                                    <el-option key="10" style="background:#28afd0" label="aqua" value="#28afd0"></el-option>
+                                                    <el-option key="11" style="background:#fdb901" label="golden" value="#fdb901"></el-option>
+                                                    <el-option key="12" style="background:#fa626b" label="coral" value="#fa626b"></el-option>
+                                                    <el-option key="13" style="background:#babfc7" label="silver" value="#babfc7"></el-option>
+                                                    <el-option key="14" style="background:#53a8ff" label="sky-blue" value="#53a8ff"></el-option>
+                                                    <el-option key="15" style="background:#85ce61" label="leaf-green" value="#85ce61"></el-option>
+                                                    <el-option key="16" style="background:#a6a9ad" label="mist-gray" value="#a6a9ad"></el-option>
+                                                    <el-option key="17" style="background:#eebe77" label="honey" value="#eebe77"></el-option>
+                                                    <el-option key="18" style="background:#f78989" label="blossom" value="#f78989"></el-option>
+                                                    <el-option key="19" style="background:#3d4b5c" label="steel" value="#3d4b5c"></el-option>
+                                                    <el-option key="20" style="background:#7e57c2" label="amethyst" value="#7e57c2"></el-option>
+                                                </el-select>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="2">
+                                            <el-button type="danger" size="mini" style="position:relative;left:10px"  icon="el-icon-close" @click="deleteItem('list_background_config',i)"></el-button>
+                                        </el-col>
+                                    </el-row>
+								<div>
+									<el-button type="success" icon="el-icon-plus" style="padding:5px 7px" :size="size" @click="addItem('list_background_config')">追加</el-button>
+									<el-button v-if="form.list_background_config.length > 0" type="warning" icon="el-icon-delete" style="padding:5px 7px" :size="size" @click="clearItem('list_background_config')">清空</el-button>
+								</div>
+							</el-form-item>
+						</el-row>
+					
+						
 						
                         <!-- 新增的字段完善提醒设置 -->
 						<el-row>
-							<el-form-item label="完善提醒">
+							<el-form-item label="字段完善提醒">
 								<el-col :span="6">
 									<el-form-item prop="improve_tiaojian">
 										<el-select v-model="form.improve_tiaojian" placeholder="选择条件类型" style="width: 100%;">
@@ -1684,9 +1936,16 @@ Vue.component('AdminUpdate', {
 								</el-col>
 								<el-col :span="18">
 									<el-form-item prop="improve_zhi">
-										<el-input v-model="form.improve_zhi" clearable placeholder="输入条件值，如 >1 或 session(admin.yuangong_id)"/>
+										<el-input v-model="form.improve_zhi" clearable placeholder="输入条件值，如 1 或 session(admin.yuangong_id)"/>
 									</el-form-item>
 								</el-col>
+							</el-form-item>
+						</el-row>
+						
+						
+						<el-row>
+							<el-form-item label="列表字段" prop="list_feild">
+								<el-input v-model="form.other_config.list_feild" clearable placeholder="请输入列表展示在哪个字段"/>
 							</el-form-item>
 						</el-row>
 						
@@ -1787,6 +2046,7 @@ Vue.component('AdminUpdate', {
                     guige: [{}],
                     maxrows: 4,
                     inputRemark: '',
+                    list_feild: '',
                     key_placeholder: '',   // 新增key-placeholder字段
                     value_placeholder: '', // 新增value-placeholder字段
                     previewImage: 0,   // 图片预览
@@ -1802,6 +2062,11 @@ Vue.component('AdminUpdate', {
                 tx_color: '',      // 新增字段提醒条件值
                 improve_tiaojian: '',      // 完善条件
                 improve_zhi: '',      // 完善条件校验值
+                
+                // 文字变色配置数组，每项包含条件类型、条件值和颜色
+                tx_config: [],
+                // 背景变色配置数组，每项包含条件类型、条件值和颜色
+                list_background_config: [],
             },
             iconDialogStatus: false,
             activeName: 'first',
@@ -1863,6 +2128,13 @@ Vue.component('AdminUpdate', {
                 }
             }
             
+            if (!this.form.tx_config) {
+                this.form.tx_config = [];
+            }
+            if (!this.form.list_background_config) {
+                this.form.list_background_config = [];
+            }
+            
             this.$refs['form'].validate(valid => {
                 if (valid) {
                     // 将键值对占位符保存到主表字段
@@ -1885,55 +2157,90 @@ Vue.component('AdminUpdate', {
             })
         },
         open() {
-            // 深拷贝info数据避免引用问题
-            this.form = JSON.parse(JSON.stringify(this.info))
+            // 1. 初始化表单数据，深拷贝避免引用问题
+            this.form = this.info ? JSON.parse(JSON.stringify(this.info)) : {};
             
-            // 处理other_config初始化
-            if (!this.form.other_config || this.form.other_config === '[]' || this.form.other_config === '{}') {
-                this.form.other_config = {
-                    shuxing: ['tooltip'],
-                    guige: [{}],
-                    key_placeholder: this.info.key_placeholder || '',
-                    value_placeholder: this.info.value_placeholder || '',
+            // 2. 处理数组字段的初始化和类型转换
+            const processArrayField = (fieldName) => {
+                // 如果字段不存在、为空字符串或空JSON表示，初始化为空数组
+                if (!this.form[fieldName] || this.form[fieldName] === '[]' || this.form[fieldName] === '{}') {
+                    this.form[fieldName] = [];
                 }
-            } else if (typeof this.form.other_config === 'string') {
-                try {
-                    this.form.other_config = JSON.parse(this.form.other_config)
-                } catch (e) {
-                    this.form.other_config = {
-                        shuxing: ['tooltip'],
-                        guige: [{}],
-                        key_placeholder: '',
-                        value_placeholder: '',
+                // 如果是字符串类型，尝试解析为JSON数组
+                else if (typeof this.form[fieldName] === 'string') {
+                    try {
+                        this.form[fieldName] = JSON.parse(this.form[fieldName]);
+                        // 确保解析后是数组类型
+                        if (!Array.isArray(this.form[fieldName])) {
+                            this.form[fieldName] = [];
+                        }
+                    } catch (e) {
+                        console.warn(`解析${fieldName}失败，初始化为空数组`, e);
+                        this.form[fieldName] = [];
                     }
                 }
+                // 如果不是数组类型，强制转换为空数组
+                else if (!Array.isArray(this.form[fieldName])) {
+                    this.form[fieldName] = [];
+                }
+            };
+            
+            // 处理所有需要初始化的数组字段
+            ['item_config', 'tx_config', 'list_background_config'].forEach(processArrayField);
+            
+            // 3. 处理other_config对象
+            if (!this.form.other_config || this.form.other_config === '[]' || this.form.other_config === '{}') {
+                // 初始化空的other_config
+                this.form.other_config = {
+                    shuxing: ['tooltip'],
+                    guige: [],
+                    key_placeholder: this.info?.key_placeholder || '',
+                    value_placeholder: this.info?.value_placeholder || '',
+                };
+            } else if (typeof this.form.other_config === 'string') {
+                // 解析字符串类型的other_config
+                try {
+                    this.form.other_config = JSON.parse(this.form.other_config);
+                } catch (e) {
+                    console.warn('解析other_config失败，使用默认配置', e);
+                    this.form.other_config = {
+                        shuxing: ['tooltip'],
+                        guige: [],
+                        key_placeholder: '',
+                        value_placeholder: '',
+                    };
+                }
             }
             
-            // 确保关键字段存在
+            // 确保other_config中的必要字段存在且类型正确
             this.form.other_config = {
                 ...this.form.other_config,
-                shuxing: this.form.other_config.shuxing || ['tooltip'],
-                guige: this.form.other_config.guige || [{}],
-                key_placeholder: this.form.other_config.key_placeholder || this.info.key_placeholder || '',
-                value_placeholder: this.form.other_config.value_placeholder || this.info.value_placeholder || '',
-            }
+                shuxing: Array.isArray(this.form.other_config.shuxing)
+                    ? this.form.other_config.shuxing
+                    : ['tooltip'],
+                guige: Array.isArray(this.form.other_config.guige)
+                    ? this.form.other_config.guige
+                    : [],
+                key_placeholder: this.form.other_config.key_placeholder || this.info?.key_placeholder || '',
+                value_placeholder: this.form.other_config.value_placeholder || this.info?.value_placeholder || '',
+            };
             
-            // 初始化其他数据
-            this.setDefaultVal('item_config')
-            this.field.forEach(item => {
-                if (this.form.type == item.type) {
-                    this.list_item = item.item
-                }
-            })
+            // 4. 设置列表项状态
+            this.list_item = this.field.some(item => item.type === this.form.type && item.item);
             
-            // 获取配置列表
-            axios.post(base_url + '/Sys.Base/configList', {menu_id: this.menuid || this.menu_id}).then(res => {
-                this.ruleList = res.data.ruleList
-                this.propertyField = res.data.propertyField
-                this.dbtype = res.data.dbtype
-                this.application_list = res.data.applist
-                this.my_actions = res.data.my_actions
-            })
+            // 5. 加载配置列表
+            axios.post(base_url + '/Sys.Base/configList', {
+                menu_id: this.menuid || this.menu_id
+            }).then(res => {
+                this.ruleList = res.data.ruleList || [];
+                this.propertyField = res.data.propertyField || [];
+                this.dbtype = res.data.dbtype || '';
+                this.application_list = res.data.applist || [];
+                this.my_actions = res.data.my_actions || [];
+            }).catch(error => {
+                console.error('加载配置列表失败', error);
+                // 可以在这里添加错误处理，如显示错误提示
+            });
         },
         selectType() {
             if (this.dbtype !== 'mongo') {
@@ -2012,13 +2319,47 @@ Vue.component('AdminUpdate', {
             }
         },
         addItem(key) {
-            this.form[key].push({})
+            if (!Array.isArray(this.form[key])) {
+                this.$set(this.form, key, []);
+            }
+            // 根据不同的key初始化不同的默认配置
+            const defaultConfig = {
+                'tx_config': {  // 文字变色配置
+                    tx_tiaojian: '',
+                    tx_zhi: '',
+                    tx_color: ''
+                },
+                'list_background_config': {  // 背景变色配置
+                    tiaojian: '',
+                    zhi: '',
+                    color: ''
+                },
+                'item_config': {}  // 其他配置
+            };
+            
+            const newItem = defaultConfig[key] || {};
+            this.form[key].push({...newItem});
+            // 使用$set添加新元素
+            // this.$set(this.form[key], this.form[key].length, {});
+            
+            this.$nextTick(() => {
+                this.$forceUpdate();
+            });
         },
         deleteItem(key, index) {
-            this.form[key].splice(index, 1)
+            if (Array.isArray(this.form[key])) {
+                // 使用splice删除元素会触发响应式更新
+                this.form[key].splice(index, 1);
+                this.$nextTick(() => {
+                    this.$forceUpdate();
+                });
+            }
         },
         clearItem(key) {
-            this.form[key] = []
+            this.form[key] = [];
+            this.$nextTick(() => {
+                this.$forceUpdate();
+            });
         },
         setDefaultItem(val) {
             this.form['item_config'] = val
@@ -2065,14 +2406,20 @@ Vue.component('AdminUpdate', {
             }
         },
         closeForm() {
-            this.$emit('update:show', false)
-            this.loading = false
+            this.$emit('update:show', false);
+            this.loading = false;
+            
             this.$nextTick(() => {
-                this.$refs['form'].resetFields()
-                this.default_rules = ''
-                this.list_item = false
+                // 先判断表单实例是否存在再重置
+                if (this.$refs['form']) {
+                    this.$refs['form'].resetFields();
+                }
                 
-                // 重置表单数据（保持与添加组件一致）
+                this.default_rules = '';
+                this.list_item = false;
+                this.activeName = 'first';
+                
+                // 重置表单数据，确保所有数组字段正确初始化
                 this.form = {
                     title: '',
                     field: '',
@@ -2080,25 +2427,35 @@ Vue.component('AdminUpdate', {
                     post_status: 1,
                     create_table_field: 1,
                     list_show: 2,
-                    validate: [],
-                    item_config: [],
+                    validate: [],  // 确保是数组
+                    item_config: [],  // 确保是数组
+                    tx_config: [],  // 确保是数组
+                    list_background_config: [],  // 确保是数组
                     other_config: {
-                        shuxing: ['tooltip'],
-                        guige: [{}],
+                        shuxing: ['tooltip'],  // 确保是数组
+                        guige: [],  // 修改为[]而非[{}]
                         key_placeholder: '',
                         value_placeholder: '',
+                        // 补充其他必要的默认属性
+                        address_type: 1,
+                        placeholder: '',
+                        liandong_field: ''
                     },
                     sql: '',
                     datatype: '',
                     length: '',
                     belong_table: '',
                     default_value: '',
+                    tx_tiaojian: '',
+                    tx_zhi: '',
+                    tx_color: '',
+                    improve_tiaojian: '',
+                    improve_zhi: '',
                     menu_id: this.menuid || this.menu_id
-                }
-                
-                this.activeName = 'first'
-            })
+                };
+            });
         }
+        
     },
 });
 

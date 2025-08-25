@@ -447,8 +447,8 @@ class Base extends Admin
             $tpl = $this->getTpl($appid, 'field');
             $this->view->assign('appid', $appid);
             $this->view->assign('menu_id', $menu_id);
-            if($ai == 1) {
-                $baseConfig = BaseconfigModel::column('data','name');
+            if ($ai == 1) {
+                $baseConfig = BaseconfigModel::column('data', 'name');
                 if (empty($baseConfig['deepseekkey'])) {
                     throw new ValidateException('请在站长配置里填写deepseekkey');
                 }
@@ -471,7 +471,7 @@ class Base extends Admin
             $data['menu_title'] = Menu::where('menu_id', $menu_id)->value('title');
             $data['app_name'] = Application::where('app_id', $appid)->value('application_name');
             $data['app_list'] = Application::field('app_id,app_type,application_name')->where('app_id', '<>', $appid)->select()->toArray();
-            $baseConfig = BaseconfigModel::column('data','name');
+            $baseConfig = BaseconfigModel::column('data', 'name');
             if (isset($baseConfig['deepseekkey']) && !empty($baseConfig['deepseekkey'])) {
                 $data['deepseekkey'] = $baseConfig['deepseekkey'];
             }
@@ -512,6 +512,9 @@ class Base extends Admin
         }
         
         $data['other_config'] = json_encode($data['other_config']);
+        
+        $data['tx_config'] = json_encode($data['tx_config'],320);
+        $data['list_background_config'] = json_encode($data['list_background_config'],320);
         
         try {
             $res = Field::create($data);
@@ -646,12 +649,16 @@ class Base extends Admin
         if ($data['field_type']) {
             $param['id'] = $data['id'];
             $param['field'] = $data['field'];
+            $param['other_config'] = $data['other_config'] ? json_encode($data['other_config']) : "{}";
         } else {
             $this->validate($data, \app\admin\controller\Sys\validate\Field::class);
             
             $data['item_config'] = getItemData($data['item_config']);
             $data['other_config'] = json_encode($data['other_config']);
             $data['validate'] = implode(',', $data['validate']);
+            
+            $data['tx_config'] = json_encode($data['tx_config'],320);
+            $data['list_background_config'] = json_encode($data['list_background_config'],320);
             
             foreach (Config::fieldList() as $v) {
                 if ($v['type'] == $data['type'] && empty($data['belong_table'])) {
@@ -1280,7 +1287,7 @@ class Base extends Admin
         
         
         $my_actions = Action::where(['menu_id' => $menu_id])->order('sortid asc')->select()->toArray();
-        return json(['status' => 200, 'ruleList' => $ruleList, 'propertyField' => $propertyField, 'dbtype' => $dbtype, 'applist' => $applist,'my_actions'=>$my_actions]);
+        return json(['status' => 200, 'ruleList' => $ruleList, 'propertyField' => $propertyField, 'dbtype' => $dbtype, 'applist' => $applist, 'my_actions' => $my_actions]);
     }
     
     
